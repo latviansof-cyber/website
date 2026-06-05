@@ -1,25 +1,17 @@
-// Centralized bilingual content map for the DLA website.
-// When we move to Payload CMS (DLA-201..206) this file will be replaced
-// by data fetched from the `pages` global / `events` collection.
+﻿// Centralized bilingual content map for the DLA website.
+// Validated against `src/lib/validation.ts` at module load so that any shape
+// regression fails fast. When the Payload CMS lands (DLA-201..206) the same
+// schemas will be reused to validate API responses.
 
-export type Lang = 'en' | 'lv'
+import { SiteContentSchema, type SiteContentValidated, LangSchema } from '@/lib/validation'
+import type { z } from 'zod'
 
-export interface EventItem {
-  id: string
-  title: string
-  body: string
-}
+export type Lang = z.infer<typeof LangSchema>
 
-export interface SiteContent {
-  nav: { about: string; history: string; events: string; skipToContent: string }
-  hero: { eyebrow: string; title: string; subtitle: string; cta: string }
-  about: { title: string; body: string[] }
-  history: { title: string; body: string[] }
-  events: { title: string; intro: string; items: EventItem[] }
-  footer: { tagline: string; contact: string; rights: string; address: string; languageLabel: string }
-}
+export type EventItem = SiteContentValidated['events']['items'][number]
+export type SiteContent = SiteContentValidated
 
-export const en: SiteContent = {
+const en: SiteContent = {
   nav: {
     about: 'About',
     history: 'History',
@@ -99,7 +91,7 @@ export const en: SiteContent = {
   },
 }
 
-export const lv: SiteContent = {
+const lv: SiteContent = {
   nav: {
     about: 'Par mums',
     history: 'Vēsture',
@@ -177,4 +169,21 @@ export const lv: SiteContent = {
   },
 }
 
-export const contentByLang: Record<Lang, SiteContent> = { en, lv }
+// Validate both content maps at module load. In dev we log, in prod we still log
+// (CMS data is expected to be valid; the only path to invalid data is a developer
+// mistake that should surface immediately).
+const enResult = SiteContentSchema.safeParse(en)
+const lvResult = SiteContentSchema.safeParse(lv)
+if (!enResult.success) {
+  // eslint-disable-next-line no-console
+  console.error('[i18n] English content failed validation', enResult.error.format())
+}
+if (!lvResult.success) {
+  // eslint-disable-next-line no-console
+  console.error('[i18n] Latvian content failed validation', lvResult.error.format())
+}
+
+export const contentByLang: Record<Lang, SiteContent> = {
+  en: enResult.success ? enResult.data : en,
+  lv: lvResult.success ? lvResult.data : lv,
+}

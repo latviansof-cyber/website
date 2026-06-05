@@ -1,34 +1,36 @@
-'use client'
+﻿'use client'
 
 import { useLanguage } from '../i18n/LanguageProvider'
+import { Container } from './ui/Container'
+import { Section } from './ui/Section'
+import { Eyebrow } from './ui/Eyebrow'
+import { Chip } from './ui/Chip'
 
-const eventAccents: Record<string, string> = {
-  lieldienas: 'from-emerald-100 to-emerald-50 text-emerald-800',
-  jani: 'from-amber-100 to-amber-50 text-amber-800',
-  may4: 'from-sky-100 to-sky-50 text-sky-800',
-  'baltijas-cels': 'from-rose-100 to-rose-50 text-rose-800',
-  nov18: 'from-violet-100 to-violet-50 text-violet-800',
+const accentByEvent: Record<string, keyof typeof accentForChip> = {
+  lieldienas: 'emerald',
+  jani: 'amber',
+  may4: 'sky',
+  'baltijas-cels': 'rose',
+  nov18: 'violet',
 }
+const accentForChip = {
+  emerald: 'emerald',
+  amber: 'amber',
+  sky: 'sky',
+  rose: 'rose',
+  violet: 'violet',
+} as const
 
 export function Events() {
   const { t } = useLanguage()
   return (
-    <section
-      id="events"
-      aria-labelledby="events-title"
-      className="bg-white py-16 sm:py-20"
-    >
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-10 flex items-center gap-3">
-          <span aria-hidden="true" className="h-px w-10 bg-amber-400" />
-          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
-            03
-          </span>
-        </div>
+    <Section id="events" ariaLabel={t.events.title} tone="plain">
+      <Container>
         <div className="max-w-3xl">
+          <Eyebrow>03 — {t.events.title}</Eyebrow>
           <h2
             id="events-title"
-            className="font-serif text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl"
+            className="font-serif text-3xl font-bold tracking-tight text-ink sm:text-4xl"
           >
             {t.events.title}
           </h2>
@@ -38,21 +40,17 @@ export function Events() {
         </div>
         <ul
           role="list"
-          className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3"
+          className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
         >
           {t.events.items.map((event) => {
-            const accent = eventAccents[event.id] ?? 'from-slate-100 to-slate-50 text-slate-800'
+            const accent = accentByEvent[event.id] ?? 'slate'
             return (
               <li
                 key={event.id}
-                className="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                className="group flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
               >
-                <span
-                  className={`inline-flex w-fit items-center rounded-full bg-gradient-to-r px-3 py-1 text-xs font-semibold uppercase tracking-wide ${accent}`}
-                >
-                  {event.id.replace('-', ' ')}
-                </span>
-                <h3 className="mt-4 font-serif text-lg font-semibold leading-snug text-slate-900">
+                <Chip tone={accent}>{event.id.replace('-', ' ')}</Chip>
+                <h3 className="mt-4 font-serif text-lg font-semibold leading-snug text-ink">
                   {event.title}
                 </h3>
                 <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-700">
@@ -62,7 +60,7 @@ export function Events() {
             )
           })}
         </ul>
-      </div>
-    </section>
+      </Container>
+    </Section>
   )
 }

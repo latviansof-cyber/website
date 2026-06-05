@@ -1,6 +1,9 @@
-'use client'
+﻿'use client'
 
 import { useLanguage } from '../i18n/LanguageProvider'
+import { Container } from './ui/Container'
+import { Eyebrow } from './ui/Eyebrow'
+import { LinkButton } from './ui/Button'
 
 export function Hero() {
   const { t } = useLanguage()
@@ -8,42 +11,47 @@ export function Hero() {
     <section
       id="top"
       aria-labelledby="hero-title"
-      className="relative isolate overflow-hidden bg-slate-900 text-white"
+      className="relative isolate overflow-hidden bg-ink text-white"
     >
+      {/* Decorative gradient + glow blobs */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900"
+        className="absolute inset-0 -z-10 bg-gradient-to-br from-ink via-slate-900 to-emerald-950"
       />
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 opacity-40"
+        className="absolute inset-0 -z-10 opacity-60"
         style={{
           backgroundImage:
-            'radial-gradient(circle at 20% 20%, rgba(252,211,77,0.25), transparent 45%), radial-gradient(circle at 80% 30%, rgba(16,185,129,0.25), transparent 50%)',
+            'radial-gradient(circle at 15% 20%, rgba(252,211,77,0.30), transparent 45%), radial-gradient(circle at 85% 35%, rgba(16,185,129,0.30), transparent 50%)',
         }}
       />
-      <div className="mx-auto flex max-w-6xl flex-col items-start gap-6 px-4 py-20 sm:px-6 sm:py-28 lg:px-8 lg:py-32">
-        <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-amber-200">
-          <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-amber-300" />
-          {t.hero.eyebrow}
-        </p>
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-b from-transparent to-ink"
+      />
+
+      <Container className="relative flex flex-col items-start gap-7 py-24 sm:py-32 lg:py-40">
+        <Eyebrow tone="amber">{t.hero.eyebrow}</Eyebrow>
         <h1
           id="hero-title"
-          className="max-w-3xl text-balance font-serif text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl"
+          className="max-w-4xl text-balance font-serif text-4xl font-bold leading-[1.05] sm:text-6xl lg:text-7xl"
         >
           {t.hero.title}
         </h1>
         <p className="max-w-2xl text-pretty text-base leading-relaxed text-white/80 sm:text-lg">
           {t.hero.subtitle}
         </p>
-        <a
-          href="#events"
-          className="inline-flex items-center gap-2 rounded-full bg-amber-300 px-5 py-2.5 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-amber-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300"
-        >
-          {t.hero.cta}
-          <span aria-hidden="true">→</span>
-        </a>
-      </div>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <LinkButton href="#events" variant="primary">
+            {t.hero.cta}
+            <span aria-hidden="true">→</span>
+          </LinkButton>
+          <LinkButton href="#about" variant="ghost" className="ring-white/30 text-white hover:bg-white/10">
+            {t.nav.about}
+          </LinkButton>
+        </div>
+      </Container>
     </section>
   )
 }

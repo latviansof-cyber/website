@@ -1,5 +1,5 @@
-import React from 'react'
-import './styles.css'
+﻿import React from 'react'
+import './globals.css'
 
 export const metadata = {
   description:
@@ -19,7 +19,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
           href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
         />
       </head>
-      <body className="bg-white font-sans text-slate-900 antialiased">{children}</body>
+      <body className="bg-cream text-ink antialiased">{children}</body>
     </html>
   )
 }

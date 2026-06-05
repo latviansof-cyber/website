@@ -1,14 +1,15 @@
-'use client'
+﻿'use client'
 
 import { useLanguage } from '../i18n/LanguageProvider'
 import type { Lang } from '../i18n/content'
 
+const options: { value: Lang; label: string }[] = [
+  { value: 'en', label: 'EN' },
+  { value: 'lv', label: 'LV' },
+]
+
 export function LanguageSwitcher() {
   const { lang, setLang, t } = useLanguage()
-  const options: { value: Lang; label: string }[] = [
-    { value: 'en', label: 'EN' },
-    { value: 'lv', label: 'LV' },
-  ]
   return (
     <div
       role="group"
@@ -23,12 +24,11 @@ export function LanguageSwitcher() {
             type="button"
             onClick={() => setLang(opt.value)}
             aria-pressed={active}
+            aria-label={`${t.footer.languageLabel}: ${opt.label}`}
             lang={opt.value}
             className={
-              'rounded-full px-3 py-1 transition-colors ' +
-              (active
-                ? 'bg-amber-300 text-slate-900 shadow-sm'
-                : 'text-white/80 hover:text-white')
+              'rounded-full px-3 py-1 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300 ' +
+              (active ? 'bg-amber-300 text-ink shadow-sm' : 'text-white/80 hover:text-white')
             }
           >
             {opt.label}

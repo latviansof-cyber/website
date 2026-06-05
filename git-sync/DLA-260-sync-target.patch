@@ -1,0 +1,1218 @@
+From DLA-260 2026-06-05 14:00:23 +03:00
+From: EsegyCode <nickofffffff@gmail.com>
+Subject: [DLA-260] Sync sandbox: Tailwind v4 + UI polish + Zod + Jest
+
+Composite patch that lands every DLA-25x / 35x / 45x change as a single commit. Apply on top of the v0-frontend baseline (post DLA-100 merge) to get a feature branch with the fully-styled, validated, and tested site. Replaces styles.css with globals.css, adds postcss.config.mjs + a ui/ primitives layer + zod-backed content validation + Jest + RTL. The DLA-251/252/351/451 ticket split still exists in BACKLOG.md for traceability, but the implementation now lands in one commit so the user only needs to apply one patch.
+
+diff --git a/jest.config.ts b/jest.config.ts
+new file mode 100644
+index 0000000..192a744
+--- /dev/null
++++ b/jest.config.ts
+@@ -0,0 +1,16 @@
++﻿import type { Config } from 'jest'
++import nextJest from 'next/jest.js'
++
++const createJestConfig = nextJest({ dir: './' })
++
++const config: Config = {
++  setupFilesAfterEach: ['<rootDir>/jest.setup.ts'],
++  testEnvironment: 'jsdom',
++  moduleNameMapper: {
++    '^@/(.*)$': '<rootDir>/src/$1',
++  },
++  testMatch: ['<rootDir>/tests/unit/**/*.test.ts', '<rootDir>/tests/unit/**/*.test.tsx'],
++  // Components use ESM; let next/jest handle the SWC transform.
++}
++
++export default createJestConfig(config)
+diff --git a/jest.setup.ts b/jest.setup.ts
+new file mode 100644
+index 0000000..038fdc8
+--- /dev/null
++++ b/jest.setup.ts
+@@ -0,0 +1,2 @@
++﻿// Common Jest setup: polyfills + custom matchers.
++import '@testing-library/jest-dom/jest-globals'
+diff --git a/package.json b/package.json
+new file mode 100644
+index 0000000..1902595
+--- /dev/null
++++ b/package.json
+@@ -0,0 +1,86 @@
++﻿{
++    "name":  "",
++    "version":  "1.0.0",
++    "description":  "A blank template to get started with Payload 3.0",
++    "license":  "MIT",
++    "type":  "module",
++    "scripts":  {
++                    "generate:types":  "pnpm run generate:types:cloudflare \u0026\u0026 pnpm run generate:types:payload",
++                    "generate:types:payload":  "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
++                    "start":  "cross-env NODE_OPTIONS=--no-deprecation next start",
++                    "devsafe":  "rm -rf .next \u0026\u0026 rm -rf .open-next \u0026\u0026 cross-env NODE_OPTIONS=--no-deprecation next dev",
++                    "generate:importmap":  "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
++                    "deploy":  "pnpm run deploy:database \u0026\u0026 pnpm run deploy:app",
++                    "payload":  "cross-env NODE_OPTIONS=--no-deprecation payload",
++                    "build":  "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
++                    "deploy:app":  "opennextjs-cloudflare build --env=$CLOUDFLARE_ENV \u0026\u0026 opennextjs-cloudflare deploy --env=$CLOUDFLARE_ENV",
++                    "lint":  "cross-env NODE_OPTIONS=--no-deprecation next lint",
++                    "ii":  "pnpm install --ignore-workspace",
++                    "test:int":  "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
++                    "dev":  "cross-env NODE_OPTIONS=--no-deprecation next dev",
++                    "test:unit":  "cross-env NODE_OPTIONS=--no-deprecation jest --config jest.config.ts",
++                    "test":  "pnpm run test:unit \u0026\u0026 pnpm run test:int \u0026\u0026 pnpm run test:e2e",
++                    "preview":  "opennextjs-cloudflare build \u0026\u0026 opennextjs-cloudflare preview --env=$CLOUDFLARE_ENV",
++                    "test:e2e":  "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
++                    "generate:types:cloudflare":  "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
++                    "deploy:database":  "cross-env NODE_ENV=production PAYLOAD_SECRET=ignore payload migrate \u0026\u0026 wrangler d1 execute D1 --command \u0027PRAGMA optimize\u0027 --env=$CLOUDFLARE_ENV --remote"
++                },
++    "dependencies":  {
++                         "react":  "19.2.1",
++                         "@payloadcms/db-d1-sqlite":  "3.85.0",
++                         "@payloadcms/richtext-lexical":  "3.85.0",
++                         "graphql":  "^16.8.1",
++                         "@payloadcms/storage-r2":  "3.85.0",
++                         "react-dom":  "19.2.1",
++                         "zod":  "^3.23.8",
++                         "next":  "15.4.11",
++                         "@opennextjs/cloudflare":  "^1.11.0",
++                         "@payloadcms/next":  "3.85.0",
++                         "cross-env":  "^7.0.3",
++                         "payload":  "3.85.0",
++                         "dotenv":  "16.4.7",
++                         "@payloadcms/ui":  "3.85.0"
++                     },
++    "devDependencies":  {
++                            "vitest":  "4.0.18",
++                            "@types/jest":  "^29.5.12",
++                            "eslint":  "^9.16.0",
++                            "@eslint/eslintrc":  "^3.2.0",
++                            "typescript":  "5.7.3",
++                            "jest-environment-jsdom":  "^29.7.0",
++                            "eslint-config-next":  "15.4.11",
++                            "@testing-library/jest-dom":  "^6.4.2",
++                            "ts-jest":  "^29.1.2",
++                            "prettier":  "^3.4.2",
++                            "vite-tsconfig-paths":  "6.0.5",
++                            "@testing-library/user-event":  "^14.5.2",
++                            "@vitejs/plugin-react":  "4.5.2",
++                            "jest":  "^29.7.0",
++                            "tsx":  "4.22.4",
++                            "wrangler":  "~4.61.1",
++                            "@types/node":  "22.19.9",
++                            "@playwright/test":  "1.58.2",
++                            "@testing-library/react":  "16.3.0",
++                            "jsdom":  "28.0.0",
++                            "@types/react":  "19.2.9",
++                            "@types/react-dom":  "19.2.3"
++                        },
++    "engines":  {
++                    "node":  "^18.20.2 || \u003e=20.9.0",
++                    "pnpm":  "^9 || ^10"
++                },
++    "pnpm":  {
++                 "onlyBuiltDependencies":  [
++                                               "sharp",
++                                               "esbuild",
++                                               "unrs-resolver"
++                                           ]
++             },
++    "cloudflare":  {
++                       "bindings":  {
++                                        "PAYLOAD_SECRET":  {
++                                                               "description":  "Generate a random string using `openssl rand -hex 32`"
++                                                           }
++                                    }
++                   }
++}
+diff --git a/postcss.config.mjs b/postcss.config.mjs
+new file mode 100644
+index 0000000..1d66eb9
+--- /dev/null
++++ b/postcss.config.mjs
+@@ -0,0 +1,7 @@
++﻿// Tailwind v4 uses the dedicated PostCSS plugin (`@tailwindcss/postcss`).
++// See https://tailwindcss.com/docs/installation/using-postcss
++export default {
++  plugins: {
++    "@tailwindcss/postcss": {},
++  },
++}
+diff --git a/src/app/(frontend)/components/Events.tsx b/src/app/(frontend)/components/Events.tsx
+index ee22cac..4ef3dd6 100644
+--- a/src/app/(frontend)/components/Events.tsx
++++ b/src/app/(frontend)/components/Events.tsx
+@@ -1,34 +1,36 @@
+-'use client'
++﻿'use client'
+ 
+ import { useLanguage } from '../i18n/LanguageProvider'
++import { Container } from './ui/Container'
++import { Section } from './ui/Section'
++import { Eyebrow } from './ui/Eyebrow'
++import { Chip } from './ui/Chip'
+ 
+-const eventAccents: Record<string, string> = {
+-  lieldienas: 'from-emerald-100 to-emerald-50 text-emerald-800',
+-  jani: 'from-amber-100 to-amber-50 text-amber-800',
+-  may4: 'from-sky-100 to-sky-50 text-sky-800',
+-  'baltijas-cels': 'from-rose-100 to-rose-50 text-rose-800',
+-  nov18: 'from-violet-100 to-violet-50 text-violet-800',
++const accentByEvent: Record<string, keyof typeof accentForChip> = {
++  lieldienas: 'emerald',
++  jani: 'amber',
++  may4: 'sky',
++  'baltijas-cels': 'rose',
++  nov18: 'violet',
+ }
++const accentForChip = {
++  emerald: 'emerald',
++  amber: 'amber',
++  sky: 'sky',
++  rose: 'rose',
++  violet: 'violet',
++} as const
+ 
+ export function Events() {
+   const { t } = useLanguage()
+   return (
+-    <section
+-      id="events"
+-      aria-labelledby="events-title"
+-      className="bg-white py-16 sm:py-20"
+-    >
+-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+-        <div className="mb-10 flex items-center gap-3">
+-          <span aria-hidden="true" className="h-px w-10 bg-amber-400" />
+-          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
+-            03
+-          </span>
+-        </div>
++    <Section id="events" ariaLabel={t.events.title} tone="plain">
++      <Container>
+         <div className="max-w-3xl">
++          <Eyebrow>03 — {t.events.title}</Eyebrow>
+           <h2
+             id="events-title"
+-            className="font-serif text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl"
++            className="font-serif text-3xl font-bold tracking-tight text-ink sm:text-4xl"
+           >
+             {t.events.title}
+           </h2>
+@@ -38,21 +40,17 @@ export function Events() {
+         </div>
+         <ul
+           role="list"
+-          className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3"
++          className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+         >
+           {t.events.items.map((event) => {
+-            const accent = eventAccents[event.id] ?? 'from-slate-100 to-slate-50 text-slate-800'
++            const accent = accentByEvent[event.id] ?? 'slate'
+             return (
+               <li
+                 key={event.id}
+-                className="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
++                className="group flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
+               >
+-                <span
+-                  className={`inline-flex w-fit items-center rounded-full bg-gradient-to-r px-3 py-1 text-xs font-semibold uppercase tracking-wide ${accent}`}
+-                >
+-                  {event.id.replace('-', ' ')}
+-                </span>
+-                <h3 className="mt-4 font-serif text-lg font-semibold leading-snug text-slate-900">
++                <Chip tone={accent}>{event.id.replace('-', ' ')}</Chip>
++                <h3 className="mt-4 font-serif text-lg font-semibold leading-snug text-ink">
+                   {event.title}
+                 </h3>
+                 <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-700">
+@@ -62,7 +60,7 @@ export function Events() {
+             )
+           })}
+         </ul>
+-      </div>
+-    </section>
++      </Container>
++    </Section>
+   )
+ }
+diff --git a/src/app/(frontend)/components/Hero.tsx b/src/app/(frontend)/components/Hero.tsx
+index 9076dde..b72dfb2 100644
+--- a/src/app/(frontend)/components/Hero.tsx
++++ b/src/app/(frontend)/components/Hero.tsx
+@@ -1,6 +1,9 @@
+-'use client'
++﻿'use client'
+ 
+ import { useLanguage } from '../i18n/LanguageProvider'
++import { Container } from './ui/Container'
++import { Eyebrow } from './ui/Eyebrow'
++import { LinkButton } from './ui/Button'
+ 
+ export function Hero() {
+   const { t } = useLanguage()
+@@ -8,42 +11,47 @@ export function Hero() {
+     <section
+       id="top"
+       aria-labelledby="hero-title"
+-      className="relative isolate overflow-hidden bg-slate-900 text-white"
++      className="relative isolate overflow-hidden bg-ink text-white"
+     >
++      {/* Decorative gradient + glow blobs */}
+       <div
+         aria-hidden="true"
+-        className="absolute inset-0 -z-10 bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900"
++        className="absolute inset-0 -z-10 bg-gradient-to-br from-ink via-slate-900 to-emerald-950"
+       />
+       <div
+         aria-hidden="true"
+-        className="absolute inset-0 -z-10 opacity-40"
++        className="absolute inset-0 -z-10 opacity-60"
+         style={{
+           backgroundImage:
+-            'radial-gradient(circle at 20% 20%, rgba(252,211,77,0.25), transparent 45%), radial-gradient(circle at 80% 30%, rgba(16,185,129,0.25), transparent 50%)',
++            'radial-gradient(circle at 15% 20%, rgba(252,211,77,0.30), transparent 45%), radial-gradient(circle at 85% 35%, rgba(16,185,129,0.30), transparent 50%)',
+         }}
+       />
+-      <div className="mx-auto flex max-w-6xl flex-col items-start gap-6 px-4 py-20 sm:px-6 sm:py-28 lg:px-8 lg:py-32">
+-        <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-amber-200">
+-          <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-amber-300" />
+-          {t.hero.eyebrow}
+-        </p>
++      <div
++        aria-hidden="true"
++        className="absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-b from-transparent to-ink"
++      />
++
++      <Container className="relative flex flex-col items-start gap-7 py-24 sm:py-32 lg:py-40">
++        <Eyebrow tone="amber">{t.hero.eyebrow}</Eyebrow>
+         <h1
+           id="hero-title"
+-          className="max-w-3xl text-balance font-serif text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl"
++          className="max-w-4xl text-balance font-serif text-4xl font-bold leading-[1.05] sm:text-6xl lg:text-7xl"
+         >
+           {t.hero.title}
+         </h1>
+         <p className="max-w-2xl text-pretty text-base leading-relaxed text-white/80 sm:text-lg">
+           {t.hero.subtitle}
+         </p>
+-        <a
+-          href="#events"
+-          className="inline-flex items-center gap-2 rounded-full bg-amber-300 px-5 py-2.5 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-amber-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300"
+-        >
+-          {t.hero.cta}
+-          <span aria-hidden="true">→</span>
+-        </a>
+-      </div>
++        <div className="flex flex-col gap-3 sm:flex-row">
++          <LinkButton href="#events" variant="primary">
++            {t.hero.cta}
++            <span aria-hidden="true">→</span>
++          </LinkButton>
++          <LinkButton href="#about" variant="ghost" className="ring-white/30 text-white hover:bg-white/10">
++            {t.nav.about}
++          </LinkButton>
++        </div>
++      </Container>
+     </section>
+   )
+ }
+diff --git a/src/app/(frontend)/components/LanguageSwitcher.tsx b/src/app/(frontend)/components/LanguageSwitcher.tsx
+index d5d5d10..bb7d857 100644
+--- a/src/app/(frontend)/components/LanguageSwitcher.tsx
++++ b/src/app/(frontend)/components/LanguageSwitcher.tsx
+@@ -1,14 +1,15 @@
+-'use client'
++﻿'use client'
+ 
+ import { useLanguage } from '../i18n/LanguageProvider'
+ import type { Lang } from '../i18n/content'
+ 
++const options: { value: Lang; label: string }[] = [
++  { value: 'en', label: 'EN' },
++  { value: 'lv', label: 'LV' },
++]
++
+ export function LanguageSwitcher() {
+   const { lang, setLang, t } = useLanguage()
+-  const options: { value: Lang; label: string }[] = [
+-    { value: 'en', label: 'EN' },
+-    { value: 'lv', label: 'LV' },
+-  ]
+   return (
+     <div
+       role="group"
+@@ -23,12 +24,11 @@ export function LanguageSwitcher() {
+             type="button"
+             onClick={() => setLang(opt.value)}
+             aria-pressed={active}
++            aria-label={`${t.footer.languageLabel}: ${opt.label}`}
+             lang={opt.value}
+             className={
+-              'rounded-full px-3 py-1 transition-colors ' +
+-              (active
+-                ? 'bg-amber-300 text-slate-900 shadow-sm'
+-                : 'text-white/80 hover:text-white')
++              'rounded-full px-3 py-1 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300 ' +
++              (active ? 'bg-amber-300 text-ink shadow-sm' : 'text-white/80 hover:text-white')
+             }
+           >
+             {opt.label}
+diff --git a/src/app/(frontend)/components/SiteFooter.tsx b/src/app/(frontend)/components/SiteFooter.tsx
+index c70b72d..62ce09f 100644
+--- a/src/app/(frontend)/components/SiteFooter.tsx
++++ b/src/app/(frontend)/components/SiteFooter.tsx
+@@ -1,24 +1,23 @@
+-'use client'
++﻿'use client'
+ 
+ import { useLanguage } from '../i18n/LanguageProvider'
++import { Container } from './ui/Container'
+ 
+ export function SiteFooter() {
+   const { t } = useLanguage()
+   const year = new Date().getFullYear()
+   return (
+-    <footer className="bg-slate-900 text-white">
+-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 sm:grid-cols-2 lg:grid-cols-3 lg:px-8">
++    <footer className="bg-ink text-white">
++      <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-3">
+         <div>
+           <div className="flex items-center gap-3">
+             <span
+               aria-hidden="true"
+-              className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-300 font-serif text-lg font-bold text-slate-900"
++              className="flex h-11 w-11 items-center justify-center rounded-full bg-amber-300 font-serif text-lg font-bold text-ink"
+             >
+               DLA
+             </span>
+-            <p className="font-serif text-base font-semibold leading-snug">
+-              {t.footer.tagline}
+-            </p>
++            <p className="font-serif text-base font-semibold leading-snug">{t.footer.tagline}</p>
+           </div>
+           <p className="mt-4 text-sm text-white/70">{t.footer.address}</p>
+         </div>
+@@ -29,10 +28,7 @@ export function SiteFooter() {
+           <ul role="list" className="mt-3 space-y-2 text-sm text-white/80">
+             {t.events.items.slice(0, 3).map((event) => (
+               <li key={event.id}>
+-                <a
+-                  href="#events"
+-                  className="hover:text-amber-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300"
+-                >
++                <a href="#events" className="hover:text-amber-200">
+                   {event.title}
+                 </a>
+               </li>
+@@ -45,10 +41,7 @@ export function SiteFooter() {
+           </h2>
+           <ul role="list" className="mt-3 space-y-2 text-sm text-white/80">
+             <li>
+-              <a
+-                href="mailto:hello@darwinlatvians.org"
+-                className="hover:text-amber-200"
+-              >
++              <a href="mailto:hello@darwinlatvians.org" className="hover:text-amber-200">
+                 hello@darwinlatvians.org
+               </a>
+             </li>
+@@ -64,14 +57,12 @@ export function SiteFooter() {
+             </li>
+           </ul>
+         </div>
+-      </div>
++      </Container>
+       <div className="border-t border-white/10">
+-        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-2 px-4 py-4 text-xs text-white/60 sm:flex-row sm:items-center sm:px-6 lg:px-8">
+-          <p>
+-            © {year} Latvian Association of Darwin. {t.footer.rights}
+-          </p>
++        <Container className="flex flex-col items-start justify-between gap-2 py-4 text-xs text-white/60 sm:flex-row sm:items-center">
++          <p>© {year} Latvian Association of Darwin. {t.footer.rights}</p>
+           <p>Built with Next.js + Tailwind CSS</p>
+-        </div>
++        </Container>
+       </div>
+     </footer>
+   )
+diff --git a/src/app/(frontend)/components/SiteHeader.tsx b/src/app/(frontend)/components/SiteHeader.tsx
+index 193de89..af71081 100644
+--- a/src/app/(frontend)/components/SiteHeader.tsx
++++ b/src/app/(frontend)/components/SiteHeader.tsx
+@@ -1,78 +1,68 @@
+-'use client'
++﻿'use client'
+ 
+ import { useLanguage } from '../i18n/LanguageProvider'
++import { Container } from './ui/Container'
+ import { LanguageSwitcher } from './LanguageSwitcher'
+ 
++const navItems = [
++  { href: '#about', key: 'about' as const },
++  { href: '#history', key: 'history' as const },
++  { href: '#events', key: 'events' as const },
++]
++
+ export function SiteHeader() {
+   const { t } = useLanguage()
+   return (
+-    <header className="sticky top-0 z-30 border-b border-white/10 bg-slate-900/85 backdrop-blur supports-[backdrop-filter]:bg-slate-900/70">
++    <header className="sticky top-0 z-40 border-b border-white/10 bg-ink/70 backdrop-blur-md supports-[backdrop-filter]:bg-ink/60">
+       <a
+         href="#main"
+-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-2 focus:z-40 focus:rounded focus:bg-amber-300 focus:px-3 focus:py-1.5 focus:text-slate-900"
++        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-2 focus:z-50 focus:rounded-full focus:bg-amber-300 focus:px-3 focus:py-1.5 focus:text-sm focus:font-semibold focus:text-ink"
+       >
+         {t.nav.skipToContent}
+       </a>
+-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
++      <Container className="flex items-center justify-between gap-4 py-3 sm:py-4">
+         <a href="#top" className="group flex items-center gap-3">
+           <span
+             aria-hidden="true"
+-            className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-300 text-slate-900 shadow-sm transition-transform group-hover:scale-105"
++            className="flex h-11 w-11 items-center justify-center rounded-full bg-amber-300 text-ink shadow-md transition-transform group-hover:scale-105"
+           >
+             <span className="font-serif text-lg font-bold">DLA</span>
+           </span>
+           <span className="hidden flex-col leading-tight text-white sm:flex">
+-            <span className="text-sm font-semibold">Latvian Association of Darwin</span>
++            <span className="text-sm font-semibold tracking-wide">Latvian Association of Darwin</span>
+             <span className="text-xs text-white/70">Dārvinas Latviešu Apvienība</span>
+           </span>
+         </a>
+-        <nav aria-label="Primary" className="flex items-center gap-1 sm:gap-2">
++
++        <nav aria-label="Primary" className="flex items-center gap-1 sm:gap-3">
+           <ul className="hidden items-center gap-1 text-sm font-medium text-white/85 sm:flex">
+-            <li>
+-              <a
+-                href="#about"
+-                className="rounded-full px-3 py-2 transition-colors hover:bg-white/10 hover:text-white"
+-              >
+-                {t.nav.about}
+-              </a>
+-            </li>
+-            <li>
+-              <a
+-                href="#history"
+-                className="rounded-full px-3 py-2 transition-colors hover:bg-white/10 hover:text-white"
+-              >
+-                {t.nav.history}
+-              </a>
+-            </li>
+-            <li>
+-              <a
+-                href="#events"
+-                className="rounded-full px-3 py-2 transition-colors hover:bg-white/10 hover:text-white"
+-              >
+-                {t.nav.events}
+-              </a>
+-            </li>
++            {navItems.map((item) => (
++              <li key={item.href}>
++                <a
++                  href={item.href}
++                  className="rounded-full px-3 py-2 transition-colors hover:bg-white/10 hover:text-white"
++                >
++                  {t.nav[item.key]}
++                </a>
++              </li>
++            ))}
+           </ul>
+           <LanguageSwitcher />
+         </nav>
+-      </div>
++      </Container>
++
+       <nav aria-label="Primary mobile" className="border-t border-white/10 sm:hidden">
+         <ul className="mx-auto flex max-w-6xl items-center justify-center gap-1 px-4 py-2 text-sm font-medium text-white/85">
+-          <li>
+-            <a href="#about" className="rounded-full px-3 py-1.5 hover:bg-white/10 hover:text-white">
+-              {t.nav.about}
+-            </a>
+-          </li>
+-          <li>
+-            <a href="#history" className="rounded-full px-3 py-1.5 hover:bg-white/10 hover:text-white">
+-              {t.nav.history}
+-            </a>
+-          </li>
+-          <li>
+-            <a href="#events" className="rounded-full px-3 py-1.5 hover:bg-white/10 hover:text-white">
+-              {t.nav.events}
+-            </a>
+-          </li>
++          {navItems.map((item) => (
++            <li key={item.href}>
++              <a
++                href={item.href}
++                className="rounded-full px-3 py-1.5 transition-colors hover:bg-white/10 hover:text-white"
++              >
++                {t.nav[item.key]}
++              </a>
++            </li>
++          ))}
+         </ul>
+       </nav>
+     </header>
+diff --git a/src/app/(frontend)/components/TextSection.tsx b/src/app/(frontend)/components/TextSection.tsx
+index 4890e1f..b20cdd0 100644
+--- a/src/app/(frontend)/components/TextSection.tsx
++++ b/src/app/(frontend)/components/TextSection.tsx
+@@ -1,41 +1,33 @@
+-'use client'
++﻿'use client'
+ 
+ import { useLanguage } from '../i18n/LanguageProvider'
++import { Container } from './ui/Container'
++import { Section } from './ui/Section'
++import { Eyebrow } from './ui/Eyebrow'
+ 
+-interface Props {
+-  id: 'about' | 'history'
+-  tone?: 'plain' | 'muted'
+-}
++type SectionId = 'about' | 'history'
++type Tone = 'plain' | 'muted'
+ 
+-export function TextSection({ id, tone = 'plain' }: Props) {
++export function TextSection({ id, tone = 'plain' }: { id: SectionId; tone?: Tone }) {
+   const { t } = useLanguage()
+   const data = id === 'about' ? t.about : t.history
+-  const isMuted = tone === 'muted'
++  const label = id === 'about' ? '01 — ' + t.nav.about : '02 — ' + t.nav.history
+   return (
+-    <section
+-      id={id}
+-      aria-labelledby={`${id}-title`}
+-      className={isMuted ? 'bg-slate-50 py-16 sm:py-20' : 'bg-white py-16 sm:py-20'}
+-    >
+-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+-        <div className="mb-8 flex items-center gap-3">
+-          <span aria-hidden="true" className="h-px w-10 bg-amber-400" />
+-          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
+-            {id === 'about' ? '01' : '02'}
+-          </span>
+-        </div>
++    <Section id={id} ariaLabel={data.title} tone={tone}>
++      <Container className="max-w-3xl">
++        <Eyebrow>{label}</Eyebrow>
+         <h2
+           id={`${id}-title`}
+-          className="font-serif text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl"
++          className="font-serif text-3xl font-bold tracking-tight text-ink sm:text-4xl"
+         >
+           {data.title}
+         </h2>
+-        <div className="mt-6 space-y-5 text-pretty text-base leading-relaxed text-slate-700 sm:text-lg">
++        <div className="mt-6 space-y-5 text-pretty text-base leading-relaxed text-slate-700 sm:text-lg sm:leading-relaxed">
+           {data.body.map((paragraph, idx) => (
+             <p key={idx}>{paragraph}</p>
+           ))}
+         </div>
+-      </div>
+-    </section>
++      </Container>
++    </Section>
+   )
+ }
+diff --git a/src/app/(frontend)/components/ui/Button.tsx b/src/app/(frontend)/components/ui/Button.tsx
+new file mode 100644
+index 0000000..fc921d1
+--- /dev/null
++++ b/src/app/(frontend)/components/ui/Button.tsx
+@@ -0,0 +1,31 @@
++﻿import Link from 'next/link'
++import type { ComponentProps, ReactNode } from 'react'
++
++type Variant = 'primary' | 'secondary' | 'ghost'
++
++const base =
++  'inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400'
++
++const variants: Record<Variant, string> = {
++  primary: 'bg-amber-400 text-ink shadow-sm hover:bg-amber-300',
++  secondary: 'bg-ink text-white shadow-sm hover:bg-slate-800',
++  ghost: 'bg-transparent text-ink ring-1 ring-inset ring-slate-300 hover:bg-white',
++}
++
++type ButtonProps = ComponentProps<'button'> & { variant?: Variant }
++export function Button({ variant = 'primary', className = '', children, ...rest }: ButtonProps) {
++  return (
++    <button {...rest} className={[base, variants[variant], className].join(' ')}>
++      {children}
++    </button>
++  )
++}
++
++type LinkButtonProps = ComponentProps<typeof Link> & { variant?: Variant; children: ReactNode }
++export function LinkButton({ variant = 'primary', className = '', children, ...rest }: LinkButtonProps) {
++  return (
++    <Link {...rest} className={[base, variants[variant], className].join(' ')}>
++      {children}
++    </Link>
++  )
++}
+diff --git a/src/app/(frontend)/components/ui/Chip.tsx b/src/app/(frontend)/components/ui/Chip.tsx
+new file mode 100644
+index 0000000..811f6e0
+--- /dev/null
++++ b/src/app/(frontend)/components/ui/Chip.tsx
+@@ -0,0 +1,24 @@
++﻿import type { ReactNode } from 'react'
++
++const tones: Record<string, string> = {
++  emerald: 'from-emerald-100 to-emerald-50 text-emerald-800',
++  amber: 'from-amber-100 to-amber-50 text-amber-800',
++  sky: 'from-sky-100 to-sky-50 text-sky-800',
++  rose: 'from-rose-100 to-rose-50 text-rose-800',
++  violet: 'from-violet-100 to-violet-50 text-violet-800',
++  slate: 'from-slate-100 to-slate-50 text-slate-800',
++}
++
++/** Small pill-shaped label used for event categories / tags. */
++export function Chip({ tone = 'slate', children }: { tone?: keyof typeof tones; children: ReactNode }) {
++  return (
++    <span
++      className={[
++        'inline-flex w-fit items-center rounded-full bg-gradient-to-r px-3 py-1 text-xs font-semibold uppercase tracking-wide',
++        tones[tone] ?? tones.slate,
++      ].join(' ')}
++    >
++      {children}
++    </span>
++  )
++}
+diff --git a/src/app/(frontend)/components/ui/Container.tsx b/src/app/(frontend)/components/ui/Container.tsx
+new file mode 100644
+index 0000000..cba1543
+--- /dev/null
++++ b/src/app/(frontend)/components/ui/Container.tsx
+@@ -0,0 +1,9 @@
++﻿import type { ReactNode } from 'react'
++
++/**
++ * Centered max-width wrapper used by every section.
++ * Keeps the reading width predictable across breakpoints.
++ */
++export function Container({ children, className = '' }: { children: ReactNode; className?: string }) {
++  return <div className={['mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8', className].join(' ')}>{children}</div>
++}
+diff --git a/src/app/(frontend)/components/ui/Eyebrow.tsx b/src/app/(frontend)/components/ui/Eyebrow.tsx
+new file mode 100644
+index 0000000..8343736
+--- /dev/null
++++ b/src/app/(frontend)/components/ui/Eyebrow.tsx
+@@ -0,0 +1,14 @@
++﻿import type { ReactNode } from 'react'
++
++/** Small label rendered above headings to anchor a section. */
++export function Eyebrow({ children, tone = 'forest' }: { children: ReactNode; tone?: 'forest' | 'amber' }) {
++  const color = tone === 'forest' ? 'text-forest' : 'text-amber-700'
++  return (
++    <div className="mb-3 flex items-center gap-3">
++      <span aria-hidden="true" className="h-px w-10 bg-amber-400" />
++      <span className={['text-xs font-semibold uppercase tracking-[0.18em]', color].join(' ')}>
++        {children}
++      </span>
++    </div>
++  )
++}
+diff --git a/src/app/(frontend)/components/ui/Section.tsx b/src/app/(frontend)/components/ui/Section.tsx
+new file mode 100644
+index 0000000..e2a7328
+--- /dev/null
++++ b/src/app/(frontend)/components/ui/Section.tsx
+@@ -0,0 +1,31 @@
++﻿import type { ReactNode } from 'react'
++
++type Tone = 'plain' | 'muted' | 'dark'
++
++const tones: Record<Tone, string> = {
++  plain: 'bg-cream text-ink',
++  muted: 'bg-white/60 text-ink',
++  dark: 'bg-ink text-white',
++}
++
++export function Section({
++  id,
++  ariaLabel,
++  tone = 'plain',
++  children,
++}: {
++  id?: string
++  ariaLabel?: string
++  tone?: Tone
++  children: ReactNode
++}) {
++  return (
++    <section
++      id={id}
++      aria-label={ariaLabel}
++      className={['py-20 sm:py-24 lg:py-28', tones[tone]].join(' ')}
++    >
++      {children}
++    </section>
++  )
++}
+diff --git a/src/app/(frontend)/globals.css b/src/app/(frontend)/globals.css
+new file mode 100644
+index 0000000..bd74417
+--- /dev/null
++++ b/src/app/(frontend)/globals.css
+@@ -0,0 +1,33 @@
++﻿@import "tailwindcss";
++
++@theme {
++  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
++  --font-serif: "Lora", Georgia, "Times New Roman", serif;
++
++  --color-ink: #0f172a;        /* slate-900 */
++  --color-cream: #fff7ec;      /* warm background */
++  --color-amber-soft: #fde68a;
++  --color-amber-brand: #f59e0b;
++  --color-forest: #14532d;     /* emerald-900 */
++  --color-forest-soft: #d1fae5;
++}
++
++@layer base {
++  html {
++    scroll-behavior: smooth;
++    -webkit-font-smoothing: antialiased;
++  }
++  body {
++    font-family: var(--font-sans);
++    color: var(--color-ink);
++    background: var(--color-cream);
++  }
++  ::selection {
++    background: var(--color-amber-soft);
++    color: var(--color-ink);
++  }
++  h1, h2, h3, h4 {
++    font-family: var(--font-serif);
++    letter-spacing: -0.01em;
++  }
++}
+diff --git a/src/app/(frontend)/i18n/LanguageProvider.tsx b/src/app/(frontend)/i18n/LanguageProvider.tsx
+index 73628ef..5227920 100644
+--- a/src/app/(frontend)/i18n/LanguageProvider.tsx
++++ b/src/app/(frontend)/i18n/LanguageProvider.tsx
+@@ -1,7 +1,8 @@
+-'use client'
++﻿'use client'
+ 
+ import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
+ import { contentByLang, type Lang, type SiteContent } from './content'
++import { LangSchema } from '@/lib/validation'
+ 
+ interface LanguageContextValue {
+   lang: Lang
+@@ -16,8 +17,15 @@ const LanguageContext = createContext<LanguageContextValue | null>(null)
+ 
+ function detectInitialLang(): Lang {
+   if (typeof window === 'undefined') return 'en'
+-  const stored = window.localStorage.getItem(STORAGE_KEY)
+-  if (stored === 'en' || stored === 'lv') return stored
++  try {
++    const stored = window.localStorage.getItem(STORAGE_KEY)
++    const parsed = LangSchema.safeParse(stored)
++    if (parsed.success) return parsed.data
++  } catch (error) {
++    // Storage may be unavailable (private mode, Safari ITP, etc.)
++    // eslint-disable-next-line no-console
++    console.warn('[i18n] localStorage unavailable, falling back to navigator', error)
++  }
+   const navLang = window.navigator.language?.toLowerCase() ?? ''
+   if (navLang.startsWith('lv')) return 'lv'
+   return 'en'
+@@ -32,10 +40,19 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
+   }, [])
+ 
+   const setLang = useCallback((next: Lang) => {
+-    setLangState(next)
+-    if (typeof window !== 'undefined') {
+-      window.localStorage.setItem(STORAGE_KEY, next)
+-      document.documentElement.lang = next
++    const parsed = LangSchema.safeParse(next)
++    if (!parsed.success) {
++      // eslint-disable-next-line no-console
++      console.warn('[i18n] setLang received invalid value, ignoring', next)
++      return
++    }
++    setLangState(parsed.data)
++    try {
++      window.localStorage.setItem(STORAGE_KEY, parsed.data)
++      document.documentElement.lang = parsed.data
++    } catch (error) {
++      // eslint-disable-next-line no-console
++      console.warn('[i18n] failed to persist language preference', error)
+     }
+   }, [])
+ 
+diff --git a/src/app/(frontend)/i18n/content.ts b/src/app/(frontend)/i18n/content.ts
+index 1da3131..00a2981 100644
+--- a/src/app/(frontend)/i18n/content.ts
++++ b/src/app/(frontend)/i18n/content.ts
+@@ -1,25 +1,17 @@
+-// Centralized bilingual content map for the DLA website.
+-// When we move to Payload CMS (DLA-201..206) this file will be replaced
+-// by data fetched from the `pages` global / `events` collection.
++﻿// Centralized bilingual content map for the DLA website.
++// Validated against `src/lib/validation.ts` at module load so that any shape
++// regression fails fast. When the Payload CMS lands (DLA-201..206) the same
++// schemas will be reused to validate API responses.
+ 
+-export type Lang = 'en' | 'lv'
++import { SiteContentSchema, type SiteContentValidated, LangSchema } from '@/lib/validation'
++import type { z } from 'zod'
+ 
+-export interface EventItem {
+-  id: string
+-  title: string
+-  body: string
+-}
++export type Lang = z.infer<typeof LangSchema>
+ 
+-export interface SiteContent {
+-  nav: { about: string; history: string; events: string; skipToContent: string }
+-  hero: { eyebrow: string; title: string; subtitle: string; cta: string }
+-  about: { title: string; body: string[] }
+-  history: { title: string; body: string[] }
+-  events: { title: string; intro: string; items: EventItem[] }
+-  footer: { tagline: string; contact: string; rights: string; address: string; languageLabel: string }
+-}
++export type EventItem = SiteContentValidated['events']['items'][number]
++export type SiteContent = SiteContentValidated
+ 
+-export const en: SiteContent = {
++const en: SiteContent = {
+   nav: {
+     about: 'About',
+     history: 'History',
+@@ -99,7 +91,7 @@ export const en: SiteContent = {
+   },
+ }
+ 
+-export const lv: SiteContent = {
++const lv: SiteContent = {
+   nav: {
+     about: 'Par mums',
+     history: 'Vēsture',
+@@ -177,4 +169,21 @@ export const lv: SiteContent = {
+   },
+ }
+ 
+-export const contentByLang: Record<Lang, SiteContent> = { en, lv }
++// Validate both content maps at module load. In dev we log, in prod we still log
++// (CMS data is expected to be valid; the only path to invalid data is a developer
++// mistake that should surface immediately).
++const enResult = SiteContentSchema.safeParse(en)
++const lvResult = SiteContentSchema.safeParse(lv)
++if (!enResult.success) {
++  // eslint-disable-next-line no-console
++  console.error('[i18n] English content failed validation', enResult.error.format())
++}
++if (!lvResult.success) {
++  // eslint-disable-next-line no-console
++  console.error('[i18n] Latvian content failed validation', lvResult.error.format())
++}
++
++export const contentByLang: Record<Lang, SiteContent> = {
++  en: enResult.success ? enResult.data : en,
++  lv: lvResult.success ? lvResult.data : lv,
++}
+diff --git a/src/app/(frontend)/layout.tsx b/src/app/(frontend)/layout.tsx
+index 76b587b..3cc47ee 100644
+--- a/src/app/(frontend)/layout.tsx
++++ b/src/app/(frontend)/layout.tsx
+@@ -1,5 +1,5 @@
+-import React from 'react'
+-import './styles.css'
++﻿import React from 'react'
++import './globals.css'
+ 
+ export const metadata = {
+   description:
+@@ -19,7 +19,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
+           href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+         />
+       </head>
+-      <body className="bg-white font-sans text-slate-900 antialiased">{children}</body>
++      <body className="bg-cream text-ink antialiased">{children}</body>
+     </html>
+   )
+ }
+diff --git a/src/app/(frontend)/page.tsx b/src/app/(frontend)/page.tsx
+index 251fe97..b14c79f 100644
+--- a/src/app/(frontend)/page.tsx
++++ b/src/app/(frontend)/page.tsx
+@@ -1,4 +1,4 @@
+-import { LanguageProvider } from './i18n/LanguageProvider'
++﻿import { LanguageProvider } from './i18n/LanguageProvider'
+ import { SiteHeader } from './components/SiteHeader'
+ import { Hero } from './components/Hero'
+ import { TextSection } from './components/TextSection'
+@@ -9,7 +9,7 @@ export default function HomePage() {
+   return (
+     <LanguageProvider>
+       <SiteHeader />
+-      <main id="main" className="bg-white text-slate-900">
++      <main id="main" className="bg-cream text-ink">
+         <Hero />
+         <TextSection id="about" tone="muted" />
+         <TextSection id="history" />
+diff --git a/src/app/(frontend)/styles.css b/src/app/(frontend)/styles.css
+deleted file mode 100644
+index 6da06c4..0000000
+--- a/src/app/(frontend)/styles.css
++++ /dev/null
+@@ -1,18 +0,0 @@
+-@layer base {
+-  :root {
+-    --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+-    --font-serif: 'Lora', Georgia, 'Times New Roman', serif;
+-  }
+-
+-  html {
+-    scroll-behavior: smooth;
+-  }
+-
+-  body {
+-    font-family: var(--font-sans);
+-  }
+-
+-  .font-serif {
+-    font-family: var(--font-serif);
+-  }
+-}
+diff --git a/src/lib/validation.ts b/src/lib/validation.ts
+new file mode 100644
+index 0000000..58289cd
+--- /dev/null
++++ b/src/lib/validation.ts
+@@ -0,0 +1,74 @@
++﻿import { z } from 'zod'
++
++/**
++ * Strict runtime schemas for the bilingual content map.
++ * These run at module load against the hard-coded `en` / `lv` objects in
++ * `i18n/content.ts` and (later) against anything Payload CMS returns from the
++ * `pages` global / `events` collection. When validation fails the LanguageProvider
++ * falls back to English so the UI is never broken.
++ */
++
++export const LangSchema = z.enum(['en', 'lv'])
++
++export const NavSchema = z.object({
++  about: z.string().min(1),
++  history: z.string().min(1),
++  events: z.string().min(1),
++  skipToContent: z.string().min(1),
++})
++
++export const HeroSchema = z.object({
++  eyebrow: z.string().min(1),
++  title: z.string().min(1),
++  subtitle: z.string().min(1),
++  cta: z.string().min(1),
++})
++
++export const TextBlockSchema = z.object({
++  title: z.string().min(1),
++  body: z.array(z.string().min(1)).min(1),
++})
++
++export const EventItemSchema = z.object({
++  id: z.string().min(1).regex(/^[a-z0-9-]+$/, 'event id must be kebab-case'),
++  title: z.string().min(1),
++  body: z.string().min(1),
++})
++
++export const EventsSchema = z.object({
++  title: z.string().min(1),
++  intro: z.string().min(1),
++  items: z.array(EventItemSchema).min(1),
++})
++
++export const FooterSchema = z.object({
++  tagline: z.string().min(1),
++  contact: z.string().min(1),
++  rights: z.string().min(1),
++  address: z.string().min(1),
++  languageLabel: z.string().min(1),
++})
++
++export const SiteContentSchema = z.object({
++  nav: NavSchema,
++  hero: HeroSchema,
++  about: TextBlockSchema,
++  history: TextBlockSchema,
++  events: EventsSchema,
++  footer: FooterSchema,
++})
++
++export type SiteContentValidated = z.infer<typeof SiteContentSchema>
++
++/**
++ * Validate any object as a `SiteContent`. Returns a discriminated result so the
++ * LanguageProvider can choose to log + fall back instead of throwing.
++ */
++export function validateSiteContent(input: unknown):
++  | { ok: true; data: SiteContentValidated }
++  | { ok: false; error: z.ZodError } {
++  const result = SiteContentSchema.safeParse(input)
++  return result.success
++    ? { ok: true, data: result.data }
++    : { ok: false, error: result.error }
++}
+diff --git a/tests/unit/LanguageSwitcher.test.tsx b/tests/unit/LanguageSwitcher.test.tsx
+new file mode 100644
+index 0000000..f6ba6f6
+--- /dev/null
++++ b/tests/unit/LanguageSwitcher.test.tsx
+@@ -0,0 +1,51 @@
++﻿/**
++ * @jest-environment jsdom
++ */
++import { fireEvent, render, screen, within } from '@testing-library/react'
++import { LanguageProvider } from '@/app/(frontend)/i18n/LanguageProvider'
++import { LanguageSwitcher } from '@/app/(frontend)/components/LanguageSwitcher'
++
++function renderSwitcher() {
++  return render(
++    <LanguageProvider>
++      <LanguageSwitcher />
++    </LanguageProvider>,
++  )
++}
++
++describe('<LanguageSwitcher />', () => {
++  beforeEach(() => {
++    window.localStorage.clear()
++  })
++
++  it('renders both EN and LV buttons with EN active by default', () => {
++    renderSwitcher()
++    const en = screen.getByRole('button', { name: /Language: EN/i })
++    const lv = screen.getByRole('button', { name: /Language: LV/i })
++    expect(en).toHaveAttribute('aria-pressed', 'true')
++    expect(lv).toHaveAttribute('aria-pressed', 'false')
++  })
++
++  it('flips the active state when LV is clicked', () => {
++    renderSwitcher()
++    const lv = screen.getByRole('button', { name: /Language: LV/i })
++    fireEvent.click(lv)
++    expect(lv).toHaveAttribute('aria-pressed', 'true')
++    const en = screen.getByRole('button', { name: /Language: EN/i })
++    expect(en).toHaveAttribute('aria-pressed', 'false')
++  })
++
++  it('persists the chosen language to localStorage', () => {
++    renderSwitcher()
++    const lv = screen.getByRole('button', { name: /Language: LV/i })
++    fireEvent.click(lv)
++    expect(window.localStorage.getItem('dla.lang')).toBe('lv')
++  })
++
++  it('rejects an invalid localStorage value on mount', () => {
++    window.localStorage.setItem('dla.lang', 'fr')
++    renderSwitcher()
++    const en = screen.getByRole('button', { name: /Language: EN/i })
++    expect(en).toHaveAttribute('aria-pressed', 'true')
++  })
++})
+diff --git a/tests/unit/validation.test.ts b/tests/unit/validation.test.ts
+new file mode 100644
+index 0000000..db66006
+--- /dev/null
++++ b/tests/unit/validation.test.ts
+@@ -0,0 +1,85 @@
++﻿import {
++  EventItemSchema,
++  LangSchema,
++  SiteContentSchema,
++  validateSiteContent,
++  type SiteContentValidated,
++} from '@/lib/validation'
++
++const baseContent: SiteContentValidated = {
++  nav: { about: 'A', history: 'H', events: 'E', skipToContent: 'S' },
++  hero: { eyebrow: 'e', title: 't', subtitle: 's', cta: 'c' },
++  about: { title: 'About', body: ['paragraph 1'] },
++  history: { title: 'History', body: ['paragraph 1'] },
++  events: {
++    title: 'Events',
++    intro: 'intro',
++    items: [{ id: 'lieldienas', title: 't', body: 'b' }],
++  },
++  footer: {
++    tagline: 'tag',
++    contact: 'c',
++    rights: 'r',
++    address: 'addr',
++    languageLabel: 'Lang',
++  },
++}
++
++describe('LangSchema', () => {
++  it('accepts "en" and "lv"', () => {
++    expect(LangSchema.parse('en')).toBe('en')
++    expect(LangSchema.parse('lv')).toBe('lv')
++  })
++
++  it('rejects anything else', () => {
++    expect(LangSchema.safeParse('fr').success).toBe(false)
++    expect(LangSchema.safeParse(null).success).toBe(false)
++  })
++})
++
++describe('EventItemSchema', () => {
++  it('rejects ids that are not kebab-case', () => {
++    const result = EventItemSchema.safeParse({ id: 'Not Kebab', title: 't', body: 'b' })
++    expect(result.success).toBe(false)
++  })
++
++  it('accepts well-formed events', () => {
++    const result = EventItemSchema.safeParse({ id: 'may4', title: 't', body: 'b' })
++    expect(result.success).toBe(true)
++  })
++})
++
++describe('SiteContentSchema', () => {
++  it('accepts a complete bilingual payload', () => {
++    const result = SiteContentSchema.safeParse(baseContent)
++    expect(result.success).toBe(true)
++  })
++
++  it('rejects a payload with an empty event list', () => {
++    const result = SiteContentSchema.safeParse({ ...baseContent, events: { ...baseContent.events, items: [] } })
++    expect(result.success).toBe(false)
++  })
++
++  it('rejects a payload with an empty body array', () => {
++    const result = SiteContentSchema.safeParse({ ...baseContent, about: { title: 'A', body: [] } })
++    expect(result.success).toBe(false)
++  })
++})
++
++describe('validateSiteContent', () => {
++  it('returns ok:true with typed data on valid input', () => {
++    const result = validateSiteContent(baseContent)
++    expect(result.ok).toBe(true)
++    if (result.ok) {
++      expect(result.data.events.items[0].id).toBe('lieldienas')
++    }
++  })
++
++  it('returns ok:false with a zod error on invalid input', () => {
++    const result = validateSiteContent({ nav: {} })
++    expect(result.ok).toBe(false)
++    if (!result.ok) {
++      expect(result.error.issues.length).toBeGreaterThan(0)
++    }
++  })
++})

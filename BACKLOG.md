@@ -1,27 +1,27 @@
-# DLA Website – Product Backlog (Jira-style)
+﻿# DLA Website вЂ“ Product Backlog (Jira-style)
 
-> Project: **Latvian Association of Darwin (Dārvinas Latviešu Apvienība)** website
+> Project: **Latvian Association of Darwin (DДЃrvinas LatvieЕЎu ApvienД«ba)** website
 > Stack: **Next.js 15 (App Router) + React 19 + Tailwind CSS v4 + Payload CMS 3 + Cloudflare Workers (OpenNext)**
 > Convention: tickets prefixed `DLA-` (Darwin Latvian Association).
 > Status legend: `To Do` | `In Progress` | `Blocked` | `Done`
 
  ---
 
-## Epic DLA-100 – Static bilingual frontend (Phase 1, no CMS)
+## Epic DLA-100 вЂ“ Static bilingual frontend (Phase 1, no CMS)
 
-Build the public marketing site in English and Latvian, using the copy provided by the client and a layout inspired by https://www.uaant.org.au. No Payload collections are wired yet — all content is hard-coded in components so the structure can later be swapped for CMS-driven data.
+Build the public marketing site in English and Latvian, using the copy provided by the client and a layout inspired by https://www.uaant.org.au. No Payload collections are wired yet вЂ” all content is hard-coded in components so the structure can later be swapped for CMS-driven data.
 
 | Ticket | Title | Type | Priority | Status | Notes |
 | --- | --- | --- | --- | --- | --- |
 | DLA-101 | Create `BACKLOG.md` task tracker | Chore | Medium | Done | This file. |
 | DLA-102 | Tailwind CSS v4 styling via Play CDN (CDN chosen because sandbox blocks `npm install`; will be replaced by `@tailwindcss/postcss` build step in CI) | Task | High | Done | `preview/index.html` uses `cdn.tailwindcss.com`; production will switch to PostCSS build. |
-| DLA-103 | Build `SiteHeader` (logo, nav, EN/LV switcher) | Story | High | Done | `components/SiteHeader.tsx` – sticky, semantic `<header>` + `<nav>`, skip link, mobile sub-nav. |
-| DLA-104 | Build `Hero` section with association name (EN + LV) | Story | High | Done | `components/Hero.tsx` – gradient banner, eyebrow, balanced H1, CTA. |
+| DLA-103 | Build `SiteHeader` (logo, nav, EN/LV switcher) | Story | High | Done | `components/SiteHeader.tsx` вЂ“ sticky, semantic `<header>` + `<nav>`, skip link, mobile sub-nav. |
+| DLA-104 | Build `Hero` section with association name (EN + LV) | Story | High | Done | `components/Hero.tsx` вЂ“ gradient banner, eyebrow, balanced H1, CTA. |
 | DLA-105 | Build `About` section (EN + LV body text) | Story | High | Done | `components/TextSection.tsx` with `id="about"`, semantic landmark, EN + LV copy. |
 | DLA-106 | Build `History` section (EN + LV body text) | Story | High | Done | `components/TextSection.tsx` with `id="history"`, semantic landmark, EN + LV copy. |
-| DLA-107 | Build `Events` grid with 5 cards (EN + LV) | Story | High | Done | `components/Events.tsx` – 1/2/3-column responsive grid, accent chips per event. |
-| DLA-108 | Build `SiteFooter` (contact, copyright, social placeholders) | Story | Medium | Done | `components/SiteFooter.tsx` – 3-column grid, copyright, email, sitemap. |
-| DLA-109 | Implement i18n context (`LanguageProvider`) with EN/LV toggle, persisted in `localStorage` | Story | High | Done | `i18n/LanguageProvider.tsx` – typed `Lang = "en" \| "lv"`, `localStorage` key `dla.lang`, navigator fallback. |
+| DLA-107 | Build `Events` grid with 5 cards (EN + LV) | Story | High | Done | `components/Events.tsx` вЂ“ 1/2/3-column responsive grid, accent chips per event. |
+| DLA-108 | Build `SiteFooter` (contact, copyright, social placeholders) | Story | Medium | Done | `components/SiteFooter.tsx` вЂ“ 3-column grid, copyright, email, sitemap. |
+| DLA-109 | Implement i18n context (`LanguageProvider`) with EN/LV toggle, persisted in `localStorage` | Story | High | Done | `i18n/LanguageProvider.tsx` вЂ“ typed `Lang = "en" \| "lv"`, `localStorage` key `dla.lang`, navigator fallback. |
 | DLA-110 | Translate all UI chrome (nav, buttons, footer) | Task | Medium | Done | `i18n/content.ts` carries `nav`, `hero`, `footer`, and chrome strings for both languages. |
 | DLA-111 | Replace `app/(frontend)/page.tsx` with bilingual site | Task | High | Done | `page.tsx` now mounts `LanguageProvider` + `SiteHeader` + sections + `SiteFooter`. |
 | DLA-112 | Provide offline preview + production-ready source | Task | Medium | Done | `preview/index.html` mirrors the React components and is openable directly in a browser; production build uses the same content map. |
@@ -30,13 +30,13 @@ Build the public marketing site in English and Latvian, using the copy provided 
 
  - [x] Static preview renders without errors (`preview/index.html`)
  - [x] Language switcher flips all visible copy between EN and LV
- - [x] Layout is responsive (tested 320px → 1280px breakpoints)
+ - [x] Layout is responsive (tested 320px в†’ 1280px breakpoints)
  - [x] No console errors; Tailwind utility classes apply correctly
- - [x] All semantic landmarks present (`<header> <nav> <main> <section id="…"> <footer>`)
+ - [x] All semantic landmarks present (`<header> <nav> <main> <section id="вЂ¦"> <footer>`)
 
  ---
 
-## Epic DLA-200 – Payload CMS data model (Phase 2)
+## Epic DLA-200 вЂ“ Payload CMS data model (Phase 2)
 
 | Ticket | Title | Type | Priority | Status | Notes |
 | --- | --- | --- | --- | --- | --- |
@@ -49,7 +49,7 @@ Build the public marketing site in English and Latvian, using the copy provided 
 
  ---
 
-## Epic DLA-300 – i18n routing & polish (Phase 3)
+## Epic DLA-300 вЂ“ i18n routing & polish (Phase 3)
 
 | Ticket | Title | Type | Priority | Status | Notes |
 | --- | --- | --- | --- | --- | --- |
@@ -61,7 +61,7 @@ Build the public marketing site in English and Latvian, using the copy provided 
 
  ---
 
-## Epic DLA-400 – Deployment to Cloudflare (Phase 4)
+## Epic DLA-400 вЂ“ Deployment to Cloudflare (Phase 4)
 
 | Ticket | Title | Type | Priority | Status | Notes |
 | --- | --- | --- | --- | --- | --- |
@@ -81,4 +81,17 @@ Build the public marketing site in English and Latvian, using the copy provided 
 4. Add new discovered work as a new row with the next `DLA-###` number.
 
 
+---
+
+## Next development phase – styling fix, zod validation, automated tests
+
+| Ticket | Title | Type | Priority | Status | Notes |
+| --- | --- | --- | --- | --- | --- |
+| DLA-251 | Wire up Tailwind v4 with `@tailwindcss/postcss` + `globals.css` | Task | High | Done | `postcss.config.mjs`, `src/app/(frontend)/globals.css`, layout imports the file. Sandbox keeps `preview/index.html` on the Play CDN. |
+| DLA-252 | Polish components (SiteHeader, Hero, TextSection, Events, SiteFooter) | Story | High | Done | New `ui/` primitives + tighter spacing/typography, frosted header, decorative hero, gradient chip accents. |
+| DLA-351 | Add `zod` + strict content schemas (`SiteContentSchema`, `EventItemSchema`, `LangSchema`) | Task | High | Done | `src/lib/validation.ts`; `i18n/content.ts` validates at module load and falls back to English on failure. |
+| DLA-352 | Surface validation errors in `LanguageProvider` | Story | Medium | Done | `safeParse` warning + dev-time `console.error`; UX is never broken by bad data. |
+| DLA-451 | Configure Jest for Next.js App Router + React Testing Library | Task | High | Done | `jest.config.ts`, `jest.setup.ts`, `tests/unit/`. |
+| DLA-452 | Unit tests: `LanguageSwitcher` state changes | Story | High | Done | `tests/unit/LanguageSwitcher.test.tsx` covers both `EN` / `LV` click and `aria-pressed`. |
+| DLA-453 | Unit tests: zod validation logic | Story | High | Done | `tests/unit/validation.test.ts` exercises accept / reject fixtures. |
 

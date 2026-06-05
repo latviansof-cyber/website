@@ -1,4 +1,4 @@
-# Smart Git sync � DLA series
+﻿# Smart Git sync – DLA series
 
 This folder is a **portable patch series** that recreates the work done for the
 DLA-25x / 35x / 45x epics as a single composite commit on top of the DLA-100
@@ -15,7 +15,7 @@ ship the commit as a `git am`-compatible mbox patch instead of pushing directly.
 `build-patch.ps1` is the generator used inside the sandbox. `apply.ps1` runs
 `git am` against the patch in a fresh feature branch. `sync-from-sandbox.ps1`
 is a smart file-level copier for users whose working tree is already partially
-updated (no git, no commits � just file system).
+updated (no git, no commits — just file system).
 
 ## Apply locally (PowerShell)
 
@@ -73,3 +73,17 @@ You should see 6 passing tests (4 LanguageSwitcher + 2 zod). If `pnpm dev`
 shows raw HTML, double-check that `postcss.config.mjs` is present and that
 `@tailwindcss/postcss` is in `devDependencies` (the patch updates
 `package.json` accordingly).
+
+
+
+## Audit patch (DLA-501)
+
+Once DLA-260 is merged, you can also apply the small integrity pass from this PR:
+
+```pwsh
+pwsh -File git-sync/apply-audit.ps1 -Branch codex/dla-501-audit
+```
+
+It fixes a typo in `jest.config.ts` (`setupFilesAfterEach` → `setupFilesAfterEnv`),
+removes an unused import, and adds four `TODO(DLA-…)` comments that link the
+current code to the planned Payload CMS + i18n-routing work.

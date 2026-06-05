@@ -83,15 +83,77 @@ Build the public marketing site in English and Latvian, using the copy provided 
 
 ---
 
-## Next development phase – styling fix, zod validation, automated tests
 
-| Ticket | Title | Type | Priority | Status | Notes |
-| --- | --- | --- | --- | --- | --- |
-| DLA-251 | Wire up Tailwind v4 with `@tailwindcss/postcss` + `globals.css` | Task | High | Done | `postcss.config.mjs`, `src/app/(frontend)/globals.css`, layout imports the file. Sandbox keeps `preview/index.html` on the Play CDN. |
-| DLA-252 | Polish components (SiteHeader, Hero, TextSection, Events, SiteFooter) | Story | High | Done | New `ui/` primitives + tighter spacing/typography, frosted header, decorative hero, gradient chip accents. |
-| DLA-351 | Add `zod` + strict content schemas (`SiteContentSchema`, `EventItemSchema`, `LangSchema`) | Task | High | Done | `src/lib/validation.ts`; `i18n/content.ts` validates at module load and falls back to English on failure. |
-| DLA-352 | Surface validation errors in `LanguageProvider` | Story | Medium | Done | `safeParse` warning + dev-time `console.error`; UX is never broken by bad data. |
-| DLA-451 | Configure Jest for Next.js App Router + React Testing Library | Task | High | Done | `jest.config.ts`, `jest.setup.ts`, `tests/unit/`. |
-| DLA-452 | Unit tests: `LanguageSwitcher` state changes | Story | High | Done | `tests/unit/LanguageSwitcher.test.tsx` covers both `EN` / `LV` click and `aria-pressed`. |
-| DLA-453 | Unit tests: zod validation logic | Story | High | Done | `tests/unit/validation.test.ts` exercises accept / reject fixtures. |
+---
+
+## Status legend
+
+`To Do` · `In Progress` · `Blocked` · `Done`
+
+## Done (merged into main)
+
+| Ticket | Title | Notes |
+| --- | --- | --- |
+| DLA-101 | Create `BACKLOG.md` task tracker | Initial Jira-style backlog. |
+| DLA-102 | Tailwind v4 styling + offline preview | Play CDN preview, styles.css in src. |
+| DLA-103 | SiteHeader with EN/LV switcher | v1 of header. |
+| DLA-104 | Hero section with association name | v1 of hero. |
+| DLA-105 | About section | v1 copy block. |
+| DLA-106 | History section | v1 copy block. |
+| DLA-107 | Events grid (5 cards) | v1 list. |
+| DLA-108 | SiteFooter | v1 of footer. |
+| DLA-109 | i18n context (LanguageProvider) | v1 client context. |
+| DLA-110 | Translate all UI chrome | Bilingual content map. |
+| DLA-111 | Wire bilingual page.tsx | v0 home shell. |
+| DLA-251 | Tailwind v4 wiring (`postcss.config.mjs` + `globals.css`) | Tailwind v4 with `@tailwindcss/postcss`, `@theme` design tokens. |
+| DLA-252 | Polish components (frosted header, decorative hero, refined cards) | New `ui/` primitives (Container / Section / Eyebrow / Chip / Button). |
+| DLA-351 | Zod runtime validation for content | `src/lib/validation.ts` + safe module-load validation in `i18n/content.ts`. |
+| DLA-352 | Safe LanguageProvider persistence | `LangSchema.safeParse` around `localStorage`. |
+| DLA-451 | Configure Jest for App Router + RTL | `jest.config.ts`, `jest.setup.ts`, `tests/unit/`. |
+| DLA-452 | Unit tests: `LanguageSwitcher` state changes | 4 tests. |
+| DLA-453 | Unit tests: zod validation logic | 9 tests. |
+| DLA-501 | Audit fixes (jest config + TODO comments + unused import) | Renames `setupFilesAfterEach` → `setupFilesAfterEnv`; drops unused `within` import; adds 4 `TODO(DLA-…)` markers. |
+
+---
+
+## To Do (next iteration)
+
+### Phase 2 — Payload CMS data model
+
+| Ticket | Title | Priority | Notes |
+| --- | --- | --- | --- |
+| DLA-201 | `Pages` global with `about`, `history` rich text (EN + LV) | High | Use `localized: true` arrays/fields. |
+| DLA-202 | `Events` collection (title, body, order, date) localized | High | Slug + draft/publish workflow. |
+| DLA-203 | `SiteSettings` global (association name, contact email, social URLs) | Medium | Drives header/footer brand strings (replaces hard-coded "DLA" mark in `SiteHeader.tsx`). |
+| DLA-204 | `Media` collection + R2 storage adapter | Medium | Adapter already installed (`@payloadcms/storage-r2`); verify bucket binding. |
+| DLA-205 | Seed dev DB with current hard-coded copy | Medium | Migration script. |
+| DLA-206 | Switch frontend sections to fetch from Payload Local API | High | Replace `contentByLang` in `i18n/content.ts` with `payload.findGlobal({ slug: 'pages' })`. |
+
+### Phase 3 — i18n routing & polish
+
+| Ticket | Title | Priority | Notes |
+| --- | --- | --- | --- |
+| DLA-301 | Move from client-side toggle to `/en/...` and `/lv/...` routes | High | App Router `[locale]` segment; `LanguageProvider` falls back to URL locale. Fixes "flash of English" issue (see TODO in `LanguageProvider.tsx`). |
+| DLA-302 | Add `<html lang>` and SEO meta per locale | Medium | OpenGraph + hreflang. |
+| DLA-303 | Add sitemap and robots | Low | Per-locale URLs. |
+| DLA-304 | Accessibility audit (axe, focus order, contrast) | Medium |  |
+| DLA-305 | Performance pass: image optimization, font subsetting | Low |  |
+
+### Phase 4 — Deployment to Cloudflare
+
+| Ticket | Title | Priority | Notes |
+| --- | --- | --- | --- |
+| DLA-401 | Verify `wrangler.jsonc` bindings (D1, R2, secrets) | High | Already scaffolded in template. |
+| DLA-402 | Configure `open-next.config.ts` for production | High |  |
+| DLA-403 | Document `pnpm deploy:database` and `pnpm deploy:app` workflow | Medium | Update `README.md`. |
+| DLA-404 | Custom domain + DNS | Medium |  |
+| DLA-405 | Smoke-test production preview (`pnpm preview`) | Medium |  |
+
+### Maintenance
+
+| Ticket | Title | Priority | Notes |
+| --- | --- | --- | --- |
+| DLA-502 | Sync `package.json` / `package-lock.json` with `pnpm install` output | Low | Workspace drift is benign (pnpm normalises JSON + adds `tailwindcss` + `@tailwindcss/postcss` to devDeps); commit as a single "chore" so future clones don't re-run the install. |
+
+---
 

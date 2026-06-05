@@ -19,3 +19,7 @@ export default function HomePage() {
     </LanguageProvider>
   )
 }
+
+// TODO(DLA-302): when i18n routing lands, split this into /[locale]/page.tsx and
+//   generate static metadata per locale (OpenGraph + hreflang). Also switch
+//   `export default` to `generateStaticParams()` + `generateMetadata()`.

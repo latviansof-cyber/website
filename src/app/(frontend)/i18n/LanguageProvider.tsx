@@ -75,3 +75,7 @@ export function useLanguage(): LanguageContextValue {
   }
   return ctx
 }
+
+// TODO(DLA-201): switch the static `en` initial state to a server-injected value (or render
+//   a loading shell) once Payload's `SiteSettings` global is wired up. The current pattern
+//   can cause a brief "flash of English content" on a Latvian browser visiting the page.

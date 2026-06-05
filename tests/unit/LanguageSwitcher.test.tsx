@@ -1,7 +1,7 @@
 ﻿/**
  * @jest-environment jsdom
  */
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { LanguageProvider } from '@/app/(frontend)/i18n/LanguageProvider'
 import { LanguageSwitcher } from '@/app/(frontend)/components/LanguageSwitcher'
 
@@ -49,3 +49,4 @@ describe('<LanguageSwitcher />', () => {
     expect(en).toHaveAttribute('aria-pressed', 'true')
   })
 })
+

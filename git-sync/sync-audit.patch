@@ -1,0 +1,90 @@
+From DLA-501 2026-06-05 14:26:46 +03:00
+From: EsegyCode <nickofffffff@gmail.com>
+Subject: [DLA-501] Audit fixes: jest config + TODO comments + unused import
+
+Applies a small integrity pass on top of DLA-260: (1) fixes jest.config.ts which had setupFilesAfterEach (invalid Jest option, the correct name is setupFilesAfterEnv) so the @testing-library/jest-dom matchers actually load, (2) removes the unused within import from LanguageSwitcher.test.tsx, (3) adds four TODO(DLA-*) comments to SiteHeader, Events, LanguageProvider, and page.tsx that document the planned Payload + i18n-routing hand-offs (DLA-201..203, DLA-302). No behavior change except the jest config fix; tests should now run with the custom matchers loaded.
+
+diff --git a/jest.config.ts b/jest.config.ts
+index 192a744..f1f78c9 100644
+--- a/jest.config.ts
++++ b/jest.config.ts
+@@ -4,7 +4,7 @@ import nextJest from 'next/jest.js'
+ const createJestConfig = nextJest({ dir: './' })
+ 
+ const config: Config = {
+-  setupFilesAfterEach: ['<rootDir>/jest.setup.ts'],
++  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+   testEnvironment: 'jsdom',
+   moduleNameMapper: {
+     '^@/(.*)$': '<rootDir>/src/$1',
+@@ -14,3 +14,4 @@ const config: Config = {
+ }
+ 
+ export default createJestConfig(config)
++
+diff --git a/src/app/(frontend)/components/Events.tsx b/src/app/(frontend)/components/Events.tsx
+index 4ef3dd6..568d1c0 100644
+--- a/src/app/(frontend)/components/Events.tsx
++++ b/src/app/(frontend)/components/Events.tsx
+@@ -64,3 +64,7 @@ export function Events() {
+     </Section>
+   )
+ }
++
++// TODO(DLA-202): once the Payload `Events` collection ships, replace the hard-coded
++//   `accentByEvent` map with a server component that fetches via `payload.find()` and
++//   pre-classifies accents by an `accentTone` enum field on each event.
+diff --git a/src/app/(frontend)/components/SiteHeader.tsx b/src/app/(frontend)/components/SiteHeader.tsx
+index af71081..6ce64ae 100644
+--- a/src/app/(frontend)/components/SiteHeader.tsx
++++ b/src/app/(frontend)/components/SiteHeader.tsx
+@@ -68,3 +68,7 @@ export function SiteHeader() {
+     </header>
+   )
+ }
++
++// TODO(DLA-203): the brand mark ("DLA"), association name and tagline are hard-coded here.
++//   Once the `SiteSettings` global exists in Payload (DLA-203), these should be fetched
++//   from there so non-developers can update them via the admin panel.
+diff --git a/src/app/(frontend)/i18n/LanguageProvider.tsx b/src/app/(frontend)/i18n/LanguageProvider.tsx
+index 5227920..cb85493 100644
+--- a/src/app/(frontend)/i18n/LanguageProvider.tsx
++++ b/src/app/(frontend)/i18n/LanguageProvider.tsx
+@@ -75,3 +75,7 @@ export function useLanguage(): LanguageContextValue {
+   }
+   return ctx
+ }
++
++// TODO(DLA-201): switch the static `en` initial state to a server-injected value (or render
++//   a loading shell) once Payload's `SiteSettings` global is wired up. The current pattern
++//   can cause a brief "flash of English content" on a Latvian browser visiting the page.
+diff --git a/src/app/(frontend)/page.tsx b/src/app/(frontend)/page.tsx
+index b14c79f..46db07f 100644
+--- a/src/app/(frontend)/page.tsx
++++ b/src/app/(frontend)/page.tsx
+@@ -19,3 +19,7 @@ export default function HomePage() {
+     </LanguageProvider>
+   )
+ }
++
++// TODO(DLA-302): when i18n routing lands, split this into /[locale]/page.tsx and
++//   generate static metadata per locale (OpenGraph + hreflang). Also switch
++//   `export default` to `generateStaticParams()` + `generateMetadata()`.
+diff --git a/tests/unit/LanguageSwitcher.test.tsx b/tests/unit/LanguageSwitcher.test.tsx
+index f6ba6f6..bc6629a 100644
+--- a/tests/unit/LanguageSwitcher.test.tsx
++++ b/tests/unit/LanguageSwitcher.test.tsx
+@@ -1,7 +1,7 @@
+ ﻿/**
+  * @jest-environment jsdom
+  */
+-import { fireEvent, render, screen, within } from '@testing-library/react'
++import { fireEvent, render, screen } from '@testing-library/react'
+ import { LanguageProvider } from '@/app/(frontend)/i18n/LanguageProvider'
+ import { LanguageSwitcher } from '@/app/(frontend)/components/LanguageSwitcher'
+ 
+@@ -49,3 +49,4 @@ describe('<LanguageSwitcher />', () => {
+     expect(en).toHaveAttribute('aria-pressed', 'true')
+   })
+ })
++

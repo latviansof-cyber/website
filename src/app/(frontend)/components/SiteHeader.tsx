@@ -68,3 +68,7 @@ export function SiteHeader() {
     </header>
   )
 }
+
+// TODO(DLA-203): the brand mark ("DLA"), association name and tagline are hard-coded here.
+//   Once the `SiteSettings` global exists in Payload (DLA-203), these should be fetched
+//   from there so non-developers can update them via the admin panel.

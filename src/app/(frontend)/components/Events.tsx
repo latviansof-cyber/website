@@ -64,3 +64,7 @@ export function Events() {
     </Section>
   )
 }
+
+// TODO(DLA-202): once the Payload `Events` collection ships, replace the hard-coded
+//   `accentByEvent` map with a server component that fetches via `payload.find()` and
+//   pre-classifies accents by an `accentTone` enum field on each event.

@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useLanguage } from '../i18n/LanguageProvider'
 import { Container } from './ui/Container'
@@ -24,36 +24,44 @@ const accentForChip = {
 export function Events() {
   const { t } = useLanguage()
   return (
-    <Section id="events" ariaLabel={t.events.title} tone="plain">
-      <Container>
-        <div className="max-w-3xl">
-          <Eyebrow>03 — {t.events.title}</Eyebrow>
+    <Section id="events" ariaLabel={t.events.title} tone="plain" className="py-24 sm:py-32 relative overflow-hidden bg-white">
+      {/* Decorative background element */}
+      <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-tr from-sunset-peach/50 to-white rounded-full blur-3xl opacity-60" />
+
+      <Container className="relative z-10">
+        <div className="max-w-3xl flex flex-col items-start">
+          <Eyebrow className="text-sunset-orange tracking-widest font-bold uppercase mb-4">03 — {t.events.title}</Eyebrow>
           <h2
             id="events-title"
-            className="font-serif text-3xl font-bold tracking-tight text-ink sm:text-4xl"
+            className="font-serif text-4xl font-bold tracking-tight text-ink sm:text-5xl lg:text-6xl"
           >
             {t.events.title}
           </h2>
-          <p className="mt-4 text-pretty text-base leading-relaxed text-slate-700 sm:text-lg">
+          <div className="w-16 h-1 bg-gradient-to-r from-sunset-red to-sunset-gold mt-6 rounded-full" />
+          <p className="mt-8 text-pretty text-lg leading-relaxed text-ink-light sm:text-xl max-w-2xl font-medium">
             {t.events.intro}
           </p>
         </div>
         <ul
           role="list"
-          className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3"
         >
-          {t.events.items.map((event) => {
+          {t.events.items.map((event, i) => {
             const accent = accentByEvent[event.id] ?? 'slate'
             return (
               <li
                 key={event.id}
-                className="group flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
+                className="group flex h-full flex-col rounded-3xl border border-slate-100 bg-white/80 backdrop-blur-sm p-8 shadow-md transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:bg-white"
+                style={{ animationDelay: `${i * 100}ms` }}
               >
-                <Chip tone={accent}>{event.id.replace('-', ' ')}</Chip>
-                <h3 className="mt-4 font-serif text-lg font-semibold leading-snug text-ink">
+                <div className="mb-4">
+                  <Chip tone={accent} className="px-3 py-1 font-bold tracking-wide shadow-sm">{event.id.replace('-', ' ')}</Chip>
+                </div>
+                <h3 className="font-serif text-2xl font-bold leading-tight text-ink group-hover:text-sunset-red transition-colors duration-300">
                   {event.title}
                 </h3>
-                <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-700">
+                <div className="mt-4 w-10 h-0.5 bg-slate-200 group-hover:bg-sunset-gold transition-colors duration-300" />
+                <p className="mt-6 flex-1 text-base leading-relaxed text-ink-light font-medium">
                   {event.body}
                 </p>
               </li>

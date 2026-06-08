@@ -1,15 +1,23 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 
 @theme {
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-serif: "Lora", Georgia, "Times New Roman", serif;
 
-  --color-ink: #0f172a;        /* slate-900 */
-  --color-cream: #fff7ec;      /* warm background */
-  --color-amber-soft: #fde68a;
-  --color-amber-brand: #f59e0b;
-  --color-forest: #14532d;     /* emerald-900 */
-  --color-forest-soft: #d1fae5;
+  --color-ink: #1e1b26;        /* Deep night silhouette */
+  --color-ink-light: #2d2938;  /* Slightly lighter for cards */
+  --color-cream: #fdfaf6;      /* Off-white warm background */
+  
+  --color-sunset-orange: #f97316; /* Vibrant orange */
+  --color-sunset-red: #be123c;    /* Deep red */
+  --color-sunset-gold: #fbbf24;   /* Warm gold */
+  --color-sunset-peach: #ffedd5;  /* Soft peach background */
+  
+  --color-emerald-custom: #059669;
+  --color-amber-custom: #d97706;
+  --color-sky-custom: #0284c7;
+  --color-rose-custom: #e11d48;
+  --color-violet-custom: #7c3aed;
 }
 
 @layer base {
@@ -23,11 +31,26 @@
     background: var(--color-cream);
   }
   ::selection {
-    background: var(--color-amber-soft);
+    background: var(--color-sunset-gold);
     color: var(--color-ink);
   }
   h1, h2, h3, h4 {
     font-family: var(--font-serif);
     letter-spacing: -0.01em;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-lg border border-white/40 shadow-xl;
+  }
+  .glass-panel-dark {
+    @apply bg-ink/70 backdrop-blur-xl border border-white/10 shadow-2xl;
+  }
+  .text-glow {
+    text-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+  }
+  .text-glow-orange {
+    text-shadow: 0 0 20px rgba(249, 115, 22, 0.4);
   }
 }

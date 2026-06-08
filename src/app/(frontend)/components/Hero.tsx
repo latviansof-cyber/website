@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useLanguage } from '../i18n/LanguageProvider'
 import { Container } from './ui/Container'
@@ -11,45 +11,48 @@ export function Hero() {
     <section
       id="top"
       aria-labelledby="hero-title"
-      className="relative isolate overflow-hidden bg-ink text-white"
+      className="relative isolate overflow-hidden bg-ink text-white min-h-[90vh] flex flex-col justify-center"
     >
-      {/* Decorative gradient + glow blobs */}
+      {/* Decorative gradient + glow blobs to simulate a sunset */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-gradient-to-br from-ink via-slate-900 to-emerald-950"
+        className="absolute inset-0 -z-20 bg-gradient-to-br from-ink via-sunset-red/90 to-sunset-orange/80"
       />
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 opacity-60"
+        className="absolute inset-0 -z-10 opacity-70"
         style={{
           backgroundImage:
-            'radial-gradient(circle at 15% 20%, rgba(252,211,77,0.30), transparent 45%), radial-gradient(circle at 85% 35%, rgba(16,185,129,0.30), transparent 50%)',
+            'radial-gradient(circle at 50% 100%, rgba(251,191,36,0.6), transparent 60%), radial-gradient(circle at 20% 80%, rgba(249,115,22,0.5), transparent 50%)',
         }}
       />
+      {/* Dark overlay at bottom for smooth transition */}
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-b from-transparent to-ink"
+        className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-b from-transparent to-cream"
       />
 
-      <Container className="relative flex flex-col items-start gap-7 py-24 sm:py-32 lg:py-40">
-        <Eyebrow tone="amber">{t.hero.eyebrow}</Eyebrow>
-        <h1
-          id="hero-title"
-          className="max-w-4xl text-balance font-serif text-4xl font-bold leading-[1.05] sm:text-6xl lg:text-7xl"
-        >
-          {t.hero.title}
-        </h1>
-        <p className="max-w-2xl text-pretty text-base leading-relaxed text-white/80 sm:text-lg">
-          {t.hero.subtitle}
-        </p>
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <LinkButton href="#events" variant="primary">
-            {t.hero.cta}
-            <span aria-hidden="true">→</span>
-          </LinkButton>
-          <LinkButton href="#about" variant="ghost" className="ring-white/30 text-white hover:bg-white/10">
-            {t.nav.about}
-          </LinkButton>
+      <Container className="relative flex flex-col items-center text-center gap-7 py-24 sm:py-32 lg:py-40 z-10">
+        <div className="glass-panel-dark p-8 sm:p-12 rounded-3xl flex flex-col items-center gap-6 max-w-5xl mx-auto shadow-2xl border-white/20 transform transition-transform hover:scale-[1.01] duration-500">
+          <Eyebrow className="text-sunset-gold tracking-widest uppercase font-semibold">{t.hero.eyebrow}</Eyebrow>
+          <h1
+            id="hero-title"
+            className="max-w-4xl text-balance font-serif text-5xl font-bold leading-[1.1] sm:text-7xl lg:text-8xl text-glow-orange"
+          >
+            {t.hero.title}
+          </h1>
+          <p className="max-w-2xl text-pretty text-lg leading-relaxed text-white/90 sm:text-xl font-medium drop-shadow-md">
+            {t.hero.subtitle}
+          </p>
+          <div className="flex flex-col gap-4 sm:flex-row mt-4">
+            <LinkButton href="#events" variant="primary" className="bg-sunset-orange hover:bg-sunset-gold text-ink font-bold border-none shadow-[0_0_15px_rgba(249,115,22,0.5)] hover:shadow-[0_0_25px_rgba(251,191,36,0.7)] transition-all duration-300">
+              {t.hero.cta}
+              <span aria-hidden="true" className="ml-2 group-hover:translate-x-1 transition-transform inline-block">→</span>
+            </LinkButton>
+            <LinkButton href="#about" variant="ghost" className="ring-white/40 text-white hover:bg-white/20 backdrop-blur-sm transition-all duration-300">
+              {t.nav.about}
+            </LinkButton>
+          </div>
         </div>
       </Container>
     </section>

@@ -27,7 +27,7 @@ export function SiteHeader() {
           <img 
             src="/images/logo.png" 
             alt="DLA Logo" 
-            className="h-14 w-auto drop-shadow-md transition-transform duration-300 group-hover:scale-105"
+            className="h-16 w-16 sm:h-20 sm:w-20 object-contain rounded-2xl bg-white p-1.5 drop-shadow-lg transition-transform duration-300 group-hover:scale-105"
           />
           <span className="hidden flex-col leading-tight sm:flex">
             <span className="text-sm font-bold tracking-wide text-white drop-shadow-sm transition-colors group-hover:text-sunset-peach">

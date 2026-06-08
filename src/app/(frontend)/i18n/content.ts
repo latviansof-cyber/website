@@ -1,4 +1,4 @@
-// Centralized bilingual content map for the DLA website.
+﻿// Centralized bilingual content map for the DLA website.
 // Validated against `src/lib/validation.ts` at module load so that any shape
 // regression fails fast. When the Payload CMS lands (DLA-201..206) the same
 // schemas will be reused to validate API responses.
@@ -38,10 +38,10 @@ const en: SiteContent = {
   history: {
     title: 'Our History',
     body: [
-      'The Latvian Association of Darwin (Dārvinas Latviešu Apvienība) is one of Australia’s newest Latvian community organisations, officially incorporated on 22 August 2023 to support the growing Latvian community in the Northern Territory.',
-      'Although formally established in 2023, the Association builds on many years of informal cultural, social, and commemorative gatherings held by Latvians living in Darwin going back to the 1980s. These community traditions—ranging from celebrations of Latvian national days to cultural events and diaspora commemorations—created a strong foundation for a permanent organisation to represent and unite Latvians across the Top End.',
-      'The Association was formed with a clear purpose: to preserve and promote Latvian culture, language, and heritage in Darwin, to support Latvian descendants, and to strengthen connections with Latvian organisations across Australia and internationally.',
-      'Today, the Latvian Association of Darwin continues to grow as a vibrant and welcoming community—honouring the past, celebrating the present, and ensuring Latvian culture thrives for future generations in the Northern Territory.',
+      `The Latvian Association of Darwin (Dārvinas Latviešu Apvienība) is one of Australia's newest Latvian community organisations, officially incorporated on 22 August 2023 to support the growing Latvian community in the Northern Territory.`,
+      `Although formally established in 2023, the Association builds on many years of informal cultural, social, and commemorative gatherings held by Latvians living in Darwin going back to the 1980s. These community traditions—ranging from celebrations of Latvian national days to cultural events and diaspora commemorations—created a strong foundation for a permanent organisation to represent and unite Latvians across the Top End.`,
+      `The Association was formed with a clear purpose: to preserve and promote Latvian culture, language, and heritage in Darwin, to support Latvian descendants, and to strengthen connections with Latvian organisations across Australia and internationally.`,
+      `Today, the Latvian Association of Darwin continues to grow as a vibrant and welcoming community—honouring the past, celebrating the present, and ensuring Latvian culture thrives for future generations in the Northern Territory.`,
     ],
   },
   events: {
@@ -53,40 +53,44 @@ const en: SiteContent = {
         id: 'lieldienas',
         title: 'Lieldienas – Easter the Latvian Way in Darwin',
         body:
-          'At the Latvian Association of Darwin Inc, we celebrate Lieldienas (Easter) — Latvia’s joyful festival of spring and renewal—with a warm Top End twist. Families and friends gather for natural egg‑dyeing, olu ripināšana (egg rolling) olu kaujas (egg‑tapping battles), and shared Latvian treats. We embrace ancient customs to welcome the new season, creating a vibrant celebration that blends Latvian heritage with Darwin’s tropical charm. Everyone is welcome to join us as we greet brighter days together.',
+          `At the Latvian Association of Darwin Inc, we celebrate Lieldienas (Easter) — Latvia's joyful festival of spring and renewal—with a warm Top End twist. Families and friends gather for natural egg-dyeing, olu ripināšana (egg rolling) olu kaujas (egg-tapping battles), and shared Latvian treats. We embrace ancient customs to welcome the new season, creating a vibrant celebration that blends Latvian heritage with Darwin's tropical charm. Everyone is welcome to join us as we greet brighter days together.`,
       },
       {
         id: 'may4',
         title:
           '4. maijs - Day of the Restoration of Latvian Independence - Latvijas Republikas Neatkarības atjaunošanas diena',
         body:
-          'On 4 May, we proudly mark Latvia’s Restoration of Independence with the Baltā galdautu svētki—the White Tablecloth Celebration. Our community gathers around a table draped in a white cloth, symbolising peace, unity, and honesty. We share Latvian dishes, reflect on our nation’s journey, and celebrate the resilience and spirit that connect Latvians near and far. In Darwin, this day is a heartfelt reminder of freedom, identity, and the strength of our shared heritage.',
+          `On 4 May, we proudly mark Latvia's Restoration of Independence with the Baltā galdautu svētki—the White Tablecloth Celebration. Our community gathers around a table draped in a white cloth, symbolising peace, unity, and honesty. We share Latvian dishes, reflect on our nation's journey, and celebrate the resilience and spirit that connect Latvians near and far. In Darwin, this day is a heartfelt reminder of freedom, identity, and the strength of our shared heritage.`,
       },
       {
         id: 'jani',
         title: 'Jāņi – Midsummer Magic in the Top End',
         body:
-          'Each June, we bring Latvia’s beloved Jāņi - St John’s Day/Midsummer night —to life beneath Darwin’s star‑filled skies. Our community sings traditional Līgo songs, weaves wreaths of leaves and flowers, enjoys hearty Latvian food, and gathers around the Līgo fire to honour the sun’s strength and the promise of good fortune. Music, laughter, and the glow of the bonfire make Jāņi in Darwin a uniquely warm and spirited celebration of culture, nature, and togetherness.',
+          `Each June, we bring Latvia's beloved Jāņi - St John's Day/Midsummer night —to life beneath Darwin's star-filled skies. Our community sings traditional Līgo songs, weaves wreaths of leaves and flowers, enjoys hearty Latvian food, and gathers around the Līgo fire to honour the sun's strength and the promise of good fortune. Music, laughter, and the glow of the bonfire make Jāņi in Darwin a uniquely warm and spirited celebration of culture, nature, and togetherness.`,
       },
       {
         id: 'baltijas-cels',
         title: 'Baltijas ceļš – Commemorating the Baltic Way',
         body:
-          'Every August, we join Latvians, Lithuanians, and Estonians worldwide in honouring the Baltijas ceļš—the Baltic Way. Through reflection, shared stories, and a symbolic human chain, we remember the nearly two million people who stood hand‑in‑hand in 1989 to peacefully demand freedom. Our Darwin commemoration highlights the courage, unity, and hope that shaped our nations’ futures, keeping alive the message that collective strength can inspire profound change.',
+          `Every August, we join Latvians, Lithuanians, and Estonians worldwide in honouring the Baltijas ceļš—the Baltic Way. Through reflection, shared stories, and a symbolic human chain, we remember the nearly two million people who stood hand-in-hand in 1989 to peacefully demand freedom. Our Darwin commemoration highlights the courage, unity, and hope that shaped our nations' futures, keeping alive the message that collective strength can inspire profound change.`,
       },
       {
         id: 'nov18',
         title:
-          '18. novembris – Proclamation Day of the Republic of Latvia – Latvia’s Independence Day',
+          `18. novembris – Proclamation Day of the Republic of Latvia – Latvia's Independence Day`,
         body:
-          'On 18 November, we celebrate one of Latvia’s most significant national days—the Proclamation of the Independence of the Republic of Latvia. Our Darwin community gathers to honour this historic moment with speeches, songs, and shared Latvian foods. It is a time to reflect on Latvia’s story, celebrate our identity, and strengthen the bonds that connect Latvians across oceans. Everyone is warmly invited to join us in marking this important day with pride and gratitude.',
+          `On 18 November, we celebrate one of Latvia's most significant national days—the Proclamation of the Independence of the Republic of Latvia. Our Darwin community gathers to honour this historic moment with speeches, songs, and shared Latvian foods. It is a time to reflect on Latvia's story, celebrate our identity, and strengthen the bonds that connect Latvians across oceans. Everyone is warmly invited to join us in marking this important day with pride and gratitude.`,
       },
     ],
   },
   footer: {
     tagline: 'Latvian Association of Darwin — Dārvinas Latviešu Apvienība',
+    quickLinks: 'Quick Links',
+    contactTitle: 'Get in Touch',
     contact: 'Get in touch',
     rights: 'All rights reserved.',
+    address: 'Darwin, Northern Territory, Australia',
+    languageLabel: 'Language',
     donate: {
       heroEyebrow: 'Support our community',
       heroTitle: 'Stand with the Latvian community in Darwin',
@@ -105,10 +109,8 @@ const en: SiteContent = {
       successHeading: 'Thank you for your generosity!',
       successBody: 'In a real deployment this would hand off to a secure payment processor. For now we have logged your intent so the team can follow up.',
       successAnother: 'Make another donation',
-      trustBadges: ['Secure', 'Tax-deductible', 'Community-run'],
+      trustBadges: ['Secure', 'Tax deductible', 'Community led'],
     },
-    address: 'Darwin, Northern Territory, Australia',
-    languageLabel: 'Language',
   },
 }
 
@@ -124,49 +126,49 @@ const lv: SiteContent = {
     eyebrow: 'Ziemeļu Teritorija, Austrālija',
     title: 'Dārvinas Latviešu Apvienība',
     subtitle:
-      'Latvian Association of Darwin — viesmīlīga kopiena latviešiem, latviešu pēctečiem un Latvijas draugiem Top End reģionā.',
-    cta: 'Apskatīt pasākumus',
+      'Dārvinas Latviešu Apvienība — welcoming community for Latvians, Latvian descendants, and friends of Latvia in the Top End.',
+    cta: 'Uzziniet par mūsu pasākumiem',
   },
   about: {
     title: 'Par apvienību',
     body: [
-      'Dārvinas Latviešu Apvienība ir kopienas organizācija, kas apvieno latviešus, latviešu pēctečus un Latvijas draugus visā Ziemeļu Teritorijā. Tā dibināta, lai atbalstītu un svinētu latviešu kultūras mantojumu, nodrošinot vietu, kur kopīgi dalīties tradīcijās, valodā un kultūrā.',
-      'Mūsu kopiena balstās uz savstarpēju saikni — veicinot sadarbību un vienotību starp latviešiem Dārvinā, visā Austrālijā un ar organizācijām Latvijā un citviet pasaulē. Ar kultūras pasākumu, sabiedrisku tikšanos, izglītojošu aktivitāšu un kopienas iniciatīvu palīdzību mēs stiprinām kopīgo identitāti un piederības sajūtu ikvienam, kurš novērtē latviešu kultūru.',
-      'Apvienība arī strādā, lai veicinātu latviešu kultūras, sabiedrisko, izglītības un labklājības aktivitāšu attīstību Ziemeļu Teritorijā. Neatkarīgi no tā, vai jums ir latviešu saknes, interese par Baltijas kultūru vai vēlme pievienoties daudzveidīgai un aktīvai kopienai — mēs jūs sirsnīgi aicinām pievienoties.',
-      'Kopā mēs godinām savu vēsturi, atbalstām viens otru un nodrošinām, ka latviešu kultūra Dārvinā dzīvo arī nākotnē.',
+      'Dārvinas Latviešu Apvienība ir kopienas organizācija, kas apvieno latviešus, latviešu pēcnācējus un Latvijas draugus visā Ziemeļu Teritorijā. Izveidota, lai atbalstītu un svinētu latviešu mantojumu, Apvienība piedāvā draudzīgu telpu, kurā kultūra, valoda un tradīcijas tiek kopīgotas, saglabātas un baudītas.',
+      'Mūsu kopiena ir veidota uz savienojumu pamata — atbalstot sadarbību un vienotību starp latviešiem Dārvinā, visā Austrālijā un ar organizācijām Latvijā un visā pasaulē. Arī kultūras pasākumiem, sociālajiem pulcēšanās brīžiem, izglītojošām aktivitātēm un kopienas iniciatīvām mēs cenšamies stiprināt mūsu kopīgo identitāti un radīt piederības sajūtu visiem, kas novērtē latviešu kultūru.',
+      'Apvienība arī veicina latviešu kultūras, sociālo, izglītības un labklājības aktivitāšu tālāku attīstību Ziemeļu Teritorijā. Neatkarīgi no tā, vai jums ir latviešu izcelsme, interese par Baltijas kultūru vai vienkārši vēlaties pievienoties dzīvai daudzkultūru kopienai, mēs jūs laipni aicinām pievienoties.',
+      'Kopā mēs svinam savu vēsturi, atbalstām viens otru un nodrošinām, ka latviešu kultūra Dārvinā plaukst nākamajām paaudzēm.',
     ],
   },
   history: {
     title: 'Mūsu vēsture',
     body: [
-      'Dārvinas Latviešu Apvienība (Latvian Association of Darwin Inc) ir viena no jaunākajām Austrālijas latviešu organizācijām. Tā oficiāli reģistrēta 2023. gada 22. augustā, lai atbalstītu augošo latviešu kopienu Ziemeļu Teritorijā.',
-      'Lai gan organizācija formāli dibināta 2023. gadā, tā balstās uz daudzu gadu neformālām kultūras, sabiedriskām un piemiņas aktivitātēm, ko latvieši Dārvinā rīkojuši jau kopš 1980. gadiem. Šīs kopienas tradīcijas — sākot no Latvijas valsts svētku atzīmēšanas līdz kultūras pasākumiem un diasporas piemiņas brīžiem — radīja spēcīgu pamatu pastāvīgas organizācijas izveidei, kas pārstāvētu un vienotu latviešus visā Top End reģionā.',
-      'Apvienība tika dibināta ar skaidru mērķi: saglabāt un popularizēt latviešu kultūru, valodu un mantojumu Dārvinā, atbalstīt latviešu pēctečus un stiprināt saikni ar latviešu organizācijām visā Austrālijā un pasaulē.',
-      'Šodien Dārvinas Latviešu Apvienība turpina augt kā dzīva un viesmīlīga kopiena — godinot pagātni, svinot tagadni un nodrošinot, ka latviešu kultūra Ziemeļu Teritorijā plaukst arī nākamajās paaudzēs.',
+      'Dārvinas Latviešu Apvienība ir viena no Austrālijas jaunākajām latviešu kopienas organizācijām, oficiāli reģistrēta 2023. gada 22. augustā, lai atbalstītu augošo latviešu kopienu Ziemeļu Teritorijā.',
+      'Lai gan formāli dibināta 2023. gadā, Apvienība balstās uz daudzu gadu neformāliem kultūras, sociāliem un piemiņas pulcēšanās brīžiem, ko Dārvinā dzīvojošie latvieši rīkoja jau kopš 1980. gadiem. Šīs kopienas tradīcijas — sākot no Latvijas nacionālo dienu svinēšanām līdz kultūras pasākumiem un diasporas piemiņas brīžiem — radīja spēcīgu pamatu pastāvīgai organizācijai, kas pārstāvētu un vienotu latviešus visā Top End reģionā.',
+      'Apvienība tika izveidota ar skaidru mērķi: saglabāt un veicināt latviešu kultūru, valodu un mantojumu Dārvinā, atbalstīt latviešu pēcnācējus un stiprināt saiknes ar latviešu organizācijām visā Austrālijā un starptautiski.',
+      'Šodien Dārvinas Latviešu Apvienība turpina augt kā dzīva un uzņemoša kopiena — godinot pagātni, svinot tagadni un nodrošinot, ka latviešu kultūra plaukst nākamajām paaudzēm Ziemeļu Teritorijā.',
     ],
   },
   events: {
     title: 'Pasākumi',
     intro:
-      'Gada gaitā mēs pulcējamies, lai godinātu latviešu tradīcijas, atzīmētu valsts svētkus un sagaidītu jaunus gadalaikus. Visi ir sirsnīgi aicināti pievienoties.',
+      'Gada garumā mēs pulcējamies, lai godinātu latviešu tradīcijas, atzīmētu nacionālās dienas un sagaidītu gadalaiku maiņu. Visi ir laipni aicināti pievienoties.',
     items: [
       {
         id: 'lieldienas',
-        title: 'Lieldienas — latviskās Lieldienas Dārvinā',
+        title: 'Lieldienas – Easter the Latvian Way in Darwin',
         body:
-          'Dārvinas Latviešu Apvienībā mēs svinam Lieldienas — priecīgos pavasara un atjaunotnes svētkus — ar siltu Top End piesitienu. Ģimenes un draugi pulcējas dabiskai olu krāsošanai, olu ripināšanai, olu kaujām un latviešu gardumu baudīšanai. Mēs kopjam senās tradīcijas, lai sveiktu jauno sezonu, radot krāsainus svētkus, kas apvieno latviešu mantojumu ar Dārvinas tropisko noskaņu. Visi ir laipni aicināti pievienoties, sagaidot gaišākas dienas kopā.',
-      },
-      {
-        id: 'jani',
-        title: 'Jāņi — saulgriežu maģija Top End reģionā',
-        body:
-          'Katru jūniju mēs atdzīvinām Latvijā tik mīļos Jāņus — Līgo vakaru un Jāņu dienu — zem Dārvinas zvaigžņotajām debesīm. Mūsu kopiena dzied tradicionālās Līgo dziesmas, pin vainagus no lapām un ziediem, bauda latviešu ēdienus un pulcējas ap Līgo uguni, godinot saules spēku un labas veiksmes solījumu. Mūzika, smiekli un ugunskura gaisma padara Jāņus Dārvinā par īpaši siltu un dzīvespriecīgu kultūras, dabas un kopības svinēšanu.',
+          'Dārvinas Latviešu Apvienībā mēs svinam Lieldienas — Latvijas priecīgo pavasara un atjaunošanās svētku — ar siltu Top End pieskārienu. Ģimenes un draugi pulcējas olu dabīgai krāsošanai, olu ripināšanai, olu kaujām un bauda latviešu našķus. Mēs pieņemam senās paražas, lai sagaidītu jauno sezonu, radot dzīvespriecīgu svinēšanu, kas sapludina latviešu mantojumu ar Dārvinas tropisko šarmu. Visi ir laipni aicināti pievienoties mums, sagaidot gaišākas dienas kopā.',
       },
       {
         id: 'may4',
         title: '4. maijs — Latvijas Republikas Neatkarības atjaunošanas diena',
         body:
           '4. maijā mēs ar lepnumu atzīmējam Latvijas Neatkarības atjaunošanas dienu, svinot Baltā galdauta svētkus. Mūsu kopiena pulcējas ap baltu galdautu, kas simbolizē mieru, vienotību un godīgumu. Mēs dalāmies latviešu ēdienos, pārdomājam mūsu valsts ceļu un svinam izturību un garu, kas vieno latviešus visā pasaulē. Dārvinā šī diena ir sirsnīgs atgādinājums par brīvību, identitāti un kopīgo mantojumu.',
+      },
+      {
+        id: 'jani',
+        title: 'Jāņi — saulgriežu maģija Top End reģionā',
+        body:
+          'Katru jūniju mēs atdzīvinām Latvijā tik mīļos Jāņus — Līgo vakaru un Jāņu dienu — zem Dārvinas zvaigžņotajām debesīm. Mūsu kopiena dzied tradicionālās Līgo dziesmas, pin vainagus no lapām un ziediem, bauda latviešu ēdienus un pulcējas ap Līgo uguni, godinot saules spēku un labas veiksmes solījumu. Mūzika, smiekli un ugunskura gaisma padara Jāņus Dārvinā par īpaši siltu un dzīvespriecīgu kultūras, dabas un kopības svinēšanu.',
       },
       {
         id: 'baltijas-cels',
@@ -184,8 +186,12 @@ const lv: SiteContent = {
   },
   footer: {
     tagline: 'Dārvinas Latviešu Apvienība — Latvian Association of Darwin',
+    quickLinks: 'Ātrā saite',
+    contactTitle: 'Sazināties ar mums',
     contact: 'Sazināties ar mums',
     rights: 'Visas tiesības aizsargātas.',
+    address: 'Dārvina, Ziemeļu Teritorija, Austrālija',
+    languageLabel: 'Valoda',
     donate: {
       heroEyebrow: 'Atbalsti mūsu kopienu',
       heroTitle: 'Stāvi blakus Dārvinas latviešu kopienai',
@@ -206,8 +212,6 @@ const lv: SiteContent = {
       successAnother: 'Veikt vēl vienu ziedojumu',
       trustBadges: ['Droši', 'Nodokļu atvieglojums', 'Vada kopiena'],
     },
-    address: 'Dārvina, Ziemeļu Teritorija, Austrālija',
-    languageLabel: 'Valoda',
   },
 }
 

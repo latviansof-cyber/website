@@ -70,6 +70,8 @@ export type DonateValidated = z.infer<typeof DonateSchema>
 export const FooterSchema = z.object({
   tagline: z.string().min(1),
   contact: z.string().min(1),
+  contactTitle: z.string().min(1),
+  quickLinks: z.string().min(1),
   rights: z.string().min(1),
   address: z.string().min(1),
   languageLabel: z.string().min(1),

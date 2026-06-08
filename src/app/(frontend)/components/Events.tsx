@@ -21,6 +21,14 @@ const accentForChip = {
   violet: 'violet',
 } as const
 
+const imageByEvent: Record<string, string> = {
+  lieldienas: '/images/img1.webp',
+  may4: '/images/img2.webp',
+  jani: '/images/img3.webp',
+  'baltijas-cels': '/images/img4.webp',
+  nov18: '/images/nov18.png',
+}
+
 export function Events() {
   const { t } = useLanguage()
   return (
@@ -48,22 +56,32 @@ export function Events() {
         >
           {t.events.items.map((event, i) => {
             const accent = accentByEvent[event.id] ?? 'slate'
+            const imgSrc = imageByEvent[event.id] ?? '/images/img1.webp'
             return (
               <li
                 key={event.id}
-                className="group flex h-full flex-col rounded-3xl border border-slate-100 bg-white/80 backdrop-blur-sm p-8 shadow-md transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:bg-white"
+                className="group flex h-full flex-col rounded-3xl border border-slate-100 bg-white/80 backdrop-blur-sm shadow-md transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:bg-white overflow-hidden"
                 style={{ animationDelay: `${i * 100}ms` }}
               >
-                <div className="mb-4">
-                  <Chip tone={accent} className="px-3 py-1 font-bold tracking-wide shadow-sm">{event.id.replace('-', ' ')}</Chip>
+                <div className="relative h-48 sm:h-56 w-full overflow-hidden">
+                  <img 
+                    src={imgSrc} 
+                    alt={event.title} 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                  />
+                  <div className="absolute top-4 left-4">
+                    <Chip tone={accent} className="px-3 py-1 font-bold tracking-wide shadow-md backdrop-blur-md bg-white/90">{event.id.replace('-', ' ')}</Chip>
+                  </div>
                 </div>
-                <h3 className="font-serif text-2xl font-bold leading-tight text-ink group-hover:text-sunset-red transition-colors duration-300">
-                  {event.title}
-                </h3>
-                <div className="mt-4 w-10 h-0.5 bg-slate-200 group-hover:bg-sunset-gold transition-colors duration-300" />
-                <p className="mt-6 flex-1 text-base leading-relaxed text-ink-light font-medium">
-                  {event.body}
-                </p>
+                <div className="p-8 flex-1 flex flex-col">
+                  <h3 className="font-serif text-2xl font-bold leading-tight text-ink group-hover:text-sunset-red transition-colors duration-300">
+                    {event.title}
+                  </h3>
+                  <div className="mt-4 w-10 h-0.5 bg-slate-200 group-hover:bg-sunset-gold transition-colors duration-300" />
+                  <p className="mt-6 flex-1 text-base leading-relaxed text-ink-light font-medium">
+                    {event.body}
+                  </p>
+                </div>
               </li>
             )
           })}

@@ -5,6 +5,10 @@ export const metadata = {
   description:
     'Latvian Association of Darwin (Dārvinas Latviešu Apvienība) — a bilingual community website for Latvians in the Northern Territory, Australia.',
   title: 'Latvian Association of Darwin — Dārvinas Latviešu Apvienība',
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+  },
 }
 
 export default async function RootLayout(props: { children: React.ReactNode }) {

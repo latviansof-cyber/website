@@ -42,10 +42,63 @@ export const EventsSchema = z.object({
   items: z.array(EventItemSchema).min(1),
 })
 
+export const DonateUrgentItemSchema = z.object({
+  title: z.string().min(1),
+  body: z.string().min(1),
+})
+
+export const DonatePresetAmountSchema = z.object({
+  amount: z.number().min(1),
+  body: z.string().min(1),
+})
+
 export const DonateSchema = z.object({
   heroEyebrow: z.string().min(1),
   heroTitle: z.string().min(1),
   heroSubtitle: z.string().min(1),
+  
+  urgentLabel: z.string().min(1),
+  urgentTitle: z.string().min(1),
+  urgentIntro: z.string().min(1),
+  urgentItems: z.array(DonateUrgentItemSchema).min(1),
+
+  features: z.array(z.string().min(1)),
+
+  quickLabel: z.string().min(1),
+  quickTitle: z.string().min(1),
+  quickIntro: z.string().min(1),
+  presetAmounts: z.array(DonatePresetAmountSchema).min(1),
+  quickDonateButton: z.string().min(1),
+
+  largeDonationTitle: z.string().min(1),
+  largeDonationBody: z.string().min(1),
+  largeDonationButton: z.string().min(1),
+
+  customOrLabel: z.string().min(1),
+  customLoading: z.string().min(1),
+  
+  directLabel: z.string().min(1),
+  directTitle: z.string().min(1),
+  directIntro: z.string().min(1),
+  bankOrgName: z.string().min(1),
+  bankStep1Title: z.string().min(1),
+  bankStep1Body: z.string().min(1),
+  bankStep2Title: z.string().min(1),
+  bankBsbLabel: z.string().min(1),
+  bankBsb: z.string().min(1),
+  bankAccountLabel: z.string().min(1),
+  bankAccount: z.string().min(1),
+  bankStep3Title: z.string().min(1),
+  bankStep3Ref: z.string().min(1),
+  bankStep3Body: z.string().min(1),
+  payIdTitle: z.string().min(1),
+  payIdBody: z.string().min(1),
+  payIdEmailLabel: z.string().min(1),
+  payIdEmail: z.string().min(1),
+  payIdZeroFeesTitle: z.string().min(1),
+  payIdZeroFeesBody: z.string().min(1),
+  receiptFooterText: z.string().min(1),
+
   intro: z.string().min(1),
   amountLabel: z.string().min(1),
   customPlaceholder: z.string().min(1),
@@ -60,7 +113,7 @@ export const DonateSchema = z.object({
   successHeading: z.string().min(1),
   successBody: z.string().min(1),
   successAnother: z.string().min(1),
-  trustBadges: z.array(z.string().min(1)).length(3),
+  trustBadges: z.array(z.string().min(1)),
 })
 
 export type DonateValidated = z.infer<typeof DonateSchema>

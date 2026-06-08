@@ -1,4 +1,4 @@
-﻿// Centralized bilingual content map for the DLA website.
+// Centralized bilingual content map for the DLA website.
 // Validated against `src/lib/validation.ts` at module load so that any shape
 // regression fails fast. When the Payload CMS lands (DLA-201..206) the same
 // schemas will be reused to validate API responses.
@@ -93,9 +93,71 @@ const en: SiteContent = {
     languageLabel: 'Language',
     donate: {
       heroEyebrow: 'Support our community',
-      heroTitle: 'Stand with the Latvian community in Darwin',
-      heroSubtitle: 'Your donation keeps Latvian culture, language, and community alive across the Northern Territory - from Lieldienas to Jāņi, from children learning daina to elders honoured on Latvian independence days.',
-      intro: 'Every contribution - one-time or monthly - directly funds cultural events, language resources, and community gatherings. 100% of donations go to programs run by the Dārvinas Latviešu Apvienība.',
+      heroTitle: 'Donate',
+      heroSubtitle: 'Support our community in the Northern Territory and preserve our Latvian heritage.',
+      
+      urgentLabel: 'Urgent Priority',
+      urgentTitle: 'Support Needed Now',
+      urgentIntro: 'DLA directs support to our local community events, cultural preservation, and people in need. Fast donations let us respond quickly.',
+      urgentItems: [
+        {
+          title: 'Cultural Events',
+          body: 'Funding for continuity of language, heritage, and community celebrations like Jāņi and Lieldienas.',
+        },
+        {
+          title: 'Community Stability',
+          body: 'Help with hall rentals, equipment, and resources for our regular gatherings.',
+        },
+        {
+          title: 'Emergency relief',
+          body: 'Immediate support for members of our community facing unexpected hardships.',
+        },
+      ],
+
+      features: ['Secure checkout', 'Zero fees via PayID', 'Direct to community'],
+
+      quickLabel: 'Quick Donate',
+      quickTitle: 'Choose an Amount',
+      quickIntro: 'Select a preset amount to donate instantly, or scroll down to enter any amount.',
+      presetAmounts: [
+        { amount: 10, body: 'Helps with transport assistance or a community meal contribution.' },
+        { amount: 25, body: 'Covers materials for one cultural workshop or language class.' },
+        { amount: 50, body: 'Supports essential supplies for our major community events.' },
+        { amount: 100, body: 'Funds hall hire for a regular community gathering or choir practice.' },
+        { amount: 250, body: 'Contributes significantly to our annual national day celebrations.' },
+      ],
+      quickDonateButton: 'Donate now',
+
+      largeDonationTitle: 'AU$500 or more',
+      largeDonationBody: 'Recommended: direct bank transfer or PayID — no processing fees, request a receipt any time.',
+      largeDonationButton: 'View details',
+
+      customOrLabel: 'or enter any amount',
+      customLoading: 'Loading secure checkout…',
+      
+      directLabel: 'Direct Payment',
+      directTitle: 'Bank Transfer & PayID',
+      directIntro: 'Recommended for larger donations. Direct transfers carry no processing fees and we can issue a receipt on request.',
+      bankOrgName: 'Latvian Association of Darwin Inc',
+      bankStep1Title: 'Open your banking app',
+      bankStep1Body: 'Log in and select "Make a transfer" or "New payment"',
+      bankStep2Title: 'Enter these details',
+      bankBsbLabel: 'BSB',
+      bankBsb: '000-000', // To be updated
+      bankAccountLabel: 'Account Number',
+      bankAccount: '00000000', // To be updated
+      bankStep3Title: 'Add a reference (required)',
+      bankStep3Ref: 'Your Name or "Donation"',
+      bankStep3Body: 'This helps us track your donation and send a receipt.',
+      payIdTitle: 'PayID — faster option',
+      payIdBody: 'Send directly from any Australian banking app in seconds. Look for "Pay to PayID" or "New PayID payment" and paste the email below.',
+      payIdEmailLabel: 'PayID Email',
+      payIdEmail: 'dla@example.com', // To be updated
+      payIdZeroFeesTitle: 'Zero fees',
+      payIdZeroFeesBody: 'PayID and bank transfers route funds directly to DLA with no deductions. 100% of donations go to our programs.',
+      receiptFooterText: 'Need a receipt? Email us with your name and transfer details and we\'ll confirm promptly.',
+
+      intro: 'Every contribution - one-time or monthly - directly funds cultural events, language resources, and community gatherings.',
       amountLabel: 'Choose an amount (AUD)',
       customPlaceholder: 'Other amount',
       customAriaLabel: 'Custom donation amount in Australian dollars',
@@ -109,7 +171,7 @@ const en: SiteContent = {
       successHeading: 'Thank you for your generosity!',
       successBody: 'In a real deployment this would hand off to a secure payment processor. For now we have logged your intent so the team can follow up.',
       successAnother: 'Make another donation',
-      trustBadges: ['Secure', 'Tax deductible', 'Community led'],
+      trustBadges: ['Secure', 'Community led'],
     },
   },
 }
@@ -194,8 +256,70 @@ const lv: SiteContent = {
     languageLabel: 'Valoda',
     donate: {
       heroEyebrow: 'Atbalsti mūsu kopienu',
-      heroTitle: 'Stāvi blakus Dārvinas latviešu kopienai',
-      heroSubtitle: 'Jūsu ziedojums uztur latviešu kultūru, valodu un kopienu visā Ziemeļu Teritorijā - no Lieldienām līdz Jāņiem, no bērniem, kas mācās dainas, līdz vecākajiem, kas godāti Latvijas valsts svētkos.',
+      heroTitle: 'Ziedot',
+      heroSubtitle: 'Atbalstiet mūsu kopienu Ziemeļu Teritorijā un palīdziet saglabāt latviešu mantojumu.',
+      
+      urgentLabel: 'Aktuālās vajadzības',
+      urgentTitle: 'Atbalsts nepieciešams tagad',
+      urgentIntro: 'DLA novirza atbalstu mūsu vietējiem pasākumiem, kultūras saglabāšanai un cilvēkiem, kuriem tas nepieciešams. Ātri ziedojumi ļauj mums nekavējoties reaģēt.',
+      urgentItems: [
+        {
+          title: 'Kultūras pasākumi',
+          body: 'Finansējums valodas, mantojuma un kopienas svētku, piemēram, Jāņu un Lieldienu, nepārtrauktībai.',
+        },
+        {
+          title: 'Kopienas stabilitāte',
+          body: 'Palīdzība ar telpu īri, aprīkojumu un resursiem mūsu regulārajām tikšanās reizēm.',
+        },
+        {
+          title: 'Ārkārtas palīdzība',
+          body: 'Tūlītējs atbalsts mūsu kopienas locekļiem, kuri saskaras ar neparedzētām grūtībām.',
+        },
+      ],
+
+      features: ['Droši maksājumi', 'Bez komisijas maksas caur PayID', 'Tieši kopienai'],
+
+      quickLabel: 'Ātrs ziedojums',
+      quickTitle: 'Izvēlies summu',
+      quickIntro: 'Izvēlieties norādīto summu, lai ziedotu nekavējoties, vai ritiniet uz leju, lai ievadītu jebkuru summu.',
+      presetAmounts: [
+        { amount: 10, body: 'Palīdz ar transporta izdevumiem vai kopienas maltītes organizēšanu.' },
+        { amount: 25, body: 'Nosedz materiālu izmaksas vienai kultūras darbnīcai vai valodas nodarbībai.' },
+        { amount: 50, body: 'Atbalsta nepieciešamos krājumus mūsu lielākajiem kopienas pasākumiem.' },
+        { amount: 100, body: 'Finansē telpu īri regulārai kopienas sanāksmei vai kora mēģinājumam.' },
+        { amount: 250, body: 'Ievērojami veicina mūsu ikgadējo nacionālo svētku organizēšanu.' },
+      ],
+      quickDonateButton: 'Ziedot tagad',
+
+      largeDonationTitle: 'AU$500 vai vairāk',
+      largeDonationBody: 'Ieteicams: tiešs bankas pārskaitījums vai PayID — bez apstrādes maksas, kvīts pieejama pēc pieprasījuma.',
+      largeDonationButton: 'Skatīt informāciju',
+
+      customOrLabel: 'vai ievadi jebkuru summu',
+      customLoading: 'Ielādē drošu maksājumu sistēmu…',
+      
+      directLabel: 'Tiešs maksājums',
+      directTitle: 'Bankas pārskaitījums un PayID',
+      directIntro: 'Ieteicams lielākiem ziedojumiem. Tiešajiem pārskaitījumiem nav apstrādes maksas, un mēs varam izsniegt kvīti pēc pieprasījuma.',
+      bankOrgName: 'Latvian Association of Darwin Inc',
+      bankStep1Title: 'Atveriet savu bankas lietotni',
+      bankStep1Body: 'Piesakieties un izvēlieties "Veikt pārskaitījumu" vai "Jauns maksājums"',
+      bankStep2Title: 'Ievadiet šo informāciju',
+      bankBsbLabel: 'BSB',
+      bankBsb: '000-000', // To be updated
+      bankAccountLabel: 'Konta numurs',
+      bankAccount: '00000000', // To be updated
+      bankStep3Title: 'Pievienojiet atsauci (obligāti)',
+      bankStep3Ref: 'Jūsu vārds vai "Ziedojums"',
+      bankStep3Body: 'Tas palīdz mums izsekot jūsu ziedojumam un nosūtīt kvīti.',
+      payIdTitle: 'PayID — ātrāks veids',
+      payIdBody: 'Sūtiet tieši no jebkuras Austrālijas bankas lietotnes dažu sekunžu laikā. Meklējiet "Pay to PayID" un ielīmējiet tālāk norādīto e-pastu.',
+      payIdEmailLabel: 'PayID E-pasts',
+      payIdEmail: 'dla@example.com', // To be updated
+      payIdZeroFeesTitle: 'Bez komisijas maksas',
+      payIdZeroFeesBody: 'PayID un bankas pārskaitījumi nosūta līdzekļus tieši DLA bez jebkādiem atvilkumiem. 100% ziedojumu nonāk mūsu programmās.',
+      receiptFooterText: 'Nepieciešama kvīts? Nosūtiet mums e-pastu ar savu vārdu un pārskaitījuma detaļām, un mēs to apstiprināsim.',
+
       intro: 'Jebkurš ziedojums - vienreizējs vai ikmēneša - tieši atbalsta kultūras pasākumus, valodas resursus un kopienas pulcēšanās. 100% ziedojumu nonāk Dārvinas Latviešu Apvienības programmās.',
       amountLabel: 'Izvēlies summu (AUD)',
       customPlaceholder: 'Cita summa',
@@ -210,7 +334,7 @@ const lv: SiteContent = {
       successHeading: 'Paldies par jūsu dāsnumu!',
       successBody: 'Reālā vidē šeit notiktu droša maksājuma apstrāde. Šobrīd mēs esam reģistrējuši jūsu nodomu, lai komanda varētu sazināties.',
       successAnother: 'Veikt vēl vienu ziedojumu',
-      trustBadges: ['Droši', 'Nodokļu atvieglojums', 'Vada kopiena'],
+      trustBadges: ['Droši', 'Vada kopiena'],
     },
   },
 }

@@ -1,195 +1,65 @@
 'use client'
 
-import { useId, useMemo, useState, type FormEvent } from 'react'
+import { useId, useState, type FormEvent } from 'react'
 import { useLanguage } from '../i18n/LanguageProvider'
 import { Container } from '../components/ui/Container'
-import { Eyebrow } from '../components/ui/Eyebrow'
 
-/** Suggested one-off amounts in AUD; rendered as chips on the form. */
-const PRESET_AMOUNTS = [10, 25, 50, 100, 250] as const
-
-type PresetAmount = (typeof PRESET_AMOUNTS)[number]
 type Frequency = 'one-time' | 'monthly'
 
-export interface DonationPayload {
-  frequency: Frequency
-  /** Always a positive integer or two-decimal number; null means "custom free-form". */
-  presetAmount: number | null
-  /** Raw user-entered string, sanitised to digits + a single decimal point. */
-  customAmount: string
-  /** Resolved amount in AUD used for the donation. */
-  amount: number
-  currency: 'AUD'
-}
-
-export interface DonationWidgetProps {
-  /** Suggested amounts; defaults to a sensible ladder. Override for A/B tests. */
-  presetAmounts?: readonly number[]
-  /** Called with the validated payload after the user submits. */
-  onSubmit?: (payload: DonationPayload) => void
-}
-
-const CURRENCY_FORMATTER = new Intl.NumberFormat('en-AU', {
-  style: 'currency',
-  currency: 'AUD',
-  maximumFractionDigits: 0,
-})
-
-/**
- * Parse a user-entered donation amount. Accepts digits and a single decimal point.
- * Returns `null` when the input is empty, negative, or not a finite positive number.
- */
-function parseDonationAmount(raw: string): number | null {
-  const cleaned = raw.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')
-  if (cleaned.length === 0) return null
-  const value = Number.parseFloat(cleaned)
-  if (!Number.isFinite(value) || value <= 0) return null
-  return Math.round(value * 100) / 100
-}
-
-function formatCurrency(value: number): string {
-  return CURRENCY_FORMATTER.format(value)
-}
-
-export function DonationWidget({ presetAmounts, onSubmit }: DonationWidgetProps = {}) {
+export function DonationWidget() {
   const { t } = useLanguage()
   const donateCopy = t.footer.donate
 
-  const amountOptions = useMemo<readonly number[]>(
-    () => (presetAmounts && presetAmounts.length > 0 ? presetAmounts : PRESET_AMOUNTS),
-    [presetAmounts],
-  )
-
   const [frequency, setFrequency] = useState<Frequency>('one-time')
-  const [selectedPreset, setSelectedPreset] = useState<number | null>(null)
   const [customAmount, setCustomAmount] = useState<string>('')
   const [error, setError] = useState<string | null>(null)
-  const [submittedPayload, setSubmittedPayload] = useState<DonationPayload | null>(null)
+  const [isSuccess, setIsSuccess] = useState(false)
 
   const baseId = useId()
   const frequencyGroupId = `${baseId}-frequency`
-  const amountGroupId = `${baseId}-amount`
   const customInputId = `${baseId}-custom`
   const errorId = `${baseId}-error`
 
-  const parsedCustom = parseDonationAmount(customAmount)
-  const hasCustomValue = parsedCustom !== null
-  const resolvedAmount: number | null = hasCustomValue ? parsedCustom : selectedPreset
-
-  const handlePresetClick = (amount: number) => {
-    setSelectedPreset(amount)
-    setCustomAmount('')
-    setError(null)
-  }
-
   const handleCustomChange = (raw: string) => {
-    // Allow only digits and a single decimal separator while typing.
     const sanitized = raw.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')
     setCustomAmount(sanitized)
-    // Typing in the custom field deselects the preset chip.
-    if (sanitized.length > 0) {
-      setSelectedPreset(null)
-    }
     setError(null)
   }
-
-  const handleFrequencyChange = (next: Frequency) => {
-    setFrequency(next)
-    setError(null)
-  }
-
-  const buildPayload = (amount: number): DonationPayload => ({
-    frequency,
-    presetAmount: hasCustomValue ? null : selectedPreset,
-    customAmount: hasCustomValue ? customAmount : '',
-    amount,
-    currency: 'AUD',
-  })
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    const parsedCustom = Number.parseFloat(customAmount)
 
-    if (!hasCustomValue && (selectedPreset === null || !Number.isFinite(selectedPreset))) {
-      setError(donateCopy.errorAmountRequired)
-      return
-    }
-
-    if (hasCustomValue && (parsedCustom === null || parsedCustom <= 0)) {
+    if (!parsedCustom || parsedCustom <= 0) {
       setError(donateCopy.errorInvalidAmount)
       return
     }
 
-    if (resolvedAmount === null) {
-      setError(donateCopy.errorAmountRequired)
-      return
+    setIsSuccess(true)
+    setError(null)
+  }
+
+  const handleCopy = (text: string) => {
+    if (typeof navigator !== 'undefined') {
+      navigator.clipboard.writeText(text)
     }
-
-    const payload = buildPayload(resolvedAmount)
-    // eslint-disable-next-line no-console
-    console.log('[donate] submit', payload)
-    onSubmit?.(payload)
-    setSubmittedPayload(payload)
-    setError(null)
   }
 
-  const handleReset = () => {
-    setSelectedPreset(null)
-    setCustomAmount('')
-    setError(null)
-    setSubmittedPayload(null)
-  }
-
-  if (submittedPayload) {
+  if (isSuccess) {
     return (
-      <section
-        aria-labelledby="donate-success-title"
-        className="relative isolate overflow-hidden bg-gradient-to-b from-cream via-white to-cream py-20 sm:py-28"
-      >
+      <section className="relative isolate overflow-hidden bg-cream py-20 sm:py-28">
         <Container className="max-w-2xl">
           <div className="glass-panel flex flex-col items-center gap-6 rounded-3xl p-10 text-center">
-            <div
-              aria-hidden="true"
-              className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-custom/10 text-emerald-custom"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2.5}
-                className="h-8 w-8"
-              >
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="h-8 w-8">
                 <path strokeLinecap="round" strokeLinejoin="round" d="m5 12 5 5L20 7" />
               </svg>
             </div>
-            <h2
-              id="donate-success-title"
-              className="font-serif text-3xl font-bold tracking-tight text-ink sm:text-4xl"
-            >
-              {donateCopy.successHeading}
-            </h2>
-            <p className="text-base leading-relaxed text-ink-light sm:text-lg">
-              {donateCopy.successBody}
-            </p>
-            <dl className="grid w-full grid-cols-2 gap-4 rounded-2xl bg-white/80 p-5 text-left text-sm shadow-inner">
-              <div>
-                <dt className="font-semibold uppercase tracking-wide text-ink/60">Amount</dt>
-                <dd className="mt-1 font-serif text-xl font-bold text-ink">
-                  {formatCurrency(submittedPayload.amount)}
-                </dd>
-              </div>
-              <div>
-                <dt className="font-semibold uppercase tracking-wide text-ink/60">Frequency</dt>
-                <dd className="mt-1 font-serif text-xl font-bold text-ink">
-                  {submittedPayload.frequency === 'monthly'
-                    ? donateCopy.frequencyMonthly
-                    : donateCopy.frequencyOneTime}
-                </dd>
-              </div>
-            </dl>
+            <h2 className="font-serif text-3xl font-bold text-ink sm:text-4xl">{donateCopy.successHeading}</h2>
+            <p className="text-lg text-ink-light">{donateCopy.successBody}</p>
             <button
-              type="button"
-              onClick={handleReset}
-              className="inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
+              onClick={() => { setIsSuccess(false); setCustomAmount('') }}
+              className="mt-4 rounded-full bg-sunset-orange px-6 py-2.5 font-bold text-white shadow-md transition hover:bg-sunset-gold hover:text-ink"
             >
               {donateCopy.successAnother}
             </button>
@@ -200,215 +70,212 @@ export function DonationWidget({ presetAmounts, onSubmit }: DonationWidgetProps 
   }
 
   return (
-    <section
-      aria-labelledby="donate-hero-title"
-      className="relative isolate overflow-hidden bg-cream text-ink"
-    >
-      {/* Hero band */}
-      <div className="relative isolate overflow-hidden">
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 -z-20 bg-gradient-to-br from-ink via-sunset-red/90 to-sunset-orange/80"
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 -z-10 opacity-70"
-          style={{
-            backgroundImage:
-              'radial-gradient(circle at 20% 80%, rgba(251,191,36,0.5), transparent 55%), radial-gradient(circle at 80% 20%, rgba(255,237,213,0.4), transparent 55%)',
-          }}
-        />
-        <Container className="relative z-10 py-20 sm:py-28">
-          <div className="glass-panel-dark mx-auto flex max-w-3xl flex-col items-center gap-6 rounded-3xl border-white/20 p-10 text-center text-white shadow-2xl sm:p-14">
-            <div className="mb-0 flex items-center gap-3">
-              <span aria-hidden="true" className="h-px w-10 bg-amber-400" />
-              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-sunset-gold">
-                {donateCopy.heroEyebrow}
-              </span>
-            </div>
-            <h1
-              id="donate-hero-title"
-              className="text-balance font-serif text-4xl font-bold leading-[1.1] sm:text-5xl lg:text-6xl text-glow-orange"
-            >
-              {donateCopy.heroTitle}
-            </h1>
-            <p className="max-w-2xl text-pretty text-base leading-relaxed text-white/90 sm:text-lg">
-              {donateCopy.heroSubtitle}
-            </p>
-            <p className="max-w-2xl text-sm leading-relaxed text-white/80 sm:text-base">
-              {donateCopy.intro}
-            </p>
+    <div className="min-h-screen bg-cream text-ink">
+      {/* 1. Hero Section */}
+      <section className="relative overflow-hidden border-b border-slate-200 bg-gradient-to-r from-sunset-peach/20 via-white to-sunset-gold/20">
+        <div className="absolute -left-20 top-0 h-56 w-56 rounded-full bg-sunset-red/10 blur-3xl"></div>
+        <div className="absolute right-0 top-0 h-44 w-44 rounded-full bg-sunset-orange/10 blur-2xl"></div>
+        <Container className="py-14">
+          <div className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+            <span className="text-sunset-orange">{donateCopy.heroEyebrow}</span>
           </div>
+          <h1 className="font-serif text-4xl font-bold tracking-tight text-ink sm:text-5xl">{donateCopy.heroTitle}</h1>
+          <p className="mt-3 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">{donateCopy.heroSubtitle}</p>
         </Container>
-      </div>
+      </section>
 
-      {/* Widget */}
-      <div className="relative py-20 sm:py-24">
-        <Container className="max-w-5xl">
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:items-start">
-            <aside className="space-y-6 lg:sticky lg:top-28">
-              <h2 className="font-serif text-3xl font-bold tracking-tight text-ink sm:text-4xl">
-                {donateCopy.heroTitle}
-              </h2>
-              <p className="text-pretty text-base leading-relaxed text-ink-light sm:text-lg">
-                {donateCopy.intro}
+      <Container className="py-16 space-y-20">
+        {/* 2. Urgent Priority */}
+        <section>
+          <div className="glass-panel rounded-3xl p-8 sm:p-10 shadow-lg">
+            <p className="text-xs font-bold uppercase tracking-widest text-sunset-orange">{donateCopy.urgentLabel}</p>
+            <h2 className="mt-2 font-serif text-3xl font-bold text-ink">{donateCopy.urgentTitle}</h2>
+            <p className="mt-3 max-w-3xl text-base leading-relaxed text-slate-600">{donateCopy.urgentIntro}</p>
+            <div className="mt-8 grid gap-6 md:grid-cols-3">
+              {donateCopy.urgentItems.map((item, i) => (
+                <div key={i} className="rounded-2xl bg-white/60 p-6 shadow-sm border border-white/40 backdrop-blur-sm transition hover:-translate-y-1 hover:shadow-md">
+                  <p className="text-lg font-bold text-sunset-orange">{item.title}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600">{item.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 3. Features Row */}
+        <section>
+          <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 rounded-full bg-white/50 px-8 py-4 backdrop-blur-sm border border-slate-200">
+            {donateCopy.features.map((feature, i) => (
+              <p key={i} className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">✓</span>
+                {feature}
               </p>
-              <ul role="list" className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-                {donateCopy.trustBadges.map((badge: string) => (
-                  <li
-                    key={badge}
-                    className="flex items-center gap-3 rounded-2xl border border-amber-200/60 bg-amber-50/60 px-4 py-3 text-sm font-semibold text-amber-900"
-                  >
-                    <span
-                      aria-hidden="true"
-                      className="flex h-7 w-7 items-center justify-center rounded-full bg-amber-300 text-amber-900"
-                    >
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth={2.5}
-                        className="h-4 w-4"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m5 12 5 5L20 7" />
-                      </svg>
-                    </span>
-                    {badge}
-                  </li>
-                ))}
-              </ul>
-            </aside>
+            ))}
+          </div>
+        </section>
 
-            <form
-              onSubmit={handleSubmit}
-              noValidate
-              aria-describedby={error ? errorId : undefined}
-              className="glass-panel flex flex-col gap-7 rounded-3xl p-6 sm:p-8 lg:p-10"
-            >
+        {/* 4. Quick Donate Grid */}
+        <section>
+          <div className="mb-8">
+            <p className="text-xs font-bold uppercase tracking-widest text-sunset-orange">{donateCopy.quickLabel}</p>
+            <h2 className="mt-2 font-serif text-3xl font-bold text-ink">{donateCopy.quickTitle}</h2>
+            <p className="mt-3 max-w-3xl text-base leading-relaxed text-slate-600">{donateCopy.quickIntro}</p>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            {donateCopy.presetAmounts.map((preset, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => { setCustomAmount(preset.amount.toString()) }}
+                className="group flex flex-col items-start rounded-3xl border-2 border-slate-200 bg-white p-6 text-left transition hover:border-sunset-orange hover:shadow-lg focus:outline-none"
+              >
+                <p className="text-3xl font-black text-sunset-orange">${preset.amount}</p>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-600">{preset.body}</p>
+                <div className="mt-6 flex w-full items-center justify-between gap-2 border-t border-slate-100 pt-4">
+                  <span className="text-xs font-bold uppercase tracking-wide text-sunset-orange transition group-hover:text-sunset-red">
+                    {donateCopy.quickDonateButton}
+                  </span>
+                  <span className="text-slate-400 group-hover:text-sunset-red transition">→</span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {/* 5. Custom Amount Form */}
+        <section className="mx-auto max-w-2xl">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="h-px flex-1 bg-slate-300"></div>
+            <p className="text-xs font-bold uppercase tracking-widest text-slate-400">{donateCopy.customOrLabel}</p>
+            <div className="h-px flex-1 bg-slate-300"></div>
+          </div>
+          <form onSubmit={handleSubmit} className="glass-panel rounded-3xl p-8 sm:p-10 shadow-xl border border-white/50">
+            <div className="flex flex-col gap-6">
               <fieldset>
-                <legend className="text-xs font-semibold uppercase tracking-[0.18em] text-ink/60">
-                  {donateCopy.frequencyLabel}
-                </legend>
-                <div
-                  id={frequencyGroupId}
-                  role="radiogroup"
-                  aria-label={donateCopy.frequencyLabel}
-                  className="mt-3 inline-flex w-full rounded-full bg-white/80 p-1 shadow-inner sm:w-auto"
-                >
-                  {(
-                    [
-                      { value: 'one-time' as const, label: donateCopy.frequencyOneTime },
-                      { value: 'monthly' as const, label: donateCopy.frequencyMonthly },
-                    ]
-                  ).map((option) => {
-                    const active = option.value === frequency
-                    return (
-                      <button
-                        key={option.value}
-                        type="button"
-                        role="radio"
-                        aria-checked={active}
-                        onClick={() => handleFrequencyChange(option.value)}
-                        className={
-                          'flex-1 rounded-full px-5 py-2 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400 sm:flex-none ' +
-                          (active
-                            ? 'bg-ink text-white shadow-sm'
-                            : 'text-ink/70 hover:text-ink')
-                        }
-                      >
-                        {option.label}
-                      </button>
-                    )
-                  })}
+                <legend className="text-sm font-bold uppercase tracking-widest text-ink/60 mb-3">{donateCopy.frequencyLabel}</legend>
+                <div className="flex rounded-full bg-slate-100 p-1 shadow-inner" id={frequencyGroupId}>
+                  {(['one-time', 'monthly'] as Frequency[]).map((opt) => (
+                    <button
+                      key={opt}
+                      type="button"
+                      onClick={() => setFrequency(opt)}
+                      className={`flex-1 rounded-full py-2.5 text-sm font-bold transition ${frequency === opt ? 'bg-sunset-orange text-white shadow-md' : 'text-slate-500 hover:text-ink'}`}
+                    >
+                      {opt === 'one-time' ? donateCopy.frequencyOneTime : donateCopy.frequencyMonthly}
+                    </button>
+                  ))}
                 </div>
               </fieldset>
-
               <fieldset>
-                <legend className="text-xs font-semibold uppercase tracking-[0.18em] text-ink/60">
+                <label htmlFor={customInputId} className="text-sm font-bold uppercase tracking-widest text-ink/60 mb-3 block">
                   {donateCopy.amountLabel}
-                </legend>
-                <div
-                  id={amountGroupId}
-                  role="radiogroup"
-                  aria-label={donateCopy.amountLabel}
-                  className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-5"
-                >
-                  {amountOptions.map((amount) => {
-                    const active = selectedPreset === amount && !hasCustomValue
-                    return (
-                      <button
-                        key={amount}
-                        type="button"
-                        role="radio"
-                        aria-checked={active}
-                        data-amount={amount}
-                        onClick={() => handlePresetClick(amount)}
-                        className={
-                          'rounded-2xl border px-4 py-3 text-center text-base font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400 ' +
-                          (active
-                            ? 'border-amber-400 bg-amber-300 text-ink shadow-md ring-2 ring-amber-300'
-                            : 'border-slate-200 bg-white text-ink hover:border-amber-300 hover:bg-amber-50')
-                        }
-                      >
-                        {formatCurrency(amount)}
-                      </button>
-                    )
-                  })}
-                </div>
-
-                <label
-                  htmlFor={customInputId}
-                  className="mt-5 flex flex-col gap-2 text-sm font-semibold text-ink/80"
-                >
-                  <span>{donateCopy.customPlaceholder}</span>
-                  <div className="relative">
-                    <span
-                      aria-hidden="true"
-                      className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-base font-semibold text-ink/50"
-                    >
-                      $
-                    </span>
-                    <input
-                      id={customInputId}
-                      name="customAmount"
-                      type="text"
-                      inputMode="decimal"
-                      autoComplete="off"
-                      placeholder="0.00"
-                      aria-label={donateCopy.customAriaLabel}
-                      value={customAmount}
-                      onChange={(event) => handleCustomChange(event.target.value)}
-                      className="w-full rounded-2xl border border-slate-200 bg-white py-3 pl-8 pr-4 text-base font-semibold text-ink shadow-inner focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-300"
-                    />
-                  </div>
                 </label>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-5 text-xl font-bold text-slate-400">$</span>
+                  <input
+                    id={customInputId}
+                    type="text"
+                    inputMode="decimal"
+                    placeholder="0.00"
+                    value={customAmount}
+                    onChange={(e) => handleCustomChange(e.target.value)}
+                    className="w-full rounded-2xl border-2 border-slate-200 bg-white py-4 pl-10 pr-4 text-xl font-bold text-ink shadow-inner focus:border-sunset-orange focus:outline-none focus:ring-0"
+                  />
+                </div>
               </fieldset>
-
-              {error ? (
-                <p
-                  id={errorId}
-                  role="alert"
-                  className="rounded-2xl border border-rose-custom/30 bg-rose-custom/10 px-4 py-3 text-sm font-semibold text-rose-custom"
-                >
-                  {error}
-                </p>
-              ) : null}
-
+              {error && <p className="text-sm font-bold text-red-500 bg-red-50 p-3 rounded-xl">{error}</p>}
               <button
                 type="submit"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-sunset-orange px-6 py-3 text-base font-bold text-white shadow-md transition hover:bg-sunset-gold hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400 disabled:cursor-not-allowed disabled:opacity-60"
+                className="mt-2 w-full rounded-full bg-ink py-4 text-lg font-bold text-white shadow-lg transition hover:bg-slate-800"
               >
                 {donateCopy.submitButton}
-                <span aria-hidden="true" className="inline-block transition-transform group-hover:translate-x-1">
-                  &rarr;
-                </span>
               </button>
-            </form>
+            </div>
+          </form>
+        </section>
+
+        {/* 6. Bank Transfer & PayID */}
+        <section>
+          <div className="glass-panel rounded-3xl p-8 sm:p-12 shadow-lg border border-slate-200">
+            <div className="mb-10 text-center">
+              <p className="text-xs font-bold uppercase tracking-widest text-sunset-orange">{donateCopy.directLabel}</p>
+              <h2 className="mt-2 font-serif text-3xl font-bold text-ink sm:text-4xl">{donateCopy.directTitle}</h2>
+              <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-600">{donateCopy.directIntro}</p>
+              <div className="mx-auto mt-6 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 shadow-sm">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 font-bold text-xs">✓</span>
+                <span className="font-bold text-ink">{donateCopy.bankOrgName}</span>
+              </div>
+            </div>
+
+            <div className="grid gap-12 lg:grid-cols-2">
+              {/* Bank Transfer Steps */}
+              <div>
+                <p className="mb-6 font-serif text-2xl font-bold text-ink">Bank Transfer</p>
+                <ol className="space-y-6">
+                  <li className="flex gap-4">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sunset-orange font-bold text-white shadow-md">1</span>
+                    <div>
+                      <p className="font-bold text-ink">{donateCopy.bankStep1Title}</p>
+                      <p className="mt-1 text-sm text-slate-500">{donateCopy.bankStep1Body}</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-4">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sunset-orange font-bold text-white shadow-md">2</span>
+                    <div className="w-full">
+                      <p className="font-bold text-ink mb-3">{donateCopy.bankStep2Title}</p>
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between rounded-xl bg-white p-3 border border-slate-200 shadow-sm">
+                          <div>
+                            <p className="text-xs font-bold uppercase tracking-widest text-slate-400">{donateCopy.bankBsbLabel}</p>
+                            <p className="font-mono text-lg font-bold text-ink">{donateCopy.bankBsb}</p>
+                          </div>
+                          <button onClick={() => handleCopy(donateCopy.bankBsb)} className="rounded-lg bg-slate-100 px-4 py-2 text-xs font-bold text-slate-600 transition hover:bg-sunset-orange hover:text-white">Copy</button>
+                        </div>
+                        <div className="flex items-center justify-between rounded-xl bg-white p-3 border border-slate-200 shadow-sm">
+                          <div>
+                            <p className="text-xs font-bold uppercase tracking-widest text-slate-400">{donateCopy.bankAccountLabel}</p>
+                            <p className="font-mono text-lg font-bold text-ink">{donateCopy.bankAccount}</p>
+                          </div>
+                          <button onClick={() => handleCopy(donateCopy.bankAccount)} className="rounded-lg bg-slate-100 px-4 py-2 text-xs font-bold text-slate-600 transition hover:bg-sunset-orange hover:text-white">Copy</button>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li className="flex gap-4">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sunset-orange font-bold text-white shadow-md">3</span>
+                    <div>
+                      <p className="font-bold text-ink">{donateCopy.bankStep3Title}</p>
+                      <p className="mt-2 inline-block rounded-lg bg-amber-100 px-3 py-1 font-mono text-sm font-bold text-amber-900">{donateCopy.bankStep3Ref}</p>
+                      <p className="mt-2 text-sm text-slate-500">{donateCopy.bankStep3Body}</p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+
+              {/* PayID */}
+              <div className="rounded-3xl bg-white/50 p-8 border border-slate-200 backdrop-blur-sm">
+                <p className="font-serif text-2xl font-bold text-ink mb-4">{donateCopy.payIdTitle}</p>
+                <p className="text-sm leading-relaxed text-slate-600 mb-6">{donateCopy.payIdBody}</p>
+                
+                <div className="flex items-center justify-between rounded-xl bg-white p-4 border border-slate-200 shadow-sm mb-6">
+                  <div className="overflow-hidden">
+                    <p className="text-xs font-bold uppercase tracking-widest text-slate-400">{donateCopy.payIdEmailLabel}</p>
+                    <p className="truncate text-lg font-bold text-ink">{donateCopy.payIdEmail}</p>
+                  </div>
+                  <button onClick={() => handleCopy(donateCopy.payIdEmail)} className="shrink-0 rounded-lg bg-slate-100 px-4 py-2 text-xs font-bold text-slate-600 transition hover:bg-sunset-orange hover:text-white">Copy</button>
+                </div>
+
+                <div className="rounded-2xl bg-amber-50 p-5 border border-amber-100">
+                  <p className="text-sm font-bold uppercase tracking-widest text-amber-800">{donateCopy.payIdZeroFeesTitle}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-amber-900/80">{donateCopy.payIdZeroFeesBody}</p>
+                </div>
+                
+                <p className="mt-6 text-sm text-slate-500 italic text-center">{donateCopy.receiptFooterText}</p>
+              </div>
+            </div>
           </div>
-        </Container>
-      </div>
-    </section>
+        </section>
+      </Container>
+    </div>
   )
 }
-
-export default DonationWidget

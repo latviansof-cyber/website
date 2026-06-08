@@ -1,4 +1,4 @@
-﻿import { z } from 'zod'
+import { z } from 'zod'
 
 /**
  * Strict runtime schemas for the bilingual content map.
@@ -41,14 +41,39 @@ export const EventsSchema = z.object({
   items: z.array(EventItemSchema).min(1),
 })
 
+export const DonateSchema = z.object({
+  heroEyebrow: z.string().min(1),
+  heroTitle: z.string().min(1),
+  heroSubtitle: z.string().min(1),
+  intro: z.string().min(1),
+  amountLabel: z.string().min(1),
+  customPlaceholder: z.string().min(1),
+  customAriaLabel: z.string().min(1),
+  frequencyLabel: z.string().min(1),
+  frequencyOneTime: z.string().min(1),
+  frequencyMonthly: z.string().min(1),
+  submitButton: z.string().min(1),
+  submitLoading: z.string().min(1),
+  errorAmountRequired: z.string().min(1),
+  errorInvalidAmount: z.string().min(1),
+  successHeading: z.string().min(1),
+  successBody: z.string().min(1),
+  successAnother: z.string().min(1),
+  trustBadges: z.array(z.string().min(1)).length(3),
+})
+
+export type DonateValidated = z.infer<typeof DonateSchema>
+
+
+
 export const FooterSchema = z.object({
   tagline: z.string().min(1),
   contact: z.string().min(1),
   rights: z.string().min(1),
   address: z.string().min(1),
   languageLabel: z.string().min(1),
+  donate: DonateSchema,
 })
-
 export const SiteContentSchema = z.object({
   nav: NavSchema,
   hero: HeroSchema,

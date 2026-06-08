@@ -17,6 +17,7 @@ const en: SiteContent = {
     history: 'History',
     events: 'Events',
     skipToContent: 'Skip to content',
+    donate: 'Donate',
   },
   hero: {
     eyebrow: 'Northern Territory, Australia',
@@ -117,6 +118,7 @@ const lv: SiteContent = {
     history: 'Vēsture',
     events: 'Pasākumi',
     skipToContent: 'Pāriet uz saturu',
+    donate: 'Ziedot',
   },
   hero: {
     eyebrow: 'Ziemeļu Teritorija, Austrālija',

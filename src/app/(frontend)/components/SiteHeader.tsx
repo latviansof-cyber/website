@@ -1,14 +1,16 @@
 'use client'
 
+import Link from 'next/link'
 import { useLanguage } from '../i18n/LanguageProvider'
 import { Container } from './ui/Container'
 import { LanguageSwitcher } from './LanguageSwitcher'
 
 const navItems = [
-  { href: '#about', key: 'about' as const },
-  { href: '#history', key: 'history' as const },
-  { href: '#events', key: 'events' as const },
+  { href: '/#about', key: 'about' as const },
+  { href: '/#history', key: 'history' as const },
+  { href: '/#events', key: 'events' as const },
 ]
+const donateCta = { href: '/donate', labelKey: 'donate' as const }
 
 export function SiteHeader() {
   const { t } = useLanguage()
@@ -50,6 +52,29 @@ export function SiteHeader() {
               </li>
             ))}
           </ul>
+          <Link
+            href={donateCta.href}
+            aria-label={t.nav[donateCta.labelKey]}
+            data-testid="nav-donate"
+            className="group inline-flex items-center gap-1.5 rounded-full bg-sunset-orange px-4 py-2 text-sm font-bold text-ink shadow-sm transition-all duration-200 hover:bg-sunset-gold hover:shadow-[0_0_18px_rgba(249,115,22,0.45)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2.2}
+              className="h-4 w-4 transition-transform group-hover:scale-110"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+              />
+            </svg>
+            <span className="hidden sm:inline">{t.nav[donateCta.labelKey]}</span>
+            <span className="sr-only sm:hidden">{t.nav[donateCta.labelKey]}</span>
+          </Link>
           <div className="pl-2 sm:border-l sm:border-white/20">
             <LanguageSwitcher />
           </div>
@@ -68,6 +93,30 @@ export function SiteHeader() {
               </a>
             </li>
           ))}
+          <li>
+            <Link
+              href={donateCta.href}
+              aria-label={t.nav[donateCta.labelKey]}
+              data-testid="nav-donate-mobile"
+              className="inline-flex items-center gap-1.5 rounded-full bg-sunset-orange px-4 py-2 font-bold text-ink shadow-sm transition-colors hover:bg-sunset-gold"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2.2}
+                className="h-4 w-4"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                />
+              </svg>
+              {t.nav[donateCta.labelKey]}
+            </Link>
+          </li>
         </ul>
       </nav>
     </header>

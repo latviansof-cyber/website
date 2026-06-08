@@ -14,6 +14,7 @@ export const NavSchema = z.object({
   about: z.string().min(1),
   history: z.string().min(1),
   events: z.string().min(1),
+  donate: z.string().min(1),
   skipToContent: z.string().min(1),
 })
 

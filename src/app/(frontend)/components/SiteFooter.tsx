@@ -1,5 +1,6 @@
 ﻿'use client'
 
+import Link from 'next/link'
 import { useLanguage } from '../i18n/LanguageProvider'
 import { Container } from './ui/Container'
 
@@ -30,24 +31,24 @@ export function SiteFooter() {
           </h2>
           <ul role="list" className="mt-3 space-y-2 text-sm text-white/80">
             <li>
-              <a href="/#about" className="hover:text-amber-200">
+              <Link href="/#about" className="hover:text-amber-200">
                 {t.nav.about}
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/#history" className="hover:text-amber-200">
+              <Link href="/#history" className="hover:text-amber-200">
                 {t.nav.history}
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/#events" className="hover:text-amber-200">
+              <Link href="/#events" className="hover:text-amber-200">
                 {t.nav.events}
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/donate" className="hover:text-amber-200">
+              <Link href="/donate" className="hover:text-amber-200">
                 {t.nav.donate}
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
@@ -60,9 +61,9 @@ export function SiteFooter() {
           <ul role="list" className="mt-3 space-y-2 text-sm text-white/80">
             {t.events.items.slice(0, 3).map((event) => (
               <li key={event.id}>
-                <a href="/#events" className="hover:text-amber-200">
+                <Link href="/#events" className="hover:text-amber-200">
                   {event.title}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

@@ -22,8 +22,8 @@ const accentForChip = {
 } as const
 
 const imageByEvent: Record<string, string> = {
-  lieldienas: '/images/img1.webp',
-  may4: '/images/img2.webp',
+  lieldienas: '/images/img2.webp',
+  may4: '/images/may4.png',
   jani: '/images/img3.webp',
   'baltijas-cels': '/images/img4.webp',
   nov18: '/images/nov18.png',

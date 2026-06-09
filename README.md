@@ -4,6 +4,60 @@
 
 **This can only be deployed on Paid Workers right now due to size limits.** This template comes configured with the bare minimum to get started on anything you need.
 
+## Recent Improvements
+
+The following website and CMS improvements were completed on June 9, 2026.
+
+### Payload content management
+
+- Added and registered a standard `pages` collection.
+- Limited public reads to published pages while authenticated editors retain draft access.
+- Enabled drafts, autosave, ordering, unique slugs, bilingual English/Latvian fields, and SEO controls.
+- Expanded the content plan from two pages to About, History, Community, and Membership.
+- Added fallback content for periods when Payload or the local D1 database is unavailable.
+
+### Block-based page builder
+
+- Replaced the fixed page body with an ordered Payload `layout` blocks field.
+- Added reusable bilingual `Hero`, `Content`, and `CallToAction` blocks.
+- Added optional block images, alignment, image position, and background tone controls.
+- Added CTA support for up to two editor-managed primary or secondary buttons.
+- Added frontend renderers shared by CMS and fallback content.
+- Generated Payload types and a D1 migration containing block tables, nested CTA buttons, drafts, SEO fields, and four seeded published pages.
+
+### Frontend content and design
+
+- Replaced long homepage text sections with compact cards and `Read more` links.
+- Added dynamic routes for all four editorial pages.
+- Added expandable `Read more` and `Show less` controls to event cards.
+- Updated desktop, mobile, and footer navigation for the expanded page plan.
+- Corrected mobile navigation overflow.
+- Added responsive Hero, Content, and CTA page layouts.
+
+### Metadata and discoverability
+
+- Added global defaults and page-specific metadata generated from Payload.
+- Added canonical URLs, robots controls, Open Graph tags, Twitter cards, and a dedicated 1200 x 630 Open Graph image.
+- Added Organization, WebSite, and WebPage JSON-LD.
+- Added Organization and WebPage microdata.
+- Added editable SEO title, description, social image, and `noIndex` page fields.
+
+### Icons and web app metadata
+
+- Extracted the supplied favicon assets directly into `public/`.
+- Removed `favicon.zip` and confirmed that no `public/favicon/` directory exists.
+- Added SVG, ICO, PNG, Apple touch, and web app manifest icon metadata.
+- Updated `site.webmanifest` with the association identity and website theme colors.
+
+### Verification and known limitations
+
+- Verified Payload type generation and formatting.
+- Browser-tested homepage cards, page blocks, CTA buttons, event disclosures, bilingual switching, and responsive layouts.
+- Verified canonical, favicon, manifest, Open Graph, microdata, and JSON-LD output.
+- Verified all favicon, manifest, and Open Graph assets return successful HTTP responses.
+- The Next.js build compiles and passes TypeScript, but page-data collection is blocked by an unauthenticated Wrangler remote-preview request (`API error 10000`).
+- Existing unit-test and ESLint configuration failures remain outside the scope of these changes.
+
 ## Quick start
 
 This template can be deployed directly to Cloudflare Workers by clicking the button to take you to the setup screen.

@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    pages: Page;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,6 +79,7 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -161,6 +163,132 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: number;
+  /**
+   * Used only in the Payload admin.
+   */
+  adminTitle: string;
+  slug: string;
+  order: number;
+  en: {
+    title: string;
+    /**
+     * A short summary used on cards and listing pages.
+     */
+    excerpt: string;
+  };
+  lv: {
+    title: string;
+    /**
+     * A short summary used on cards and listing pages.
+     */
+    excerpt: string;
+  };
+  layout: (HeroLayoutBlock | ContentLayoutBlock | CallToActionLayoutBlock)[];
+  meta?: {
+    /**
+     * Optional search/social title. Defaults to the English page title.
+     */
+    title?: string | null;
+    /**
+     * Optional search/social description. Defaults to the English excerpt.
+     */
+    description?: string | null;
+    /**
+     * Recommended size: 1200 × 630 pixels.
+     */
+    image?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HeroLayoutBlock".
+ */
+export interface HeroLayoutBlock {
+  en: {
+    eyebrow?: string | null;
+    heading: string;
+    text: string;
+  };
+  lv: {
+    eyebrow?: string | null;
+    heading: string;
+    text: string;
+  };
+  image?: (number | null) | Media;
+  alignment?: ('left' | 'center') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'hero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentLayoutBlock".
+ */
+export interface ContentLayoutBlock {
+  en: {
+    heading?: string | null;
+    /**
+     * Separate paragraphs with a blank line.
+     */
+    body: string;
+  };
+  lv: {
+    heading?: string | null;
+    /**
+     * Separate paragraphs with a blank line.
+     */
+    body: string;
+  };
+  image?: (number | null) | Media;
+  imagePosition?: ('right' | 'left' | 'none') | null;
+  tone?: ('plain' | 'muted') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'content';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CallToActionLayoutBlock".
+ */
+export interface CallToActionLayoutBlock {
+  en: {
+    heading: string;
+    text?: string | null;
+    buttons?:
+      | {
+          label: string;
+          link: string;
+          variant?: ('primary' | 'secondary') | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  lv: {
+    heading: string;
+    text?: string | null;
+    buttons?:
+      | {
+          label: string;
+          link: string;
+          variant?: ('primary' | 'secondary') | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'cta';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -190,6 +318,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: number | Page;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -270,6 +402,128 @@ export interface MediaSelect<T extends boolean = true> {
   filesize?: T;
   width?: T;
   height?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  adminTitle?: T;
+  slug?: T;
+  order?: T;
+  en?:
+    | T
+    | {
+        title?: T;
+        excerpt?: T;
+      };
+  lv?:
+    | T
+    | {
+        title?: T;
+        excerpt?: T;
+      };
+  layout?:
+    | T
+    | {
+        hero?: T | HeroLayoutBlockSelect<T>;
+        content?: T | ContentLayoutBlockSelect<T>;
+        cta?: T | CallToActionLayoutBlockSelect<T>;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        noIndex?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HeroLayoutBlock_select".
+ */
+export interface HeroLayoutBlockSelect<T extends boolean = true> {
+  en?:
+    | T
+    | {
+        eyebrow?: T;
+        heading?: T;
+        text?: T;
+      };
+  lv?:
+    | T
+    | {
+        eyebrow?: T;
+        heading?: T;
+        text?: T;
+      };
+  image?: T;
+  alignment?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentLayoutBlock_select".
+ */
+export interface ContentLayoutBlockSelect<T extends boolean = true> {
+  en?:
+    | T
+    | {
+        heading?: T;
+        body?: T;
+      };
+  lv?:
+    | T
+    | {
+        heading?: T;
+        body?: T;
+      };
+  image?: T;
+  imagePosition?: T;
+  tone?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CallToActionLayoutBlock_select".
+ */
+export interface CallToActionLayoutBlockSelect<T extends boolean = true> {
+  en?:
+    | T
+    | {
+        heading?: T;
+        text?: T;
+        buttons?:
+          | T
+          | {
+              label?: T;
+              link?: T;
+              variant?: T;
+              id?: T;
+            };
+      };
+  lv?:
+    | T
+    | {
+        heading?: T;
+        text?: T;
+        buttons?:
+          | T
+          | {
+              label?: T;
+              link?: T;
+              variant?: T;
+              id?: T;
+            };
+      };
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

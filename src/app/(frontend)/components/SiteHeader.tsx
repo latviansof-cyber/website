@@ -6,14 +6,16 @@ import { Container } from './ui/Container'
 import { LanguageSwitcher } from './LanguageSwitcher'
 
 const navItems = [
-  { href: '/#about', key: 'about' as const },
-  { href: '/#history', key: 'history' as const },
-  { href: '/#events', key: 'events' as const },
+  { href: '/about', en: 'About', lv: 'Par mums' },
+  { href: '/history', en: 'History', lv: 'Vēsture' },
+  { href: '/community', en: 'Community', lv: 'Kopiena' },
+  { href: '/membership', en: 'Join', lv: 'Pievienoties' },
+  { href: '/#events', en: 'Events', lv: 'Pasākumi' },
 ]
 const donateCta = { href: '/donate', labelKey: 'donate' as const }
 
 export function SiteHeader() {
-  const { t } = useLanguage()
+  const { lang, t } = useLanguage()
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 glass-panel-dark text-white shadow-lg transition-all duration-300">
       <a
@@ -24,9 +26,9 @@ export function SiteHeader() {
       </a>
       <Container className="flex items-center justify-between gap-4 py-3 sm:py-4">
         <a href="#top" className="group flex items-center gap-4">
-          <img 
-            src="/images/logo.png" 
-            alt="DLA Logo" 
+          <img
+            src="/images/logo.png"
+            alt="DLA Logo"
             className="h-16 w-16 sm:h-20 sm:w-20 object-contain rounded-2xl bg-white p-1.5 drop-shadow-lg transition-transform duration-300 group-hover:scale-105"
           />
           <span className="hidden flex-col leading-tight sm:flex">
@@ -47,7 +49,7 @@ export function SiteHeader() {
                   href={item.href}
                   className="rounded-full px-4 py-2 transition-all duration-200 hover:bg-white/20 hover:text-white hover:shadow-[0_0_10px_rgba(255,255,255,0.2)]"
                 >
-                  {t.nav[item.key]}
+                  {item[lang]}
                 </a>
               </li>
             ))}
@@ -81,42 +83,21 @@ export function SiteHeader() {
         </nav>
       </Container>
 
-      <nav aria-label="Primary mobile" className="border-t border-white/10 sm:hidden bg-ink/50 backdrop-blur-md">
-        <ul className="mx-auto flex max-w-6xl items-center justify-center gap-2 px-4 py-3 text-sm font-semibold text-white/90">
+      <nav
+        aria-label="Primary mobile"
+        className="overflow-x-auto border-t border-white/10 bg-ink/50 backdrop-blur-md sm:hidden"
+      >
+        <ul className="mx-auto flex w-max min-w-full items-center justify-start gap-1 px-3 py-3 text-sm font-semibold text-white/90">
           {navItems.map((item) => (
             <li key={item.href}>
               <a
                 href={item.href}
-                className="rounded-full px-4 py-2 transition-colors hover:bg-white/20 hover:text-white"
+                className="block whitespace-nowrap rounded-full px-3 py-2 transition-colors hover:bg-white/20 hover:text-white"
               >
-                {t.nav[item.key]}
+                {item[lang]}
               </a>
             </li>
           ))}
-          <li>
-            <Link
-              href={donateCta.href}
-              aria-label={t.nav[donateCta.labelKey]}
-              data-testid="nav-donate-mobile"
-              className="inline-flex items-center gap-1.5 rounded-full bg-sunset-orange px-4 py-2 font-bold text-ink shadow-sm transition-colors hover:bg-sunset-gold"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2.2}
-                className="h-4 w-4"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-                />
-              </svg>
-              {t.nav[donateCta.labelKey]}
-            </Link>
-          </li>
         </ul>
       </nav>
     </header>

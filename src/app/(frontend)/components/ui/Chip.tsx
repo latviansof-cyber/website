@@ -10,12 +10,21 @@ const tones: Record<string, string> = {
 }
 
 /** Small pill-shaped label used for event categories / tags. */
-export function Chip({ tone = 'slate', children }: { tone?: keyof typeof tones; children: ReactNode }) {
+export function Chip({
+  tone = 'slate',
+  className = '',
+  children,
+}: {
+  tone?: keyof typeof tones
+  className?: string
+  children: ReactNode
+}) {
   return (
     <span
       className={[
         'inline-flex w-fit items-center rounded-full bg-gradient-to-r px-3 py-1 text-xs font-semibold uppercase tracking-wide',
         tones[tone] ?? tones.slate,
+        className,
       ].join(' ')}
     >
       {children}

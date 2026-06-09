@@ -1,18 +1,32 @@
 ﻿import { LanguageProvider } from './i18n/LanguageProvider'
+import type { Metadata } from 'next'
 import { SiteHeader } from './components/SiteHeader'
 import { Hero } from './components/Hero'
-import { TextSection } from './components/TextSection'
+import { PageCards } from './components/PageCards'
 import { Events } from './components/Events'
 import { SiteFooter } from './components/SiteFooter'
+import { getWebsitePages } from '@/lib/pages'
+import { SITE_DESCRIPTION, SITE_NAME, SITE_NAME_LV } from '@/lib/site'
 
-export default function HomePage() {
+export const metadata: Metadata = {
+  title: {
+    absolute: `${SITE_NAME} — ${SITE_NAME_LV}`,
+  },
+  description: SITE_DESCRIPTION,
+  alternates: {
+    canonical: '/',
+  },
+}
+
+export default async function HomePage() {
+  const pages = await getWebsitePages()
+
   return (
     <LanguageProvider>
       <SiteHeader />
       <main id="main" className="bg-cream text-ink">
         <Hero />
-        <TextSection id="about" tone="muted" />
-        <TextSection id="history" />
+        <PageCards pages={pages} />
         <Events />
       </main>
       <SiteFooter />
@@ -20,6 +34,4 @@ export default function HomePage() {
   )
 }
 
-// TODO(DLA-302): when i18n routing lands, split this into /[locale]/page.tsx and
-//   generate static metadata per locale (OpenGraph + hreflang). Also switch
-//   `export default` to `generateStaticParams()` + `generateMetadata()`.
+// TODO(DLA-302): when locale routing lands, add locale-specific canonicals and hreflang.

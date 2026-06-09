@@ -8,7 +8,9 @@ export function SiteFooter() {
   const { t } = useLanguage()
   const year = new Date().getFullYear()
   return (
-    <footer className="bg-ink text-white">
+    <footer className="bg-ink text-white" itemScope itemType="https://schema.org/Organization">
+      <meta itemProp="name" content="Latvian Association of Darwin" />
+      <meta itemProp="alternateName" content="Dārvinas Latviešu Apvienība" />
       <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
         {/* Column 1: Brand */}
         <div>
@@ -21,7 +23,9 @@ export function SiteFooter() {
             </span>
             <p className="font-serif text-base font-semibold leading-snug">{t.footer.tagline}</p>
           </div>
-          <p className="mt-4 text-sm text-white/70">{t.footer.address}</p>
+          <p className="mt-4 text-sm text-white/70" itemProp="address">
+            {t.footer.address}
+          </p>
         </div>
 
         {/* Column 2: Quick Links */}
@@ -31,13 +35,23 @@ export function SiteFooter() {
           </h2>
           <ul role="list" className="mt-3 space-y-2 text-sm text-white/80">
             <li>
-              <Link href="/#about" className="hover:text-amber-200">
+              <Link href="/about" className="hover:text-amber-200">
                 {t.nav.about}
               </Link>
             </li>
             <li>
-              <Link href="/#history" className="hover:text-amber-200">
+              <Link href="/history" className="hover:text-amber-200">
                 {t.nav.history}
+              </Link>
+            </li>
+            <li>
+              <Link href="/community" className="hover:text-amber-200">
+                {t.nav.about === 'About' ? 'Community' : 'Kopiena'}
+              </Link>
+            </li>
+            <li>
+              <Link href="/membership" className="hover:text-amber-200">
+                {t.nav.about === 'About' ? 'Join the Association' : 'Pievienoties apvienībai'}
               </Link>
             </li>
             <li>
@@ -76,7 +90,11 @@ export function SiteFooter() {
           </h2>
           <ul role="list" className="mt-3 space-y-2 text-sm text-white/80">
             <li>
-              <a href="mailto:hello@darwinlatvians.org" className="hover:text-amber-200">
+              <a
+                href="mailto:hello@darwinlatvians.org"
+                className="hover:text-amber-200"
+                itemProp="email"
+              >
                 hello@darwinlatvians.org
               </a>
             </li>
@@ -85,7 +103,9 @@ export function SiteFooter() {
       </Container>
       <div className="border-t border-white/10">
         <Container className="flex flex-col items-start justify-between gap-2 py-4 text-xs text-white/60 sm:flex-row sm:items-center">
-          <p>© {year} Latvian Association of Darwin. {t.footer.rights}</p>
+          <p>
+            © {year} Latvian Association of Darwin. {t.footer.rights}
+          </p>
           <p>Built with Next.js + Tailwind CSS</p>
         </Container>
       </div>

@@ -12,18 +12,20 @@ export function Section({
   id,
   ariaLabel,
   tone = 'plain',
+  className = '',
   children,
 }: {
   id?: string
   ariaLabel?: string
   tone?: Tone
+  className?: string
   children: ReactNode
 }) {
   return (
     <section
       id={id}
       aria-label={ariaLabel}
-      className={['py-20 sm:py-24 lg:py-28', tones[tone]].join(' ')}
+      className={['py-20 sm:py-24 lg:py-28', tones[tone], className].join(' ')}
     >
       {children}
     </section>

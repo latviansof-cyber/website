@@ -7,6 +7,7 @@ import { SiteFooter } from '../components/SiteFooter'
 import { SiteHeader } from '../components/SiteHeader'
 import { fallbackPages, getWebsitePage } from '@/lib/pages'
 import { SITE_NAME, SITE_URL, absoluteURL } from '@/lib/site'
+import { getOgImageUrlByPath } from '@/lib/ogImage'
 
 export function generateStaticParams() {
   return fallbackPages.map((page) => ({ slug: page.slug }))
@@ -23,6 +24,7 @@ export async function generateMetadata({
 
   const title = page.meta.title || page.en.title
   const description = page.meta.description || page.en.excerpt
+  const ogImage = getOgImageUrlByPath(`/${page.slug}`)
 
   return {
     title,
@@ -42,13 +44,20 @@ export async function generateMetadata({
       siteName: SITE_NAME,
       title,
       description,
-      images: [{ url: page.meta.image, alt: page.en.title }],
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: page.en.title,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [page.meta.image],
+      images: [ogImage],
     },
   }
 }

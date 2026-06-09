@@ -3,6 +3,9 @@ import { LanguageProvider } from '../i18n/LanguageProvider'
 import { SiteHeader } from '../components/SiteHeader'
 import { SiteFooter } from '../components/SiteFooter'
 import { DonationWidget } from './DonationWidget'
+import { getOgImageUrlByPath } from '@/lib/ogImage'
+
+const ogImage = getOgImageUrlByPath('/donate')
 
 export const metadata: Metadata = {
   title: 'Donate',
@@ -16,11 +19,18 @@ export const metadata: Metadata = {
     description:
       'Support cultural events, language programs, and Latvian community gatherings in the Northern Territory.',
     url: '/donate',
-    images: ['/open-graph.jpg'],
+    images: [
+      {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: 'Donate to the Latvian Association of Darwin',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['/open-graph.jpg'],
+    images: [ogImage],
   },
 }
 

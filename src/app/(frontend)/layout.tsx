@@ -10,6 +10,9 @@ import {
   SITE_URL,
   absoluteURL,
 } from '@/lib/site'
+import { getOgImageUrlByPath } from '@/lib/ogImage'
+
+const defaultOgImage = getOgImageUrlByPath('/')
 
 export const metadata: Metadata = {
   metadataBase: SITE_URL,
@@ -37,7 +40,7 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [
       {
-        url: '/open-graph.jpg',
+        url: defaultOgImage,
         width: 1200,
         height: 630,
         alt: `${SITE_NAME} community gathering`,
@@ -48,7 +51,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: `${SITE_NAME} — ${SITE_NAME_LV}`,
     description: SITE_DESCRIPTION,
-    images: ['/open-graph.jpg'],
+    images: [defaultOgImage],
   },
   robots: {
     index: true,

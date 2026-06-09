@@ -23,6 +23,7 @@
     "test": "pnpm run test:unit && pnpm run test:int && pnpm run test:e2e",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview --env=$CLOUDFLARE_ENV",
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
+    "genog-local": "node scripts/run-og-images-local.mjs",
     "generate:types:cloudflare": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "deploy:database": "cross-env NODE_ENV=production PAYLOAD_SECRET=ignore payload migrate && wrangler d1 execute D1 --command 'PRAGMA optimize' --env=$CLOUDFLARE_ENV --remote"
   },
@@ -58,6 +59,7 @@
     "@vitejs/plugin-react": "6.0.2",
     "eslint": "^10.4.1",
     "eslint-config-next": "16.2.7",
+    "fast-xml-parser": "^5.7.3",
     "jest": "^30.4.2",
     "jest-environment-jsdom": "^30.4.1",
     "jsdom": "29.1.1",

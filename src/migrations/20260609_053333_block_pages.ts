@@ -367,12 +367,12 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
           ${pageID},
           'layout',
           ${blockID},
-          ${enBlock.eyebrow},
-          ${enBlock.heading},
-          ${enBlock.text},
-          ${lvBlock.eyebrow},
-          ${lvBlock.heading},
-          ${lvBlock.text},
+          ${enBlock.eyebrow ?? null},
+          ${enBlock.heading ?? null},
+          ${enBlock.text ?? null},
+          ${lvBlock.eyebrow ?? null},
+          ${lvBlock.heading ?? null},
+          ${lvBlock.text ?? null},
           ${enBlock.alignment || 'left'}
         );`)
       }
@@ -394,10 +394,10 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
           ${pageID},
           'layout',
           ${blockID},
-          ${enBlock.heading},
-          ${enBlock.body},
-          ${lvBlock.heading},
-          ${lvBlock.body},
+          ${enBlock.heading ?? null},
+          ${enBlock.body ?? null},
+          ${lvBlock.heading ?? null},
+          ${lvBlock.body ?? null},
           ${enBlock.imagePosition || 'right'},
           ${enBlock.tone || 'plain'}
         );`)
@@ -418,10 +418,10 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
           ${pageID},
           'layout',
           ${blockID},
-          ${enBlock.heading},
-          ${enBlock.text},
-          ${lvBlock.heading},
-          ${lvBlock.text}
+          ${enBlock.heading ?? null},
+          ${enBlock.text ?? null},
+          ${lvBlock.heading ?? null},
+          ${lvBlock.text ?? null}
         );`)
 
         for (const [buttonIndex, button] of (enBlock.buttons || []).entries()) {

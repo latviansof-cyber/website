@@ -6,12 +6,16 @@ const require = createRequire(import.meta.url)
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone' as const,
   images: {
     localPatterns: [
       {
         pathname: '/api/media/file/**',
       },
     ],
+  },
+  experimental: {
+    cpus: 1,
   },
   // Packages with Cloudflare Workers (workerd) specific code
   // Read more: https://opennext.js.org/cloudflare/howtos/workerd
@@ -25,9 +29,15 @@ const nextConfig = {
       '.mjs': ['.mts', '.mjs'],
     }
 
+    const vercelOgDir = path.dirname(require.resolve('next/dist/compiled/@vercel/og/package.json'))
+
     webpackConfig.resolve.alias = {
       ...(webpackConfig.resolve.alias ?? {}),
       '@vercel/og': false,
+      'next/dist/compiled/@vercel/og': false,
+      [path.join(vercelOgDir, 'resvg.wasm')]: false,
+      [path.join(vercelOgDir, 'yoga.wasm')]: false,
+      [path.join(vercelOgDir, 'Geist-Regular.ttf')]: false,
     }
 
     if (!isServer) {

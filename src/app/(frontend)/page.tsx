@@ -6,6 +6,7 @@ import { PageCards } from './components/PageCards'
 import { Events } from './components/Events'
 import { SiteFooter } from './components/SiteFooter'
 import { getWebsitePages } from '@/lib/pages'
+import { getWebsiteEvents } from '@/lib/events'
 import { SITE_DESCRIPTION, SITE_NAME, SITE_NAME_LV } from '@/lib/site'
 
 export const metadata: Metadata = {
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
 }
 
 export default async function HomePage() {
-  const pages = await getWebsitePages()
+  const [pages, events] = await Promise.all([getWebsitePages(), getWebsiteEvents()])
 
   return (
     <LanguageProvider>
@@ -27,7 +28,7 @@ export default async function HomePage() {
       <main id="main" className="bg-cream text-ink">
         <Hero />
         <PageCards pages={pages} />
-        <Events />
+        <Events events={events} />
       </main>
       <SiteFooter />
     </LanguageProvider>

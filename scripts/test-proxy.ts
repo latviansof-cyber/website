@@ -1,7 +1,14 @@
 import { getPlatformProxy } from 'wrangler';
+import dotenv from 'dotenv';
+import path from 'path';
+
+// Load env
+dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 
 async function run() {
-  console.log("Running proxy test...");
+  console.log("CLOUDFLARE_API_TOKEN is set:", !!process.env.CLOUDFLARE_API_TOKEN);
+  console.log("CLOUDFLARE_ACCOUNT_ID is set:", !!process.env.CLOUDFLARE_ACCOUNT_ID);
+  
   try {
     const proxy = await getPlatformProxy({
       environment: undefined,
@@ -9,16 +16,15 @@ async function run() {
       remoteBindings: true,
     });
     
-    console.log("Proxy D1 binding keys:", Object.keys(proxy.env));
     const d1 = proxy.env.D1;
     if (!d1) {
       console.log("D1 binding not found in proxy env!");
       return;
     }
     
-    // Execute a test query
-    const res = await d1.prepare("SELECT name FROM sqlite_master WHERE type='table';").all();
-    console.log("D1 tables through proxy:", res.results);
+    // Query payload_migrations
+    const res = await d1.prepare("SELECT * FROM payload_migrations;").all();
+    console.log("Migrations found through proxy:", res.results);
   } catch (err) {
     console.error("Error during proxy test:", err);
   }

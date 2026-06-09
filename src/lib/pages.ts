@@ -152,7 +152,7 @@ export const fallbackPages: WebsitePage[] = [
   starterPage({
     slug: 'community',
     order: 30,
-    image: '/images/gathering3.jpg',
+    image: '/images/img1.webp',
     en: {
       title: 'Our Community',
       excerpt:
@@ -169,7 +169,7 @@ export const fallbackPages: WebsitePage[] = [
   starterPage({
     slug: 'membership',
     order: 40,
-    image: '/images/img1.webp',
+    image: '/images/membership-welcome.webp',
     en: {
       title: 'Join the Association',
       excerpt:
@@ -205,6 +205,64 @@ export const fallbackPages: WebsitePage[] = [
             variant: 'primary',
           },
           { label: 'Skatīt pasākumus', link: '/#events', variant: 'secondary' },
+        ],
+      },
+    },
+  }),
+  starterPage({
+    slug: 'culture',
+    order: 50,
+    image: '/images/culture.png',
+    en: {
+      title: 'Culture & Traditions',
+      excerpt:
+        'Explore the vibrant Latvian heritage, from song and dance festivals to seasonal celebrations kept alive in Darwin.',
+      body: 'Latvian culture is deeply rooted in history, nature, and community. In Darwin, we actively preserve and celebrate our unique traditions, keeping them alive for future generations and sharing them with the wider Australian community.\n\nFrom the traditional summer solstice celebration of Jāņi with its flower crowns, songs, and bonfires, to celebrating national holidays, we cherish our rich heritage. We also maintain connections with the broader Latvian diaspora in Australia, participating in regional song festivals, cultural events, and youth gatherings.\n\nTraditional crafts, folk dancing, and singing are at the heart of our community life, offering a bridge between Latvia and our home in the Northern Territory.',
+    },
+    lv: {
+      title: 'Kultūra un tradīcijas',
+      excerpt:
+        'Iepazīstiet dzīvīgo latviešu mantojumu, no dziesmu un deju svētkiem līdz gadskārtu svinībām Dārvinā.',
+      body: 'Latviešu kultūra ir cieši saistīta ar vēsturi, dabu un kopienu. Dārvinā mēs aktīvi saglabājam un kopjam savas unikālās tradīcijas, nododot tās nākamajām paaudzēm un daloties tajās ar plašāku Austrālijas sabiedrību.\n\nNo tradicionālajām vasaras saulgriežu svinībām – Jāņiem ar vainagu pīšanu, dziesmām un ugunskuriem, līdz valsts svētku atzīmēšanai – mēs godinām mūsu bagāto mantojumu. Mēs arī uzturam saites ar plašāku latviešu diasporu Austrālijā, piedaloties reģionālos dziesmu svētkos, kultūras pasākumos un jauniešu salidojumos.\n\nTradicionālie amatniecības izstrādājumi, tautas dejas un dziedāšana ir mūsu kopienas dzīves centrā, nodrošinot tiltu starp Latviju un mūsu mājām Ziemeļu Teritorijā.',
+    },
+  }),
+  starterPage({
+    slug: 'contact',
+    order: 60,
+    image: '/images/contact.png',
+    en: {
+      title: 'Contact Us',
+      excerpt:
+        'Get in touch with the Latvian Association of Darwin. We welcome questions, membership inquiries, and cultural collaborations.',
+      body: "We would love to hear from you! Whether you are a Latvian newly arrived in the Northern Territory, a descendant wishing to reconnect with your heritage, or a local resident interested in Latvian culture, our door is always open.\n\nYou can reach out to us via email for general inquiries, membership applications, or event details. We also encourage you to follow our social media channels to stay updated on upcoming community gatherings and initiatives.\n\nLet's connect and build a stronger community together in the Top End!",
+    },
+    lv: {
+      title: 'Kontakti',
+      excerpt:
+        'Sazinieties ar Dārvinas Latviešu Apvienību. Mēs priecāsimies par jūsu jautājumiem, sadarbības priekšlikumiem un vēstulēm.',
+      body: 'Mēs priecāsimies par jūsu ziņām! Neatkarīgi no tā, vai esat latvietis, kurš nesen ieradies Ziemeļu Teritorijā, pēcnācējs, kurš vēlas atjaunot saikni ar savu mantojumu, vai vietējais iedzīvotājs, kuram interesē latviešu kultūra – mūsu durvis ir atvērtas.\n\nSazinieties ar mums pa e-pastu, lai uzdotu jautājumus, pieteiktos dalībai apvienībā vai uzzinātu par pasākumiem. Tāpat aicinām sekot mūsu sociālo tīklu profiliem, lai uzzinātu jaunumus par nākamiem kopienas sarīkojumiem un iniciatīvām.\n\nSazināsimies un veidosim stiprāku kopienu kopā Ziemeļu Teritorijā!',
+    },
+    cta: {
+      en: {
+        heading: 'Want to reach out?',
+        text: 'Contact us via email or join us at the next gathering.',
+        buttons: [
+          {
+            label: 'Send Email',
+            link: 'mailto:hello@darwinlatvians.org',
+            variant: 'primary',
+          },
+        ],
+      },
+      lv: {
+        heading: 'Vēlaties sazināties?',
+        text: 'Sazinieties ar mums pa e-pastu vai pievienojieties nākamajā tikšanās reizē.',
+        buttons: [
+          {
+            label: 'Sūtīt e-pastu',
+            link: 'mailto:hello@darwinlatvians.org',
+            variant: 'primary',
+          },
         ],
       },
     },

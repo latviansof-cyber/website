@@ -38,17 +38,27 @@ export function PageCards({ pages }: { pages: WebsitePage[] }) {
         <div className="mt-12 grid gap-7 md:grid-cols-2">
           {pages.map((page) => {
             const content = page[lang]
+            const isLogo = page.slug === 'history'
+
             return (
               <article
                 key={page.slug}
                 id={page.slug === 'history' ? 'history' : undefined}
                 className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
               >
-                <div className="h-56 overflow-hidden">
+                <div
+                  className={`aspect-[16/10] overflow-hidden ${
+                    isLogo ? 'bg-cream p-6 sm:p-8' : 'bg-slate-100'
+                  }`}
+                >
                   <img
                     src={page.meta.image}
                     alt=""
-                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                    className={`h-full w-full transition duration-500 ${
+                      isLogo
+                        ? 'object-contain group-hover:scale-[1.02]'
+                        : 'object-cover group-hover:scale-105'
+                    }`}
                   />
                 </div>
                 <div className="p-7 sm:p-8">

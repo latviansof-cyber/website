@@ -25,6 +25,11 @@ const nextConfig = {
       '.mjs': ['.mts', '.mjs'],
     }
 
+    webpackConfig.resolve.alias = {
+      ...(webpackConfig.resolve.alias ?? {}),
+      '@vercel/og': false,
+    }
+
     if (!isServer) {
       webpackConfig.resolve.fallback = {
         ...webpackConfig.resolve.fallback,
@@ -33,7 +38,7 @@ const nextConfig = {
         path: require.resolve('path-browserify'),
       }
       webpackConfig.resolve.alias = {
-        ...(webpackConfig.resolve.alias ?? {}),
+        ...webpackConfig.resolve.alias,
         'node:assert': require.resolve('assert/'),
         assert: require.resolve('assert/'),
         path: require.resolve('path-browserify'),

@@ -5,6 +5,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
+    "deploy:app": "opennextjs-cloudflare build --env=$CLOUDFLARE_ENV && wrangler deploy --minify --env=$CLOUDFLARE_ENV",
     "generate:types": "pnpm run generate:types:cloudflare && pnpm run generate:types:payload",
     "generate:types:payload": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
@@ -14,7 +15,6 @@
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "build": "cross-env PAYLOAD_BUILD=true NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build --webpack",
     "build:next": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
-    "deploy:app": "opennextjs-cloudflare build --env=$CLOUDFLARE_ENV && opennextjs-cloudflare deploy --env=$CLOUDFLARE_ENV",
     "lint": "cross-env NODE_OPTIONS=--no-deprecation next lint",
     "ii": "pnpm install --ignore-workspace",
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",

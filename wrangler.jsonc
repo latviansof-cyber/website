@@ -2,8 +2,7 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"main": ".open-next/worker.js",
 	"name": "latviansof",
-	"pages_build_output_dir": ".next",
-	"compatibility_date": "2025-08-15",
+	"compatibility_date": "2026-06-01",
 	"compatibility_flags": [
 		// Enable Node.js API
 		// see https://developers.cloudflare.com/workers/configuration/compatibility-flags/#nodejs-compatibility-flag
@@ -14,7 +13,7 @@
 	],
 	"assets": {
 		"directory": ".open-next/assets",
-		"binding": "ASSETS",
+		"binding": "__ASSETS",
 	},
 	"d1_databases": [
 		{

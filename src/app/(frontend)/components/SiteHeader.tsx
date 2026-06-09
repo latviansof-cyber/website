@@ -17,7 +17,7 @@ const donateCta = { href: '/donate', labelKey: 'donate' as const }
 export function SiteHeader() {
   const { lang, t } = useLanguage()
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 glass-panel-dark text-white shadow-lg transition-all duration-300">
+    <header className="sticky top-0 z-40 border-b border-rose-100/10 bg-[#4a2028] text-white shadow-lg transition-all duration-300">
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-2 focus:z-50 focus:rounded-full focus:bg-sunset-gold focus:px-3 focus:py-1.5 focus:text-sm focus:font-semibold focus:text-ink"
@@ -85,7 +85,7 @@ export function SiteHeader() {
 
       <nav
         aria-label="Primary mobile"
-        className="overflow-x-auto border-t border-white/10 bg-ink/50 backdrop-blur-md sm:hidden"
+        className="overflow-x-auto border-t border-white/10 bg-[#35151c] sm:hidden"
       >
         <ul className="mx-auto flex w-max min-w-full items-center justify-start gap-1 px-3 py-3 text-sm font-semibold text-white/90">
           {navItems.map((item) => (

@@ -55,7 +55,11 @@ The following website and CMS improvements were completed on June 9, 2026.
 - Browser-tested homepage cards, page blocks, CTA buttons, event disclosures, bilingual switching, and responsive layouts.
 - Verified canonical, favicon, manifest, Open Graph, microdata, and JSON-LD output.
 - Verified all favicon, manifest, and Open Graph assets return successful HTTP responses.
-- The Next.js build compiles and passes TypeScript, but page-data collection is blocked by an unauthenticated Wrangler remote-preview request (`API error 10000`).
+- Corrected optional migration seed values to emit SQL `NULL` and validated both migrations against SQLite.
+- Applied both Payload migrations to the production D1 database and verified four published pages.
+- Corrected the recursive OpenNext build script, switched the production build to Webpack, and isolated build-time Payload bindings from remote D1.
+- Verified the complete Next.js and OpenNext build, including generation of `.open-next/worker.js`.
+- The final Worker upload remains blocked because the configured Cloudflare API token lacks Workers service permissions (`API error 10000`; membership check `9106`).
 - Existing unit-test and ESLint configuration failures remain outside the scope of these changes.
 
 ## Quick start

@@ -20,7 +20,6 @@
 			"binding": "D1",
 			"database_name": "payload-db",
 			"database_id": "f569eab6-2677-4aa4-afad-7cc97bb1e094",
-			"remote": true,
 		},
 	],
 	"services": [

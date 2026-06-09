@@ -12,7 +12,7 @@
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "deploy": "pnpm run deploy:database && pnpm run deploy:app",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
-    "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" opennextjs-cloudflare build",
+    "build": "cross-env PAYLOAD_BUILD=true NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build --webpack",
     "build:next": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
     "deploy:app": "opennextjs-cloudflare build --env=$CLOUDFLARE_ENV && opennextjs-cloudflare deploy --env=$CLOUDFLARE_ENV",
     "lint": "cross-env NODE_OPTIONS=--no-deprecation next lint",

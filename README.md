@@ -297,7 +297,7 @@ Direct links to collections and globals in the **Payload admin panel** (requires
 
 The following require code changes and cannot be modified through the admin interface:
 
-- Website branding, logo, and site-wide styling (CSS, design system)
+- Website branding, site-wide styling (CSS, design system), and logo
 - Page layout templates and block types
 - User roles and granular permission rules
 - Site configuration (domain, environment variables, Cloudflare settings)
@@ -306,6 +306,8 @@ The following require code changes and cannot be modified through the admin inte
 - Third-party integrations and API keys
 
 To make these changes, contact a developer to modify the codebase, run migrations, and redeploy the application.
+
+**Note on the logo**: The website logo appears in the footer (`/public/images/logo.png`). To update the logo, replace the image file or modify the footer component and redeploy.
 
 ## Operational Notes
 

@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { useLanguage } from '../i18n/LanguageProvider'
 import { Container } from './ui/Container'
@@ -19,12 +20,13 @@ export function SiteFooter({ footer }: { footer: FooterContent }) {
         {/* Column 1: Brand */}
         <div>
           <div className="flex items-center gap-3">
-            <span
-              aria-hidden="true"
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-amber-300 font-serif text-lg font-bold text-ink"
-            >
-              DLA
-            </span>
+            <Image
+              src="/images/logo.png"
+              alt="Latvian Association of Darwin logo"
+              width={44}
+              height={44}
+              className="rounded-full"
+            />
             <p className="font-serif text-base font-semibold leading-snug">{content.tagline}</p>
           </div>
           <p className="mt-4 text-sm text-white/70" itemProp="address">

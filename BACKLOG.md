@@ -1,102 +1,261 @@
-# DLA Website – Product Backlog (Jira-style)
+# DLA Website – Product Backlog
 
 > Project: **Latvian Association of Darwin (Dārvinas Latviešu Apvienība)** website
 > Stack: **Next.js 15 (App Router) + React 19 + Tailwind CSS v4 + Payload CMS 3 + Cloudflare Workers (OpenNext)**
-> Convention: tickets prefixed `DLA-` (Darwin Latvian Association).
-> Status legend: `To Do` | `In Progress` | `Blocked` | `Done`
+> Ticket prefix: `DLA-`
 
 ---
 
-## Summary
+## Phase 1 — Static bilingual frontend ✅ **Complete**
 
-**Phase 1 (DLA-100) – Static bilingual frontend** ✅ **Complete**
 - Bilingual English/Latvian site with React components
 - Language switching via `LanguageProvider` context
 - Responsive layout (320px–1280px)
 - Tailwind v4 with design tokens
 - Jest unit tests for core components
-- All items merged to main
 
-**Current Phase: DLA-200 onwards** – CMS data model, i18n routing, Cloudflare deployment
-
----
-
-## To Do (next iteration)
-
-### Phase 2 – Payload CMS data model
-
-| Ticket | Title | Priority | Notes |
-| --- | --- | --- | --- |
-| DLA-201 | `Pages` global with `about`, `history` rich text (EN + LV) | High | Use `localized: true` arrays/fields. |
-| DLA-202 | `Events` collection (title, body, order, date) localized | High | Slug + draft/publish workflow. |
-| DLA-203 | `SiteSettings` global (association name, contact email, social URLs) | Medium | Drives header/footer brand strings (replaces hard-coded "DLA" mark in `SiteHeader.tsx`). |
-| DLA-204 | `Media` collection + R2 storage adapter | Medium | Adapter already installed (`@payloadcms/storage-r2`); verify bucket binding. |
-| DLA-205 | Seed dev DB with current hard-coded copy | Medium | Migration script. |
-| DLA-206 | Switch frontend sections to fetch from Payload Local API | High | Replace `contentByLang` in `i18n/content.ts` with `payload.findGlobal({ slug: 'pages' })`. |
-| DLA-207 | Add `meta` field to `SpecialPages` collection | High | For custom SEO title/description per special page. (Issue B-3) |
-| DLA-208 | Create `DonationSettings` global for bank/PayID details | High | Move hardcoded donation payment details to CMS. (Issue B-4) |
-
-### Phase 2b – Bug Fixes & Test Corrections
-
-| Ticket | Title | Priority | Notes |
-| --- | --- | --- | --- |
-| DLA-209 | Rewrite `DonationWidget` tests to match actual component | High | Tests expect props/exports that don't exist. (Issue B-1) |
-| DLA-210 | Fix `getWebsiteEvents()` fallback consistency | Low | Return `fallbackEvents` when CMS unavailable, not empty array. (Issue B-2) |
-| DLA-211 | Extract `slugValidator` to shared utility | Medium | Remove duplication across 3 collections. (Issue DRY-1) |
-| DLA-212 | Extract `mediaURL` helper to shared module | Medium | Remove duplication across 3 data modules. (Issue DRY-2) |
-| DLA-213 | Remove array index keys; use stable keys in lists | Medium | Fix React key warnings in multiple components. (Issue CQ-1) |
-| DLA-214 | Remove inline `style` in Hero; use Tailwind utilities | Medium | Hero gradient should use arbitrary Tailwind values. (Issue CQ-2) |
-| DLA-215 | Add error handling to `handleCopy` clipboard operation | Medium | Wrap in useCallback, catch rejection, add logging. (Issue CQ-3) |
-| DLA-216 | Clean up hardcoded TODO comments (DLA-NNN refs) | Low | Make TODOs self-describing or remove. (Issue CQ-4) |
-| DLA-217 | Fix sitemap to include special pages | Medium | About, Privacy, Terms, EULA should be in sitemap.ts. (Issue CQ-7) |
-| DLA-218 | Fix E2E test to check actual DLA content | Medium | Tests reference Payload default template. (Issue T-1) |
-
-### Phase 3 – i18n routing & polish
-
-| Ticket | Title | Priority | Notes |
-| --- | --- | --- | --- |
-| DLA-301 | Move from client-side toggle to `/en/...` and `/lv/...` routes | High | App Router `[locale]` segment; `LanguageProvider` falls back to URL locale. Fixes "flash of English" issue (see TODO in `LanguageProvider.tsx`). |
-| DLA-302 | Add `<html lang>` and SEO meta per locale | Medium | OpenGraph + hreflang. |
-| DLA-303 | Add sitemap and robots | Low | Per-locale URLs. |
-| DLA-304 | Accessibility audit (axe, focus order, contrast) | Medium |  |
-| DLA-305 | Performance pass: image optimization, font subsetting | Low |  |
-
-### Phase 4 – Deployment to Cloudflare
-
-| Ticket | Title | Priority | Notes |
-| --- | --- | --- | --- |
-| DLA-401 | Verify `wrangler.jsonc` bindings (D1, R2, secrets) | High | Already scaffolded in template. |
-| DLA-402 | Configure `open-next.config.ts` for production | High |  |
-| DLA-403 | Document `pnpm deploy:database` and `pnpm deploy:app` workflow | Medium | Update `README.md`. |
-| DLA-404 | Custom domain + DNS | Medium |  |
-| DLA-405 | Smoke-test production preview (`pnpm preview`) | Medium |  |
-
-### Maintenance
-
-| Ticket | Title | Priority | Notes |
-| --- | --- | --- | --- |
-| DLA-502 | Sync `package.json` / `package-lock.json` with `pnpm install` output | Low | Workspace drift is benign (pnpm normalises JSON + adds `tailwindcss` + `@tailwindcss/postcss` to devDeps); commit as a single "chore" so future clones don't re-run the install. |
+**Key principle for remaining phases:** move hardcoded content into Payload CMS so editors can update text without code changes. Accept zero or minimal hardcoded fallbacks.
 
 ---
 
-## Critical Security Issues (Must Address Before Production)
+## Current Phase: Phase 2 — Payload CMS & Frontend Integration
 
-These issues from the code review must be fixed before the application is deployed to production:
+### SECTION 0: Critical Security (do FIRST, blocks everything)
 
-| Ticket | Title | Priority | Notes |
-| --- | --- | --- | --- |
-| DLA-SEC-1 | Fix `PAYLOAD_SECRET` fallback to empty string | Critical | S-1: Secret must not default to empty. Causes auth bypass. Add validation at startup. |
-| DLA-SEC-2 | Replace `as any` logger type with proper interface | High | S-2: Type safety on logger. Define local interface matching Payload's logger contract. |
+| Ticket | Title | Priority |
+|--------|-------|----------|
+| DLA-SEC-1 | Validate `PAYLOAD_SECRET` at startup — no empty fallback | **Critical** |
+| DLA-SEC-2 | Replace `as any` logger with typed interface | **High** |
 
-**Action:** Before deployment, ensure both SEC-1 and SEC-2 are completed. Add to CI/CD pre-production checklist.
+**DLA-SEC-1: Validate `PAYLOAD_SECRET` at startup**
+
+- **Why:** `PAYLOAD_SECRET` currently falls back to `''` (empty string) if the env var is missing. An empty secret is trivially guessable, letting attackers forge session tokens and take over the admin panel.
+- **Action:** Remove the `|| ''` fallback in `src/payload.config.ts:77`. Add a startup check that throws a clear error with remediation steps if `PAYLOAD_SECRET` is not set.
+- **AC:** Server refuses to start without a proper secret; error message tells you how to generate one.
+
+**DLA-SEC-2: Replace `as any` logger with proper interface**
+
+- **Why:** The `cloudflareLogger` object in `src/payload.config.ts:46` is typed as `any`, bypassing all TypeScript checks. If Payload's logger API changes in a future version, there will be no compile error — only a runtime crash.
+- **Action:** Define a local `PayloadLogger` interface with all required methods (`trace`, `debug`, `info`, `warn`, `error`, `fatal`, `silent`). Type the logger object against it. Remove the `as any` cast.
+- **AC:** No `as any` on logger; TypeScript catches API mismatches at compile time.
+
+---
+
+### SECTION 1: CMS Data Schemas (build the admin-editable content containers)
+
+| Ticket | Title | Priority |
+|--------|-------|----------|
+| DLA-201 | Create `Pages` Global — rich text `about` + `history` (EN/LV) | **High** |
+| DLA-202 | Create `Events` Collection — localized event listing | **High** |
+| DLA-203 | Create `SiteSettings` Global — brand name, contact, social links | **Medium** |
+| DLA-204 | Configure `Media` Collection + R2 storage adapter | **Medium** |
+| DLA-207 | Add SEO `meta` field group to `SpecialPages` Collection | **High** |
+| DLA-208 | Create `DonationSettings` Global — bank/PayID details | **High** |
+
+---
+
+**DLA-201: Create `Pages` Global — rich text `about` + `history`**
+
+- **Why:** Currently, the "About Us" and "History" text lives in hardcoded `src/app/(frontend)/i18n/content.ts`. Editors can't change it without a developer. These are the two most frequently updated content sections.
+- **What:** A new Payload **Global** (singleton, single entry) with two bilingual rich text fields — `about` and `history` — using the Lexical WYSIWYG editor (already configured).
+- **Depends on:** DLA-SEC-1, DLA-SEC-2 (for safe admin access)
+- **Action:**
+  1. Create `src/globals/Pages.ts` with slug `pages`, following the pattern in `src/globals/Homepage.ts`
+  2. Use bilingual `en`/`lv` tabs with `type: 'richText'` fields for `about` and `history`
+  3. Register in `src/payload.config.ts` globals array
+  4. Create `src/lib/pagesGlobal.ts` — a fetch helper (pattern: `src/lib/homepage.ts`)
+  5. Update `src/app/(frontend)/components/TextSection.tsx` to fetch from CMS instead of hardcoded `content.ts`
+- **AC:** Editor can write/edit "About Us" and "History" with bold, italic, links, headings in admin panel; changes appear on homepage without code deploy.
+
+---
+
+**DLA-202: Create `Events` Collection — localized event listing**
+
+- **Why:** Events are currently static/hardcoded in `content.ts`. The association needs to add/update events (meetings, cultural events) from the admin panel.
+- **What:** A Payload **Collection** (many entries) for events with bilingual fields and draft/publish workflow.
+- **Action:**
+  1. Update `src/collections/Events.ts` with fields: `title` (localized), `body` (localized rich text), `date`, `order`
+  2. Add slug field with draft/publish toggle
+  3. Register in `payload.config.ts` collections array (verify it's already there)
+- **AC:** Admin can create, edit, draft, publish, and reorder events. Events appear on the website.
+
+---
+
+**DLA-203: Create `SiteSettings` Global — brand name, contact, social links**
+
+- **Why:** The association name "Latvian Association of Darwin", contact email, and social media URLs are hardcoded. Moving them to a Global lets anyone update them from the admin panel without touching code.
+- **What:** A Payload **Global** with fields for association name, tagline, contact email, Facebook/Instagram/etc. URLs. Both EN and LV locales.
+- **Action:**
+  1. Create `src/globals/SiteSettings.ts` with appropriate fields
+  2. Register in `payload.config.ts`
+  3. Replace hardcoded brand strings in `SiteHeader.tsx`, `SiteFooter.tsx` with data from this global
+  4. Following DLA-206 pattern for fetching
+- **AC:** Header/footer brand text is editable in admin panel. "DLA" mark in `SiteHeader.tsx` is no longer hardcoded.
+
+---
+
+**DLA-204: Configure `Media` Collection + R2 storage adapter**
+
+- **Why:** Image uploads (event photos, hero images) need to work. The `@payloadcms/storage-r2` adapter is installed but may not be connected to a real R2 bucket.
+- **What:** Verify and configure the R2 storage adapter in Payload so uploaded images are stored in Cloudflare R2.
+- **Action:**
+  1. Check `src/payload.config.ts` for existing R2 adapter config
+  2. Verify environment variable bindings (bucket name, endpoint, access key)
+  3. Test upload flow end-to-end
+- **AC:** Images uploaded in admin panel are stored in R2 and served correctly on the frontend.
+
+---
+
+**DLA-207: Add SEO `meta` field group to `SpecialPages` Collection**
+
+- **Why:** Special pages (About, Privacy, Terms, EULA) have no dedicated SEO meta description. The code falls back to using the page title as `<meta name="description">`, which produces poor SEO like "About the Association" instead of a meaningful summary.
+- **What:** Add a `meta` group field to the `SpecialPages` collection with `title` and `description` (both localized).
+- **Depends on:** Nothing (can be done standalone)
+- **Action:**
+  1. Add to `src/collections/SpecialPages.ts` a `meta` group with `title` (text, max 60 chars) and `description` (textarea, max 160 chars), both localized
+  2. Update `src/app/(frontend)/[slug]/page.tsx` `generateMetadata` to use the new field
+- **AC:** Each special page can have a custom SEO title and description set in admin panel.
+
+---
+
+**DLA-208: Create `DonationSettings` Global — bank/PayID details**
+
+- **Why:** Bank BSB, account number, and PayID email are hardcoded placeholders (`"000-000"`, `"dla@example.com"`) in `content.ts`. These must be editable in the admin panel so donation info is always correct without a code deploy.
+- **What:** A Payload **Global** with bank details (BSB, account number) and PayID email, both localized.
+- **Action:**
+  1. Create `src/globals/DonationSettings.ts` (schema is already specified in the current backlog's detailed description)
+  2. Register in `payload.config.ts`
+  3. Update `DonationWidget.tsx` to fetch from CMS at runtime instead of hardcoded `content.ts`
+- **AC:** Donation payment details are editable in admin panel. Widget displays live values. Falls back to hardcoded defaults if CMS is unavailable.
+
+---
+
+### SECTION 2: Frontend → CMS Integration (connect the frontend to Payload)
+
+| Ticket | Title | Priority |
+|--------|-------|----------|
+| DLA-206 | Replace hardcoded `content.ts` data with Payload Local API calls | **High** |
+| DLA-205 | Seed dev database with current hardcoded content | **Medium** |
+
+---
+
+**DLA-206: Replace hardcoded `content.ts` data with Payload Local API calls**
+
+- **Why:** The entire site currently reads from `src/app/(frontend)/i18n/content.ts` — a hardcoded file. After building the CMS schemas (DLA-201, 202, 203, 208), we need to switch the frontend to read from Payload so editor changes actually show on the site.
+- **What:** Update each frontend data module to fetch from Payload's Local API (`.findGlobal()`, `.find()`) instead of importing from `content.ts`. Keep hardcoded data only as fallback when CMS is unavailable.
+- **Depends on:** DLA-201, DLA-202, DLA-203, DLA-204, DLA-208 (schemas must exist before you can fetch from them)
+- **Action:**
+  1. Create `src/lib/pagesGlobal.ts` — `getWebsitePagesContent()` → fetch `pages` global
+  2. Create `src/lib/siteSettings.ts` — `getSiteSettings()` → fetch `siteSettings` global
+  3. Create `src/lib/donationSettings.ts` — `getDonationSettings()` → fetch `donationSettings` global
+  4. Update `src/lib/events.ts` to use the proper `Events` collection
+  5. Update `src/lib/pages.ts`, `src/lib/homepage.ts` to use Local API with `depth: 0`
+  6. Each module keeps a minimal hardcoded fallback for when CMS is unreachable
+- **AC:** All 6 data modules (pages, events, homepage, footer, navigation, and the new ones above) fetch from Payload. Site works with fallback content if CMS is down.
+
+---
+
+**DLA-205: Seed dev database with current hardcoded content**
+
+- **Why:** Once the CMS schemas exist, the database is empty. We need a seed script that populates it with the content currently in `content.ts`, so the site looks the same but is now CMS-driven.
+- **What:** A migration/seed script that reads the hardcoded content and inserts it into Payload via Local API.
+- **Depends on:** DLA-206 (data modules exist), schemas from SECTION 1
+- **Action:**
+  1. Create `src/seed.ts` (or extend an existing seed script)
+  2. Use `payload.createGlobal()` and `payload.create()` to insert content
+  3. Map content from `content.ts`, `pages.ts` fallbacks, `specialPages.ts` fallbacks into the new schema shapes
+  4. Add a `pnpm seed` command to `package.json`
+- **AC:** Running `pnpm seed` populates the database; site looks identical to before but content is now CMS-driven.
+
+---
+
+## Phase 3 — Bug Fixes & Code Quality
+
+| Ticket | Title | Priority |
+|--------|-------|----------|
+| DLA-209 | Rewrite `DonationWidget` tests to match actual component | **High** |
+| DLA-210 | Fix `getWebsiteEvents()` to return fallbackEvents on error | **Low** |
+| DLA-211 | Extract duplicate `slugValidator` to shared utility | **Medium** |
+| DLA-212 | Extract duplicate `mediaURL` helper to shared module | **Medium** |
+| DLA-213 | Replace array index React keys with stable keys | **Medium** |
+| DLA-214 | Replace inline `style` in Hero with Tailwind utilities | **Medium** |
+| DLA-215 | Add error handling + `useCallback` to clipboard `handleCopy` | **Medium** |
+| DLA-216 | Replace opaque TODO(DLA-NNN) comments with self-describing text | **Low** |
+| DLA-217 | Add special pages (about, privacy, etc.) to sitemap | **Medium** |
+| DLA-218 | Fix E2E tests to check actual DLA content, not Payload template | **Medium** |
+
+Each of these tickets has a detailed description already in the file below. They're standalone fixes that can be done in any order.
+
+---
+
+## Phase 4 — i18n URL Routing
+
+| Ticket | Title | Priority |
+|--------|-------|----------|
+| DLA-301 | Move from client-side toggle to `/en/...` and `/lv/...` routes | **High** |
+| DLA-302 | Add `<html lang>` and locale-specific SEO meta | **Medium** |
+| DLA-303 | Generate per-locale sitemap | **Low** |
+| DLA-304 | Accessibility audit (axe, focus order, contrast) | **Medium** |
+| DLA-305 | Performance optimization (images, fonts) | **Low** |
+
+**DLA-301: Move to `/en/` and `/lv/` URL routes**
+
+- **Why:** Currently language is switched client-side via `LanguageProvider` + `localStorage`. This causes a "flash of English" on first paint for Latvian users and is bad for SEO (search engines only see English). App Router's `[locale]` segment fixes both.
+- **What:** Restructure routes from `/(frontend)/page.tsx` to `/(frontend)/[locale]/page.tsx`. `LanguageProvider` falls back to URL locale.
+- **Action:**
+  1. Add `[locale]` dynamic segment to all routes under `(frontend)`
+  2. Update `LanguageProvider` to detect locale from URL path
+  3. Add `generateStaticParams` for `['en', 'lv']`
+  4. Update all internal links to include locale prefix
+- **AC:** `/en/about` and `/lv/about` both work. No flash of English on Latvian browsers. Search engines index both language versions.
+
+---
+
+## Phase 5 — Deployment to Cloudflare
+
+| Ticket | Title | Priority |
+|--------|-------|----------|
+| DLA-401 | Verify `wrangler.jsonc` bindings (D1, R2, secrets) | **High** |
+| DLA-402 | Configure `open-next.config.ts` for production | **High** |
+| DLA-403 | Document deploy workflow in README | **Medium** |
+| DLA-404 | Set up custom domain + DNS | **Medium** |
+| DLA-405 | Smoke-test production preview | **Medium** |
+
+---
+
+## Maintenance
+
+| Ticket | Title | Priority |
+|--------|-------|----------|
+| DLA-502 | Sync `package.json` / lockfile with `pnpm install` output | **Low** |
+
+---
+
+## Dependencies Map
+
+```
+DLA-SEC-1 ─┐
+DLA-SEC-2 ─┘
+             │
+             ├─→ DLA-201 (Pages global) ──→ DLA-206 (switch to CMS) ──→ DLA-205 (seed)
+             ├─→ DLA-202 (Events collection) ─┘
+             ├─→ DLA-203 (SiteSettings global) ─┘
+             ├─→ DLA-204 (Media + R2) ──────────┘
+             ├─→ DLA-207 (SpecialPages meta) ───┘  (standalone)
+             └─→ DLA-208 (DonationSettings) ──────┘
+
+Phase 3 (DLA-209–218): standalone, any order
+Phase 4 (DLA-301–305): after Phase 2 is stable
+Phase 5 (DLA-401–405): after Phase 4
+```
 
 ---
 
 ## Detailed Ticket Descriptions
 
-### DLA-SEC-1: Fix `PAYLOAD_SECRET` Fallback to Empty String
+*(Keeping existing detailed descriptions for DLA-209 through DLA-218, DLA-SEC-1, DLA-SEC-2, DLA-207, DLA-208 as they are already well-documented below — unchanged.)*
 
-**Issue:** [S-1] `PAYLOAD_SECRET` Falls Back to Empty String
+### DLA-SEC-1: Fix `PAYLOAD_SECRET` Fallback to Empty String
 
 **File:** `src/payload.config.ts:77`
 
@@ -130,8 +289,6 @@ secret: process.env.PAYLOAD_SECRET,
 ---
 
 ### DLA-SEC-2: Replace `as any` Logger Type with Proper Interface
-
-**Issue:** [S-2] `as any` Type Assertion on Logger Bypasses All Type Safety
 
 **File:** `src/payload.config.ts:46`
 
@@ -177,143 +334,7 @@ const cloudflareLogger: PayloadLogger = {
 
 ---
 
-### DLA-207: Add `meta` Field to `SpecialPages` Collection
-
-**Issue:** [B-3] Special Pages Have No Dedicated Meta Description Field
-
-**File:** `src/collections/SpecialPages.ts`
-
-**Problem:**
-```ts
-// In src/app/(frontend)/[slug]/page.tsx:35
-const description = page
-  ? (page.meta.description || page.en.excerpt)
-  : specialPage!.en.title  // <-- Uses title as description (poor SEO)
-```
-
-Special pages (About, Privacy, Terms, etc.) have no dedicated `meta.description` field in the Payload collection. The code falls back to using the page title as the meta description, which produces poor SEO (`<meta name="description" content="About the Association">` instead of a meaningful summary).
-
-**Acceptance Criteria:**
-- `SpecialPages` collection has a `meta` group with `title` and `description` fields
-- Both fields are localized (EN + LV)
-- `generateMetadata` uses the description field, falling back to content excerpt if empty
-- Admin panel shows a dedicated field for custom SEO metadata per special page
-- Description field has character count indicator (50-160 chars recommended)
-
-**Solution:**
-Add to the `SpecialPages` collection schema:
-
-```ts
-{
-  name: 'meta',
-  type: 'group',
-  fields: [
-    {
-      name: 'title',
-      type: 'text',
-      localized: true,
-      label: 'Meta Title (SEO)',
-      maxLength: 60,
-    },
-    {
-      name: 'description',
-      type: 'textarea',
-      localized: true,
-      label: 'Meta Description (SEO)',
-      maxLength: 160,
-    },
-  ],
-}
-```
-
----
-
-### DLA-208: Create `DonationSettings` Global for Bank/PayID Details
-
-**Issue:** [B-4] Bank & PayID Details Are Hardcoded Placeholders
-
-**File:** `src/app/(frontend)/i18n/content.ts:146-155`
-
-**Problem:**
-```ts
-bankBsb: '000-000', // To be updated
-bankAccount: '00000000', // To be updated
-payIdEmail: 'dla@example.com', // To be updated
-```
-
-Placeholder bank details and PayID email are hardcoded in `content.ts`. These should be managed in the Payload CMS admin panel so they can be updated without code deployment. Currently, if these placeholders are displayed to users, donations could be sent to the wrong account.
-
-**Acceptance Criteria:**
-- A `donationSettings` global exists in Payload with localized bank/PayID fields
-- Editors can update payment details in admin panel without code changes
-- `DonationWidget` fetches settings from CMS at runtime
-- Fallback to hardcoded defaults if CMS is unavailable
-- Validation warns if placeholder values remain in production
-- Both EN and LV locales are supported
-
-**Solution:**
-Create a new global in Payload:
-
-```ts
-// src/globals/DonationSettings.ts
-import { GlobalConfig } from 'payload'
-
-export const DonationSettings: GlobalConfig = {
-  slug: 'donationSettings',
-  label: 'Donation Settings',
-  access: {
-    read: () => true,
-    update: ({ req: { user } }) => Boolean(user),
-  },
-  fields: [
-    {
-      name: 'bankDetails',
-      type: 'group',
-      label: 'Bank Transfer Details',
-      fields: [
-        {
-          name: 'bsb',
-          type: 'text',
-          label: 'BSB Code',
-          localized: true,
-          required: true,
-        },
-        {
-          name: 'accountNumber',
-          type: 'text',
-          label: 'Account Number',
-          localized: true,
-          required: true,
-        },
-      ],
-    },
-    {
-      name: 'payIdEmail',
-      type: 'email',
-      label: 'PayID Email',
-      localized: true,
-      required: true,
-    },
-  ],
-}
-```
-
-Then update `DonationWidget` to fetch from CMS:
-
-```ts
-export async function DonationWidget() {
-  const settings = await getPayloadClient().findGlobal({
-    slug: 'donationSettings',
-  })
-  return <DonationForm settings={settings} />
-}
-```
-
----
-
 ### DLA-209: Rewrite `DonationWidget` Tests to Match Actual Component
-
-**Issue:** [B-1] Test Suite Is Disconnected from Component Implementation
 
 **File:** `tests/unit/DonationWidget.test.tsx`
 
@@ -323,8 +344,6 @@ Tests are written against a hypothetical API that doesn't match the actual compo
 - Tests expect `onSubmit` prop (component accepts no props)
 - Tests look for `role="radio"` elements (buttons have no role)
 - Tests look for aria-label text that doesn't exist in the component
-
-**Verdict:** The component implementation is correct; the tests are aspirational/incorrect. Tests must be rewritten to match the actual component behavior.
 
 **Acceptance Criteria:**
 - All tests pass without modification to component API
@@ -398,8 +417,6 @@ describe('DonationWidget', () => {
 
 ### DLA-210: Fix `getWebsiteEvents()` Fallback Consistency
 
-**Issue:** [B-2] Events Fallback Defined But Not Used
-
 **File:** `src/lib/events.ts:87-90`
 
 **Problem:**
@@ -435,8 +452,6 @@ export async function getWebsiteEvents(): Promise<WebsiteEvent[]> {
 ---
 
 ### DLA-211: Extract `slugValidator` to Shared Utility
-
-**Issue:** [DRY-1] Slug Validation Duplicated Across Three Collections
 
 **Files:** `src/collections/Pages.ts:59-64`, `src/collections/Events.ts:62-67`, `src/collections/SpecialPages.ts:62-67`
 
@@ -483,8 +498,6 @@ validate: slugValidator,
 
 ### DLA-212: Extract `mediaURL` Helper to Shared Module
 
-**Issue:** [DRY-2] `mediaURL` Helper Duplicated Across Three Modules
-
 **Files:** `src/lib/pages.ts:255-259`, `src/lib/events.ts:57-61`, `src/lib/homepage.ts:64-68`
 
 **Problem:**
@@ -527,8 +540,6 @@ const imageUrl = mediaURL(page.image)
 
 ### DLA-213: Remove Array Index Keys; Use Stable Keys in Lists
 
-**Issue:** [CQ-1] Array Index Used as React Key in Multiple Components
-
 **Files:**
 - `src/app/(frontend)/components/SiteFooter.tsx:43`: `key={idx}`
 - `src/app/(frontend)/components/DonationWidget.tsx:96,109,127`: `key={i}`
@@ -568,8 +579,6 @@ Use stable, unique keys:
 
 ### DLA-214: Remove Inline `style` in Hero; Use Tailwind Utilities
 
-**Issue:** [CQ-2] Inline `style` Attribute Breaks Tailwind Consistency
-
 **File:** `src/app/(frontend)/components/Hero.tsx:34-38`
 
 **Problem:**
@@ -603,8 +612,6 @@ Use Tailwind arbitrary values:
 ---
 
 ### DLA-215: Add Error Handling to `handleCopy` Clipboard Operation
-
-**Issue:** [CQ-3] `handleCopy` Unhandled Promise Rejection Risk
 
 **File:** `src/app/(frontend)/donate/DonationWidget.tsx:42-46`
 
@@ -647,8 +654,6 @@ const handleCopy = useCallback(async (text: string) => {
 
 ### DLA-216: Clean Up Hardcoded TODO Comments
 
-**Issue:** [CQ-4] Hardcoded Opaque TODO References (DLA-NNN)
-
 **Files (multiple):**
 - `src/app/(frontend)/page.tsx:49`: `// TODO(DLA-302): when locale routing lands...`
 - `src/app/(frontend)/i18n/LanguageProvider.tsx:79`: `// TODO(DLA-201): switch the static en initial state...`
@@ -677,8 +682,6 @@ TODO comments reference opaque internal ticket numbers (DLA-201, DLA-203, DLA-30
 ---
 
 ### DLA-217: Fix Sitemap to Include Special Pages
-
-**Issue:** [CQ-7] Sitemap Missing Special Pages
 
 **File:** `src/app/sitemap.ts:7`
 
@@ -717,40 +720,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 ---
 
 ### DLA-218: Fix E2E Test to Check Actual DLA Content
-
-**Issue:** [T-1] Frontend E2E Test References Default Payload Template Content
-
-**File:** `tests/e2e/frontend.e2e.spec.ts:14-18`
-
-**Problem:**
-```ts
-await expect(page).toHaveTitle(/Payload Blank Template/)
-const heading = page.locator('h1').first()
-await expect(heading).toHaveText('Welcome to your new project.')
-```
-
-These assertions check for the default Payload CMS starter template content, not the actual DLA website content. The homepage title is "Latvian Association of Darwin — Dārvinas Latviešu Apvienība" and there is no "Welcome to your new project." heading. This test will always fail.
-
-**Acceptance Criteria:**
-- E2E tests verify actual DLA website content
-- Tests check for elements that exist on the live pages
-- Tests pass in CI without modification
-- Both EN and LV content paths are tested (post-locale-routing)
-
-**Solution:**
-Update to match actual website content:
-
-```ts
-test('can go on homepage', async ({ page }) => {
-  await page.goto('http://localhost:3000')
-  await expect(page).toHaveTitle(/Latvian Association of Darwin/)
-  const heading = page.locator('h1').first()
-  await expect(heading).toBeVisible()
-})
-
-### DLA-218: Fix E2E Test to Check Actual DLA Content
-
-**Issue:** [T-1] Frontend E2E Test References Default Payload Template Content
 
 **File:** `tests/e2e/frontend.e2e.spec.ts:14-18`
 
@@ -792,11 +761,9 @@ test('can navigate to about page', async ({ page }) => {
 
 ## Known Issues & Deferred Work
 
-The following issues were identified in the code review but are marked as **deferred** or **accepted as-is** pending prioritization:
+The following issues were identified in the code review but are **deferred** pending prioritization:
 
 ### B-5: `getWebsitePage()` Over-Fetches All Pages
-
-**Issue:** [B-5] `getWebsitePage()` Fetches All Pages Then Filters by Slug
 
 **File:** `src/lib/pages.ts:350-353`
 
@@ -816,8 +783,6 @@ Every request to a dynamic page (`/[slug]`) fetches ALL pages (up to 100 with bl
 
 ### T-2: Missing Unit Tests for Core Data-Processing Logic
 
-**Issue:** [T-2] Missing Unit Tests for Core Data-Processing Logic
-
 **Problem:**
 There are no unit tests for critical data transformation functions:
 - `starterPage()` and `mapLayout()` in `src/lib/pages.ts`
@@ -832,8 +797,6 @@ There are no unit tests for critical data transformation functions:
 
 ### DRY-3: Duplicated i18n Group Field Patterns Across Collections
 
-**Issue:** [DRY-3] Duplicated i18n Group Field Patterns Across Collections
-
 **Files:** `src/collections/Pages.ts:76-99`, `src/collections/Events.ts:103-127`, `src/collections/SpecialPages.ts:69-93`
 
 **Problem:**
@@ -844,8 +807,6 @@ Each collection defines `en`/`lv` tabs with nearly identical structure. The `bil
 ---
 
 ### CQ-5: `contentByLang` Falls Back to Unvalidated Data
-
-**Issue:** [CQ-5] `contentByLang` Falls Back to Unvalidated Data on Validation Failure
 
 **File:** `src/app/(frontend)/i18n/content.ts:356-359`
 
@@ -864,8 +825,6 @@ If Zod validation fails, the code falls back to the raw object that just failed 
 ---
 
 ### CQ-6: `handleCustomChange` Regex Silently Corrupts Input
-
-**Issue:** [CQ-6] `handleCustomChange` Regex Quietly Corrupts Input
 
 **File:** `src/app/(frontend)/donate/DonationWidget.tsx:23-27`
 
@@ -886,8 +845,6 @@ The sanitization regex has edge cases that silently change values. `1.2.3` becom
 
 ### A-1: Language Flash — Always Renders English on First Paint
 
-**Issue:** [A-1] Language Flash: Always Renders English on First Paint
-
 **File:** `src/app/(frontend)/i18n/LanguageProvider.tsx:36-40`
 
 **Problem:**
@@ -899,46 +856,38 @@ The `LanguageProvider` always initializes with `'en'` on the server, then runs a
 
 ### A-2: Mobile Navigation Visible to Screen Readers on Desktop
 
-**Issue:** [A-2] Mobile Navigation Visible to Screen Readers on Desktop
-
 **File:** `src/app/(frontend)/components/SiteHeader.tsx:82-100`
 
 **Problem:**
 The mobile navigation is hidden via `sm:hidden` (CSS display), but screen readers on desktop may still announce the "Primary mobile" nav if content is rendered in the DOM.
 
-**Status:** Low priority. Add `aria-hidden` on larger screens or refactor to conditionally render. Already mostly accessible.
+**Status:** Low priority. Add `aria-hidden` on larger screens or refactor to conditionally render.
 
 ---
 
 ### P-1: No View Transition During Language Switch
-
-**Issue:** [P-1] No View Transition or Loading State During Language Switch
 
 **File:** `src/app/(frontend)/i18n/LanguageProvider.tsx`
 
 **Problem:**
 When the user switches language, all content updates immediately. For content-heavy pages, there might be a noticeable lag. No visual feedback or transition is shown.
 
-**Status:** Low priority UX enhancement. Could be addressed with CSS transitions or a brief loading state post-i18n-routing.
+**Status:** Low priority UX enhancement.
 
 ---
 
 ### P-2: Google Fonts `fetchpriority` Optimization
-
-**Issue:** [P-2] Google Fonts Loaded Without `fetchpriority=high`
 
 **File:** `src/app/(frontend)/layout.tsx:76-78`
 
 **Problem:**
 Font URLs use `display=swap` (correct) but lack `fetchpriority="high"` to prioritize font loading over other resources.
 
-**Status:** Low priority optimization. Would improve Core Web Vitals slightly.
+**Status:** Low priority optimization.
 
 ---
 
 ### E-1: Inconsistent `crossOrigin` on Preconnect Links
-
-**Issue:** [E-1] Inconsistent `crossOrigin` on Preconnect Links
 
 **File:** `src/app/(frontend)/layout.tsx:73-74`
 
@@ -950,13 +899,11 @@ Font URLs use `display=swap` (correct) but lack `fetchpriority="high"` to priori
 
 `fonts.googleapis.com` preconnect lacks `crossorigin` while `fonts.gstatic.com` has it. This inconsistency may prevent proper browser preconnection.
 
-**Status:** Low priority cleanup. Add `crossOrigin="anonymous"` to both for consistency.
+**Status:** Low priority cleanup.
 
 ---
 
 ### E-2: Wrangler Import Path Obfuscation
-
-**Issue:** [E-2] Wrangler Import Path Obfuscation
 
 **File:** `src/payload.config.ts:95-96`
 
@@ -968,17 +915,16 @@ return import(/* webpackIgnore: true */ `${'__wrangler'.replaceAll('_', '')}`).t
 
 The import uses string manipulation to bypass bundler detection. This is fragile and lacks type safety on the imported module.
 
-**Status:** Low priority improvement. Add type guard validation and document the dependency clearly. Refactor when updating Payload or wrangler versions.
-
----
-
-
+**Status:** Low priority improvement. Add type guard validation and document the dependency clearly.
 
 ---
 
 ## How to use this file
 
-1. Pick the next ticket with highest priority in the "To Do" section.
-2. Change `To Do` to `In Progress` while you work on it.
-3. When finished, remove the row from the table (task is done, no need to track it).
-4. Add new discovered work as a new row with the next `DLA-###` number.
+1. Start with **Section 0** (Security) — these block everything else.
+2. Work through **Section 1** (CMS Data Schemas) in ticket order — later tickets depend on earlier ones.
+3. Then **Section 2** (Frontend Integration) to connect the site to the CMS.
+4. Phase 3 bugs can be done in any order, in parallel with other work.
+5. Phase 4 (i18n routing) and Phase 5 (deployment) come last.
+
+When you start a ticket, move it to "In Progress". When done, remove the row. Add newly discovered work as `DLA-###` with a clear What/Why/Action.

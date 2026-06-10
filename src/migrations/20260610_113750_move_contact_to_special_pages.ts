@@ -3,7 +3,6 @@ import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-d1-sqlite'
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   // 1. Insert "Contact Us" page into special_pages
   await db.run(sql`INSERT INTO \`special_pages\` (
-    \`id\`,
     \`admin_title\`,
     \`slug\`,
     \`en_title\`,
@@ -12,7 +11,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
     \`lv_content\`,
     \`_status\`
   ) VALUES (
-    5,
     'Contact Us',
     'contact',
     'Contact Us',

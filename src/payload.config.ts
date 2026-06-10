@@ -19,7 +19,7 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 const realpath = (value: string) => (fs.existsSync(value) ? fs.realpathSync(value) : undefined)
 
-const isCLI = process.argv.some((value) => realpath(value).endsWith(path.join('payload', 'bin.js')))
+const isCLI = process.argv?.some((value) => realpath(value)?.endsWith(path.join('payload', 'bin.js'))) ?? false
 const isProduction = process.env.NODE_ENV === 'production'
 const isBuild = process.env.PAYLOAD_BUILD === 'true'
 
@@ -55,7 +55,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     components: {
-      beforeDashboard: ['components/AdminHelpSection#AdminHelpSection'],
+      beforeDashboard: ['@/components/AdminHelpSection#AdminHelpSection'],
     },
   },
   collections: [Users, Media, Pages, Events],

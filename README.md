@@ -1,172 +1,191 @@
-# Payload Cloudflare Template
+# Latvian Association of Darwin Website
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/payloadcms/payload/tree/3.x/templates/with-cloudflare-d1)
+The public website and Payload CMS for the Latvian Association of Darwin
+(`Dārvinas Latviešu Apvienība`).
 
-**This can only be deployed on Paid Workers right now due to size limits.** This template comes configured with the bare minimum to get started on anything you need.
+## Project Overview
 
-## Recent Improvements
+- **Frontend:** Next.js 16, React 19, and Tailwind CSS
+- **CMS:** Payload 3 with a bilingual English/Latvian content model
+- **Database:** Cloudflare D1 through Payload's D1 SQLite adapter
+- **Media:** Cloudflare R2 through the Payload R2 storage adapter
+- **Hosting:** Cloudflare Workers through OpenNext
 
-The following website and CMS improvements were completed on June 9, 2026.
+### Editable Content
 
-### Payload content management
+- **Pages:** About, History, Community, Membership, Culture, Contact, and future editorial pages
+- **Page builder:** Hero, Content, and Call to Action blocks
+- **Events:** Ordered bilingual event cards with images and accent colors
+- **Homepage:** Hero content, Hero links/image, and Events section heading/introduction
+- **Main Menu:** Ordered bilingual header links
+- **Media:** Uploaded images with required alt text
+- **Users:** Payload administrator accounts
 
-- Added and registered a standard `pages` collection.
-- Limited public reads to published pages while authenticated editors retain draft access.
-- Enabled drafts, autosave, ordering, unique slugs, bilingual English/Latvian fields, and SEO controls.
-- Expanded the content plan from two pages to About, History, Community, and Membership.
-- Added fallback content for periods when Payload or the local D1 database is unavailable.
+Pages and Events support drafts, autosave, publishing, and version history. Homepage,
+Main Menu, Media, and Users save directly.
 
-### Block-based page builder
+### Frontend Behavior
 
-- Replaced the fixed page body with an ordered Payload `layout` blocks field.
-- Added reusable bilingual `Hero`, `Content`, and `CallToAction` blocks.
-- Added optional block images, alignment, image position, and background tone controls.
-- Added CTA support for up to two editor-managed primary or secondary buttons.
-- Added frontend renderers shared by CMS and fallback content.
-- Generated Payload types and a D1 migration containing block tables, nested CTA buttons, drafts, SEO fields, and four seeded published pages.
-
-### Frontend content and design
-
-- Replaced long homepage text sections with compact cards and `Read more` links.
-- Added dynamic routes for all four editorial pages.
-- Added expandable `Read more` and `Show less` controls to event cards.
-- Updated desktop, mobile, and footer navigation for the expanded page plan.
-- Corrected mobile navigation overflow.
-- Added responsive Hero, Content, and CTA page layouts.
-
-### Metadata and discoverability
-
-- Added global defaults and page-specific metadata generated from Payload.
-- Added canonical URLs, robots controls, Open Graph tags, Twitter cards, and a dedicated 1200 x 630 Open Graph image.
-- Added Organization, WebSite, and WebPage JSON-LD.
-- Added Organization and WebPage microdata.
-- Added editable SEO title, description, social image, and `noIndex` page fields.
-
-### Icons and web app metadata
-
-- Extracted the supplied favicon assets directly into `public/`.
-- Removed `favicon.zip` and confirmed that no `public/favicon/` directory exists.
-- Added SVG, ICO, PNG, Apple touch, and web app manifest icon metadata.
-- Updated `site.webmanifest` with the association identity and website theme colors.
-
-### Verification and known limitations
-
-- Verified Payload type generation and formatting.
-- Browser-tested homepage cards, page blocks, CTA buttons, event disclosures, bilingual switching, and responsive layouts.
-- Verified canonical, favicon, manifest, Open Graph, microdata, and JSON-LD output.
-- Verified all favicon, manifest, and Open Graph assets return successful HTTP responses.
-- Corrected optional migration seed values to emit SQL `NULL` and validated both migrations against SQLite.
-- Applied both Payload migrations to the production D1 database and verified four published pages.
-- Corrected the recursive OpenNext build script, switched the production build to Webpack, and isolated build-time Payload bindings from remote D1.
-- Verified the complete Next.js and OpenNext build, including generation of `.open-next/worker.js`.
-- The final Worker upload remains blocked because the configured Cloudflare API token lacks Workers service permissions (`API error 10000`; membership check `9106`).
-- Existing unit-test and ESLint configuration failures remain outside the scope of these changes.
+- The homepage displays published Pages in their configured Page order.
+- The Events section displays published Events in their configured Event order.
+- Header navigation is controlled independently by the Main Menu global.
+- Content loaders use built-in fallback content if Payload or D1 is temporarily unavailable.
+- English and Latvian content is switched client-side.
+- Page metadata includes canonical URLs, Open Graph/Twitter data, robots controls, and structured data.
 
 ### Analytics
 
-- Integrated Google Analytics (GA4) with measurement ID **G-54WF6RB2HX**
-- Analytics managed through the **latviansof@gmail.com** Google account
-- GA4 script loads asynchronously on all frontend pages using Next.js `Script` component with `strategy="afterInteractive"`
-- Tracks pageviews, user engagement, and events across the website
-- View analytics dashboard at [Google Analytics Console](https://analytics.google.com)
+Google Analytics 4 is loaded on frontend pages with measurement ID `G-54WF6RB2HX`.
 
-## Quick start
+## Infrastructure & Deployment
 
-This template can be deployed directly to Cloudflare Workers by clicking the button to take you to the setup screen.
+The website runs on Cloudflare Workers using:
 
-From there you can connect your code to a git provider such Github or Gitlab, name your Workers, D1 Database and R2 Bucket as well as attach any additional environment variables or services you need.
+- **D1** for Payload content and authentication data
+- **R2** for uploaded media
+- **OpenNext** to package the Next.js application for Workers
+- **Wrangler** for bindings, migrations, observability, and deployment
 
-## Quick Start - local setup
+### Deployment Process
 
-To spin up this template locally, follow these steps:
-
-### Clone
-
-After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. Cloudflare will connect your app to a git provider such as Github and you can access your code from there.
-
-### Local Development
-
-## How it works
-
-Out of the box, using [`Wrangler`](https://developers.cloudflare.com/workers/wrangler/) will automatically create local bindings for you to connect to the remote services and it can even create a local mock of the services you're using with Cloudflare.
-
-We've pre-configured Payload for you with the following:
-
-### Collections
-
-See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for details on how to extend this functionality.
-
-- #### Users (Authentication)
-
-  Users are auth-enabled collections that have access to the admin panel.
-
-  For additional help, see the official [Auth Example](https://github.com/payloadcms/payload/tree/3.x/examples/auth) or the [Authentication](https://payloadcms.com/docs/authentication/overview#authentication-overview) docs.
-
-- #### Media
-
-  This is the uploads enabled collection.
-
-### Image Storage (R2)
-
-Images will be served from an R2 bucket which you can then further configure to use a CDN to serve for your frontend directly.
-
-### D1 Database
-
-The Worker will have direct access to a D1 SQLite database which Wrangler can connect locally to, just note that you won't have a connection string as you would typically with other providers.
-
-You can enable read replicas by adding `readReplicas: 'first-primary'` in the DB adapter and then enabling it on your D1 Cloudflare dashboard. Read more about this feature on [our docs](https://payloadcms.com/docs/database/sqlite#d1-read-replicas).
-
-## Working with Cloudflare
-
-Firstly, after installing dependencies locally you need to authenticate with Wrangler by running:
+Run:
 
 ```bash
-pnpm wrangler login
+pnpm deploy
 ```
 
-This will take you to Cloudflare to login and then you can use the Wrangler CLI locally for anything, use `pnpm wrangler help` to see all available options.
+This command:
 
-Wrangler is pretty smart so it will automatically bind your services for local development just by running `pnpm dev`.
+1. Runs pending Payload migrations against the remote D1 database
+2. Optimizes D1
+3. Builds the Next.js application with Webpack and OpenNext
+4. Deploys the Worker bundle with Wrangler
 
-## Deployments
+The repository does not assume a particular CI/CD provider. Any automated deployment must run the same migration and application deployment steps.
 
-When you're ready to deploy, first make sure you have created your migrations:
+### Storage & Media
+
+- **Images**: Uploaded through Payload and stored in the configured R2 bucket
+- **Database**: Payload uses the D1 SQLite adapter
+- **Image processing**: Crop and focal-point tools are disabled because Sharp is not supported in this Workers setup
+- **Delivery**: No separate CDN or R2 custom domain is configured in this repository
+
+### Database Migrations
+
+Migrations are version-controlled as JSON schema snapshots and TypeScript files in `src/migrations/`. Create a migration after changing the Payload schema:
 
 ```bash
 pnpm payload migrate:create
 ```
 
-Then run the following command:
+Review the generated SQL and seed logic before deploying. Migrations run through `pnpm deploy:database`; they do not run automatically on every application request.
+
+### Cloudflare Usage
+
+Plan limits and pricing can change and are not encoded in this repository. Check the [Cloudflare Dashboard](https://dash.cloudflare.com) and current Cloudflare documentation for the account's actual plan, usage, and limits.
+
+### Observability & Logs
+
+Workers Logs are enabled in `wrangler.jsonc` with full head sampling, persistence, and invocation logs. Traces are disabled. Payload uses a production-only JSON console logger, and its level can be set with `PAYLOAD_LOG_LEVEL`.
+
+## Available Commands
+
+All project commands use `pnpm`. Here are the most commonly used:
+
+### Development
+
+- **`pnpm dev`** — Start the Next.js development server on `http://localhost:3000`
+- **`pnpm devsafe`** — Clean build artifacts and start dev server (use if experiencing build issues)
+
+### Building & Type Generation
+
+- **`pnpm build`** — Build the Next.js app with Webpack (8GB memory limit to prevent OOM)
+- **`pnpm generate:types`** — Regenerate all TypeScript types from Payload schema and Cloudflare
+- **`pnpm generate:types:payload`** — Regenerate Payload collection and field types to `payload-types.ts`
+- **`pnpm generate:types:cloudflare`** — Regenerate Cloudflare environment types
+- **`pnpm generate:importmap`** — Regenerate Payload admin import map
+
+### Deployment
+
+- **`pnpm deploy`** — Full deployment: runs migrations, builds the app, and deploys to Cloudflare Workers (production)
+- **`pnpm deploy:database`** — Run pending migrations and optimize the D1 database (database schema updates only)
+- **`pnpm deploy:app`** — Build with OpenNext and deploy the Worker bundle to Cloudflare (app code only)
+- **`pnpm preview`** — Build and preview the application locally before deploying
+
+### Testing
+
+- **`pnpm test`** — Run all tests: unit tests, integration tests, and end-to-end tests
+- **`pnpm test:unit`** — Run Jest unit tests (React components, utilities)
+- **`pnpm test:int`** — Run Vitest integration tests (API endpoints, database queries)
+- **`pnpm test:e2e`** — Run Playwright end-to-end tests (user flows, admin panel interactions)
+
+### Content Management
+
+- **`pnpm payload`** — Access Payload CLI for:
+  - `pnpm payload migrate:create` — Create a new database migration
+  - See [Payload CLI docs](https://payloadcms.com/docs/cli) for more commands
+- **`pnpm dev`** — Start the application and open `/admin` to use Payload locally
+
+### Code Quality & Maintenance
+
+- **`pnpm lint`** — Run ESLint to check code quality and find style issues
+- **`pnpm start`** — Start the Next.js production server (for testing production builds locally)
+- **`pnpm ii`** — Install dependencies while ignoring the pnpm workspace
+- **`pnpm genog-local`** — Generate Open Graph images locally for testing
+
+### Example Workflow
+
+**Creating and deploying content changes:**
 
 ```bash
-pnpm run deploy
+# 1. Make edits in the Payload admin panel at https://latviansofdarwin.org.au/admin
+# 2. Or programmatically via API
+
+# 3. When database schema changes are needed:
+pnpm payload migrate:create
+
+# 4. Deploy everything:
+pnpm deploy
+
+# 5. Verify the deployment succeeded:
+# Visit the production website and /admin
 ```
 
-This will spin up Wrangler in `production` mode, run any created migrations, build the app and then deploy the bundle up to Cloudflare.
+**Local development:**
 
-That's it! You can if you wish move these steps into your CI pipeline as well.
+```bash
+pnpm dev              # Start dev server
+pnpm test:unit        # Test changes
+pnpm lint             # Check code
+pnpm build && pnpm preview  # Test production build
+```
 
-## Enabling logs
+## How It Works
 
-By default logs are not enabled for your API, we've made this decision because it does run against your quota so we've left it opt-in. But you can easily enable logs in one click in the Cloudflare panel, [see docs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#enable-workers-logs).
+### Architecture Overview
+
+The website is built on Next.js deployed to Cloudflare Workers. Payload CMS manages content in a D1 SQLite database, images are stored in R2, and the frontend uses React with Tailwind CSS.
+
+**Request flow:**
+
+1. User visits **latviansofdarwin.org.au**
+2. Cloudflare Workers routes to the Next.js application
+3. Authenticated requests to **/admin** route to Payload CMS admin panel
+4. Public requests to **/** route to the frontend
+5. Content is fetched from D1 and rendered server-side
+6. Uploaded images are read from the configured R2 storage adapter
 
 ### Logger Configuration
 
 This template includes a custom console-based logger compatible with Cloudflare Workers. Payload's default logger uses `pino-pretty`, which relies on Node.js APIs not available in Workers and would cause `fs.write is not implemented` errors.
 
-The custom logger in `payload.config.ts`:
+The custom logger in [src/payload.config.ts](src/payload.config.ts):
 
 - Routes logs through `console.*` methods which Workers handles correctly
 - Outputs JSON-formatted logs for Cloudflare observability
 - Only active in production (development uses the default `pino-pretty` for better DX)
 
-You can control the log level via the `PAYLOAD_LOG_LEVEL` environment variable (e.g., `debug`, `info`, `warn`, `error`).
-
-### Diagnostic Channel Errors
-
-If you see "Failed to publish diagnostic channel message" errors in your observability logs, these typically come from the `undici` HTTP client library. The template includes `skipSafeFetch: true` in the Media collection to use native fetch instead of undici for file uploads, which helps reduce these errors.
-
-Cloudflare Workers runs in an [isolated environment that cannot access private IP ranges](https://developers.cloudflare.com/workers-vpc/examples/route-across-private-services/) by default, providing built-in SSRF protection. This makes `skipSafeFetch` safe to use.
+Control the log level via the `PAYLOAD_LOG_LEVEL` environment variable (e.g., `debug`, `info`, `warn`, `error`).
 
 ## Content Management with Payload Admin
 
@@ -175,15 +194,17 @@ The Payload CMS admin interface is accessible at **https://latviansofdarwin.org.
 ### What can be edited in the admin panel
 
 #### Pages (Content group)
+
 Create and edit the website's main editorial pages with full bilingual support:
+
 - **Internal title**: Used only in the admin for organization
 - **Slug**: URL path (lowercase letters, numbers, and hyphens only)
-- **Order**: Display order in navigation (lower numbers appear first)
+- **Order**: Display order of page cards on the homepage (lower numbers appear first)
 - **English & Latvian content**:
   - Page title and excerpt (excerpt appears on cards and listing pages)
   - Customizable layout built from reusable blocks:
-    - **Hero block**: Large banner with optional image, alignment, and positioning controls
-    - **Content block**: Text content with optional image, alignment, and background tone (light/dark)
+    - **Hero block**: Bilingual eyebrow, heading, text, optional image, and left/center alignment
+    - **Content block**: Bilingual heading/body, optional left/right image, and plain/muted tone
     - **Call to Action block**: One or two buttons (primary/secondary) with customizable text and links
 - **SEO & social sharing**:
   - Custom meta title and description for search engines
@@ -193,7 +214,9 @@ Create and edit the website's main editorial pages with full bilingual support:
 - **Version history**: Track and restore previous versions
 
 #### Events (Content group)
+
 Manage event listings with bilingual descriptions and visual styling:
+
 - **Internal title**: Admin-only reference
 - **Slug**: URL path identifier
 - **Order**: Display order
@@ -201,26 +224,82 @@ Manage event listings with bilingual descriptions and visual styling:
 - **Event image**: Landscape image (recommended: at least 1200 × 800 pixels)
 - **English & Latvian content**:
   - Event title and detailed description (textarea)
-- **Draft/Publish status**: Control visibility with autosave
+- **Draft/Publish status**: Save drafts with autosave, then publish to make an event publicly visible
 
-#### Media (Content group)
+#### Media
+
 Upload and manage images used throughout the site:
+
 - **Alt text**: Accessibility and SEO text for images
-- **File upload**: Add images to an R2 bucket (served via CDN)
+- **File upload**: Store images in the configured Cloudflare R2 bucket
+
+Media changes save directly and do not use drafts.
+
+#### Homepage (Settings group)
+
+Configure homepage content:
+
+- **English & Latvian hero content**: Eyebrow, title, subtitle, and both button labels
+- **Hero image**: Optional background image
+- **Button URLs**: Destinations for the primary and secondary hero buttons
+- **Events section copy**: Bilingual heading and introduction
+
+Homepage changes save directly and do not use drafts.
 
 #### Main Menu (Settings group)
+
 Configure the website header navigation:
+
 - **Menu items**: Add, remove, and reorder navigation links
 - **URL/href**: Site paths (e.g., `/about`, `/#events`) or external URLs
 - **English & Latvian labels**: Bilingual menu text
 - **Open in new tab**: Optional checkbox to open external links in a new tab
 
+Main Menu changes save directly. Its item order controls header navigation; Page order does not.
+
+#### Users
+
+Administrators can manage Payload user accounts from the Users collection. The project currently has one authenticated user type and does not define separate editor roles or granular permissions.
+
+## 📖 Quick Access to Admin Panel
+
+Direct links to collections and globals in the **Payload admin panel** (requires authentication at **https://latviansofdarwin.org.au/admin**):
+
+### Collections
+
+**Users**
+- [List users](https://latviansofdarwin.org.au/admin/collections/users)
+- [Create user](https://latviansofdarwin.org.au/admin/collections/users/create)
+
+**Media**
+- [View media library](https://latviansofdarwin.org.au/admin/collections/media)
+- [Upload media](https://latviansofdarwin.org.au/admin/collections/media/create)
+
+### Content
+
+**Pages**
+- [View all pages](https://latviansofdarwin.org.au/admin/collections/pages)
+- [Create page](https://latviansofdarwin.org.au/admin/collections/pages/create)
+
+**Events**
+- [View all events](https://latviansofdarwin.org.au/admin/collections/events)
+- [Create event](https://latviansofdarwin.org.au/admin/collections/events/create)
+
+### Settings
+
+**Homepage**
+- [Edit homepage](https://latviansofdarwin.org.au/admin/globals/homepage)
+
+**Main Menu**
+- [Edit navigation](https://latviansofdarwin.org.au/admin/globals/main-menu)
+
 ### What cannot be edited in the admin panel
 
 The following require code changes and cannot be modified through the admin interface:
+
 - Website branding, logo, and site-wide styling (CSS, design system)
 - Page layout templates and block types
-- User accounts and permissions (admin-only)
+- User roles and granular permission rules
 - Site configuration (domain, environment variables, Cloudflare settings)
 - API routes and backend logic
 - Database schema and structure
@@ -228,18 +307,11 @@ The following require code changes and cannot be modified through the admin inte
 
 To make these changes, contact a developer to modify the codebase, run migrations, and redeploy the application.
 
-## Known issues
+## Operational Notes
 
-### GraphQL
-
-We are currently waiting on some issues with GraphQL to be [fixed upstream in Workers](https://github.com/cloudflare/workerd/issues/5175) so full support for GraphQL is not currently guaranteed when deployed.
-
-### Worker size limits
-
-We currently recommend deploying this template to the Paid Workers plan due to bundle [size limits](https://developers.cloudflare.com/workers/platform/limits/#worker-size) of 3mb. We're actively trying to reduce our bundle footprint over time to better meet this metric.
-
-This also applies to your own code, in the case of importing a lot of libraries you may find yourself limited by the bundle.
-
-## Questions
-
-If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+- Run `pnpm generate:types` after changing Payload fields, collections, globals, or Cloudflare bindings.
+- Run `pnpm generate:importmap` after adding or changing custom Payload admin components.
+- Create and review a migration after every database-backed Payload schema change.
+- Content-only edits in `/admin` do not require a code deployment.
+- Schema, styling, integration, and application-code changes require a deployment.
+- Confirm current Cloudflare plan limits and Payload/Workers compatibility against their official documentation before infrastructure changes.

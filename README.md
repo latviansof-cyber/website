@@ -62,6 +62,14 @@ The following website and CMS improvements were completed on June 9, 2026.
 - The final Worker upload remains blocked because the configured Cloudflare API token lacks Workers service permissions (`API error 10000`; membership check `9106`).
 - Existing unit-test and ESLint configuration failures remain outside the scope of these changes.
 
+### Analytics
+
+- Integrated Google Analytics (GA4) with measurement ID **G-54WF6RB2HX**
+- Analytics managed through the **latviansof@gmail.com** Google account
+- GA4 script loads asynchronously on all frontend pages using Next.js `Script` component with `strategy="afterInteractive"`
+- Tracks pageviews, user engagement, and events across the website
+- View analytics dashboard at [Google Analytics Console](https://analytics.google.com)
+
 ## Quick start
 
 This template can be deployed directly to Cloudflare Workers by clicking the button to take you to the setup screen.

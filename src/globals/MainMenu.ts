@@ -5,6 +5,7 @@ export const MainMenu: GlobalConfig = {
   label: 'Main Menu',
   access: {
     read: () => true,
+    update: ({ req }) => Boolean(req.user),
   },
   admin: {
     group: 'Settings',

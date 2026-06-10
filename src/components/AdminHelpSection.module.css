@@ -1,0 +1,75 @@
+.helpContainer {
+  padding: 2rem 0;
+}
+
+.helpContainer hr {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 0 0 2rem 0;
+}
+
+.helpContent {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  color: #374151;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.helpContent h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+  color: #1f2937;
+}
+
+.helpContent h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 1.5rem 0 1rem 0;
+  color: #1f2937;
+}
+
+.helpContent p {
+  margin: 0 0 1rem 0;
+}
+
+.helpContent ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+}
+
+.helpContent li {
+  margin: 0.75rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.helpContent li:before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: #6366f1;
+  font-weight: bold;
+}
+
+.helpContent strong {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.helpContent code {
+  background-color: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.25rem;
+  padding: 0.125rem 0.375rem;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9rem;
+  color: #d946ef;
+}
+
+.section {
+  margin-bottom: 1.5rem;
+}

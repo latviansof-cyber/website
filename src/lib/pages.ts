@@ -1,5 +1,5 @@
-import { getPayload } from 'payload'
 import type { Page as PayloadPage } from '@/payload-types'
+import { getPayloadClient } from './payload'
 
 export type PageLanguage = {
   title: string
@@ -323,8 +323,7 @@ function mapLayout(
 
 export async function getWebsitePages(): Promise<WebsitePage[]> {
   try {
-    const { default: config } = await import('@payload-config')
-    const payload = await getPayload({ config })
+    const payload = await getPayloadClient()
     const result = await payload.find({
       collection: 'pages',
       depth: 1,

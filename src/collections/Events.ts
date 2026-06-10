@@ -20,7 +20,13 @@ const eventContentFields = (language: string) => [
 
 export const Events: CollectionConfig = {
   slug: 'events',
+  labels: {
+    singular: 'Event',
+    plural: 'Events',
+  },
   access: {
+    create: ({ req }) => Boolean(req.user),
+    delete: ({ req }) => Boolean(req.user),
     read: ({ req }) =>
       req.user
         ? true
@@ -29,6 +35,7 @@ export const Events: CollectionConfig = {
               equals: 'published',
             },
           },
+    update: ({ req }) => Boolean(req.user),
   },
   admin: {
     useAsTitle: 'adminTitle',

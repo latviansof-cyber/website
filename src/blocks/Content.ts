@@ -1,7 +1,7 @@
 import type { Block, Field } from 'payload'
 import { bilingualGroup } from './fields'
 
-const contentFields: Field[] = [
+const contentFields = (): Field[] => [
   {
     name: 'heading',
     type: 'text',

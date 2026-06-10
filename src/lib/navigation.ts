@@ -1,4 +1,4 @@
-import { getPayload } from 'payload'
+import { getPayloadClient } from './payload'
 
 export type MainMenuItem = {
   href: string
@@ -19,8 +19,7 @@ export const fallbackMainMenu: MainMenuItem[] = [
 
 export async function getMainMenu(): Promise<MainMenuItem[]> {
   try {
-    const { default: config } = await import('@payload-config')
-    const payload = await getPayload({ config })
+    const payload = await getPayloadClient()
     const menu = await payload.findGlobal({
       slug: 'main-menu',
     })

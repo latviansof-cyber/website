@@ -160,6 +160,66 @@ If you see "Failed to publish diagnostic channel message" errors in your observa
 
 Cloudflare Workers runs in an [isolated environment that cannot access private IP ranges](https://developers.cloudflare.com/workers-vpc/examples/route-across-private-services/) by default, providing built-in SSRF protection. This makes `skipSafeFetch` safe to use.
 
+## Content Management with Payload Admin
+
+The Payload CMS admin interface is accessible at **https://latviansofdarwin.org.au/admin** in production. Authenticated editors can manage website content through a user-friendly dashboard.
+
+### What can be edited in the admin panel
+
+#### Pages (Content group)
+Create and edit the website's main editorial pages with full bilingual support:
+- **Internal title**: Used only in the admin for organization
+- **Slug**: URL path (lowercase letters, numbers, and hyphens only)
+- **Order**: Display order in navigation (lower numbers appear first)
+- **English & Latvian content**:
+  - Page title and excerpt (excerpt appears on cards and listing pages)
+  - Customizable layout built from reusable blocks:
+    - **Hero block**: Large banner with optional image, alignment, and positioning controls
+    - **Content block**: Text content with optional image, alignment, and background tone (light/dark)
+    - **Call to Action block**: One or two buttons (primary/secondary) with customizable text and links
+- **SEO & social sharing**:
+  - Custom meta title and description for search engines
+  - Social image (Open Graph; recommended: 1200 × 630 pixels)
+  - `noIndex` checkbox to exclude pages from search engines
+- **Draft/Publish status**: Save as draft with autosave enabled, or publish to make live
+- **Version history**: Track and restore previous versions
+
+#### Events (Content group)
+Manage event listings with bilingual descriptions and visual styling:
+- **Internal title**: Admin-only reference
+- **Slug**: URL path identifier
+- **Order**: Display order
+- **Accent tone**: Color scheme for the event card (Emerald, Amber, Sky, Rose, Violet, or Slate)
+- **Event image**: Landscape image (recommended: at least 1200 × 800 pixels)
+- **English & Latvian content**:
+  - Event title and detailed description (textarea)
+- **Draft/Publish status**: Control visibility with autosave
+
+#### Media (Content group)
+Upload and manage images used throughout the site:
+- **Alt text**: Accessibility and SEO text for images
+- **File upload**: Add images to an R2 bucket (served via CDN)
+
+#### Main Menu (Settings group)
+Configure the website header navigation:
+- **Menu items**: Add, remove, and reorder navigation links
+- **URL/href**: Site paths (e.g., `/about`, `/#events`) or external URLs
+- **English & Latvian labels**: Bilingual menu text
+- **Open in new tab**: Optional checkbox to open external links in a new tab
+
+### What cannot be edited in the admin panel
+
+The following require code changes and cannot be modified through the admin interface:
+- Website branding, logo, and site-wide styling (CSS, design system)
+- Page layout templates and block types
+- User accounts and permissions (admin-only)
+- Site configuration (domain, environment variables, Cloudflare settings)
+- API routes and backend logic
+- Database schema and structure
+- Third-party integrations and API keys
+
+To make these changes, contact a developer to modify the codebase, run migrations, and redeploy the application.
+
 ## Known issues
 
 ### GraphQL

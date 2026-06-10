@@ -1,6 +1,6 @@
-import { getPayload } from 'payload'
 import type { Event as PayloadEvent } from '@/payload-types'
 import { contentByLang } from '@/app/(frontend)/i18n/content'
+import { getPayloadClient } from './payload'
 
 export type EventAccent = 'emerald' | 'amber' | 'sky' | 'rose' | 'violet' | 'slate'
 
@@ -62,8 +62,7 @@ function mediaURL(value: PayloadEvent['image']): string | undefined {
 
 export async function getWebsiteEvents(): Promise<WebsiteEvent[]> {
   try {
-    const { default: config } = await import('@payload-config')
-    const payload = await getPayload({ config })
+    const payload = await getPayloadClient()
     const result = await payload.find({
       collection: 'events',
       depth: 1,

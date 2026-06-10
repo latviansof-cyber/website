@@ -1,7 +1,7 @@
 import type { Block, Field } from 'payload'
 import { bilingualGroup } from './fields'
 
-const buttonFields: Field[] = [
+const buttonFields = (): Field[] => [
   {
     name: 'label',
     type: 'text',
@@ -23,7 +23,7 @@ const buttonFields: Field[] = [
   },
 ]
 
-const ctaFields: Field[] = [
+const ctaFields = (): Field[] => [
   {
     name: 'heading',
     type: 'text',
@@ -40,7 +40,7 @@ const ctaFields: Field[] = [
     name: 'buttons',
     type: 'array',
     maxRows: 2,
-    fields: buttonFields,
+    fields: buttonFields(),
   },
 ]
 

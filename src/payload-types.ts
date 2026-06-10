@@ -92,9 +92,11 @@ export interface Config {
   };
   fallbackLocale: null;
   globals: {
+    homepage: Homepage;
     'main-menu': MainMenu;
   };
   globalsSelect: {
+    homepage: HomepageSelect<false> | HomepageSelect<true>;
     'main-menu': MainMenuSelect<false> | MainMenuSelect<true>;
   };
   locale: null;
@@ -632,6 +634,39 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage".
+ */
+export interface Homepage {
+  id: number;
+  en: {
+    heroEyebrow: string;
+    heroTitle: string;
+    heroSubtitle: string;
+    heroPrimaryLabel: string;
+    heroSecondaryLabel: string;
+    eventsTitle: string;
+    eventsIntro: string;
+  };
+  lv: {
+    heroEyebrow: string;
+    heroTitle: string;
+    heroSubtitle: string;
+    heroPrimaryLabel: string;
+    heroSecondaryLabel: string;
+    eventsTitle: string;
+    eventsIntro: string;
+  };
+  /**
+   * Optional homepage hero background image.
+   */
+  heroImage?: (number | null) | Media;
+  heroPrimaryHref: string;
+  heroSecondaryHref: string;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "main-menu".
  */
 export interface MainMenu {
@@ -651,6 +686,40 @@ export interface MainMenu {
   }[];
   updatedAt?: string | null;
   createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage_select".
+ */
+export interface HomepageSelect<T extends boolean = true> {
+  en?:
+    | T
+    | {
+        heroEyebrow?: T;
+        heroTitle?: T;
+        heroSubtitle?: T;
+        heroPrimaryLabel?: T;
+        heroSecondaryLabel?: T;
+        eventsTitle?: T;
+        eventsIntro?: T;
+      };
+  lv?:
+    | T
+    | {
+        heroEyebrow?: T;
+        heroTitle?: T;
+        heroSubtitle?: T;
+        heroPrimaryLabel?: T;
+        heroSecondaryLabel?: T;
+        eventsTitle?: T;
+        eventsIntro?: T;
+      };
+  heroImage?: T;
+  heroPrimaryHref?: T;
+  heroSecondaryHref?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

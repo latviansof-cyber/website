@@ -6,13 +6,21 @@ import { Section } from './ui/Section'
 import { Eyebrow } from './ui/Eyebrow'
 import { Chip } from './ui/Chip'
 import type { WebsiteEvent } from '@/lib/events'
+import type { HomepageContent } from '@/lib/homepage'
 
-export function Events({ events }: { events: WebsiteEvent[] }) {
+export function Events({
+  events,
+  homepage,
+}: {
+  events: WebsiteEvent[]
+  homepage: HomepageContent
+}) {
   const { lang, t } = useLanguage()
+  const content = homepage[lang]
   return (
     <Section
       id="events"
-      ariaLabel={t.events.title}
+      ariaLabel={content.eventsTitle}
       tone="plain"
       className="py-24 sm:py-32 relative overflow-hidden bg-white"
     >
@@ -22,17 +30,17 @@ export function Events({ events }: { events: WebsiteEvent[] }) {
       <Container className="relative z-10">
         <div className="max-w-3xl flex flex-col items-start">
           <Eyebrow className="text-sunset-orange tracking-widest font-bold uppercase mb-4">
-            03 — {t.events.title}
+            03 — {content.eventsTitle}
           </Eyebrow>
           <h2
             id="events-title"
             className="font-serif text-4xl font-bold tracking-tight text-ink sm:text-5xl lg:text-6xl"
           >
-            {t.events.title}
+            {content.eventsTitle}
           </h2>
           <div className="w-16 h-1 bg-gradient-to-r from-sunset-red to-sunset-gold mt-6 rounded-full" />
           <p className="mt-8 text-pretty text-lg leading-relaxed text-ink-light sm:text-xl max-w-2xl font-medium">
-            {t.events.intro}
+            {content.eventsIntro}
           </p>
         </div>
         <ul role="list" className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">

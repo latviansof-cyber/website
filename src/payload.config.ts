@@ -12,6 +12,7 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Events } from './collections/Events'
+import { Homepage } from './globals/Homepage'
 import { MainMenu } from './globals/MainMenu'
 
 const filename = fileURLToPath(import.meta.url)
@@ -53,9 +54,12 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      beforeDashboard: ['components/AdminHelpSection#AdminHelpSection'],
+    },
   },
   collections: [Users, Media, Pages, Events],
-  globals: [MainMenu],
+  globals: [Homepage, MainMenu],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

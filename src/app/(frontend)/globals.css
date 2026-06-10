@@ -13,6 +13,8 @@
   --color-sunset-gold: #fbbf24;   /* Warm gold */
   --color-sunset-peach: #ffedd5;  /* Soft peach background */
   
+  --color-latvian-red: #7a2231;   /* Carmine red of the Latvian flag */
+  
   --color-emerald-custom: #059669;
   --color-amber-custom: #d97706;
   --color-sky-custom: #0284c7;
@@ -46,6 +48,9 @@
   }
   .glass-panel-dark {
     @apply bg-ink/70 backdrop-blur-xl border border-white/10 shadow-2xl;
+  }
+  .glass-panel-latvian {
+    @apply bg-latvian-red/80 backdrop-blur-xl border border-white/10 shadow-2xl;
   }
   .text-glow {
     text-shadow: 0 0 20px rgba(251, 191, 36, 0.4);

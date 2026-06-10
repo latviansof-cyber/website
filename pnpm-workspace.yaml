@@ -1,0 +1,26 @@
+allowBuilds:
+  esbuild: set this to true or false
+  sharp: set this to true or false
+  unrs-resolver: set this to true or false
+  workerd: set this to true or false
+minimumReleaseAgeExclude:
+  - '@cloudflare/workerd-darwin-64@1.20260609.1'
+  - '@cloudflare/workerd-darwin-arm64@1.20260609.1'
+  - '@cloudflare/workerd-linux-64@1.20260609.1'
+  - '@cloudflare/workerd-linux-arm64@1.20260609.1'
+  - '@cloudflare/workerd-windows-64@1.20260609.1'
+  - '@payloadcms/db-d1-sqlite@3.85.1'
+  - '@payloadcms/drizzle@3.85.1'
+  - '@payloadcms/graphql@3.85.1'
+  - '@payloadcms/next@3.85.1'
+  - '@payloadcms/plugin-cloud-storage@3.85.1'
+  - '@payloadcms/richtext-lexical@3.85.1'
+  - '@payloadcms/storage-r2@3.85.1'
+  - '@payloadcms/translations@3.85.1'
+  - '@payloadcms/ui@3.85.1'
+  - graphql@16.14.2
+  - miniflare@4.20260609.0
+  - payload@3.85.1
+  - prettier@3.8.4
+  - workerd@1.20260609.1
+  - wrangler@4.99.0

@@ -7,7 +7,10 @@ import { Events } from './components/Events'
 import { SiteFooter } from './components/SiteFooter'
 import { getWebsitePages } from '@/lib/pages'
 import { getWebsiteEvents } from '@/lib/events'
+import { getMainMenu } from '@/lib/navigation'
 import { SITE_DESCRIPTION, SITE_NAME, SITE_NAME_LV } from '@/lib/site'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: {
@@ -20,11 +23,15 @@ export const metadata: Metadata = {
 }
 
 export default async function HomePage() {
-  const [pages, events] = await Promise.all([getWebsitePages(), getWebsiteEvents()])
+  const [pages, events, mainMenu] = await Promise.all([
+    getWebsitePages(),
+    getWebsiteEvents(),
+    getMainMenu(),
+  ])
 
   return (
     <LanguageProvider>
-      <SiteHeader />
+      <SiteHeader navItems={mainMenu} />
       <main id="main" className="bg-cream text-ink">
         <Hero />
         <PageCards pages={pages} />

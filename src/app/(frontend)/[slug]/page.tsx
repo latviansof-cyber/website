@@ -6,8 +6,11 @@ import { LanguageProvider } from '../i18n/LanguageProvider'
 import { SiteFooter } from '../components/SiteFooter'
 import { SiteHeader } from '../components/SiteHeader'
 import { fallbackPages, getWebsitePage } from '@/lib/pages'
+import { getMainMenu } from '@/lib/navigation'
 import { SITE_NAME, SITE_URL, absoluteURL } from '@/lib/site'
 import { getOgImageUrlByPath } from '@/lib/ogImage'
+
+export const dynamic = 'force-dynamic'
 
 export function generateStaticParams() {
   return fallbackPages.map((page) => ({ slug: page.slug }))
@@ -68,12 +71,12 @@ export default async function WebsiteContentPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const page = await getWebsitePage(slug)
+  const [page, mainMenu] = await Promise.all([getWebsitePage(slug), getMainMenu()])
   if (!page) notFound()
 
   return (
     <LanguageProvider>
-      <SiteHeader />
+      <SiteHeader navItems={mainMenu} />
       <JsonLd
         data={{
           '@context': 'https://schema.org',

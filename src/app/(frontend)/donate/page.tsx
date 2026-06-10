@@ -4,8 +4,11 @@ import { SiteHeader } from '../components/SiteHeader'
 import { SiteFooter } from '../components/SiteFooter'
 import { DonationWidget } from './DonationWidget'
 import { getOgImageUrlByPath } from '@/lib/ogImage'
+import { getMainMenu } from '@/lib/navigation'
 
 const ogImage = getOgImageUrlByPath('/donate')
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Donate',
@@ -34,10 +37,12 @@ export const metadata: Metadata = {
   },
 }
 
-export default function DonatePage() {
+export default async function DonatePage() {
+  const mainMenu = await getMainMenu()
+
   return (
     <LanguageProvider>
-      <SiteHeader />
+      <SiteHeader navItems={mainMenu} />
       <main id="main" className="bg-cream text-ink">
         <DonationWidget />
       </main>

@@ -77,7 +77,7 @@ export function SiteFooter({ footer }: { footer: FooterContent }) {
             © {year} Latvian Association of Darwin. {content.rights}
           </p>
           <p>
-            Found a bag?{' '}
+            Found a bug?{' '}
             <a href="https://vasilkoff.com/contact-us#report" rel="noreferrer" target="_blank">
               Report here
             </a>

@@ -12,8 +12,10 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Events } from './collections/Events'
+import { SpecialPages } from './collections/SpecialPages'
 import { Homepage } from './globals/Homepage'
 import { MainMenu } from './globals/MainMenu'
+import { Footer } from './globals/Footer'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -57,9 +59,17 @@ export default buildConfig({
     components: {
       beforeDashboard: ['@/components/AdminHelpSection#AdminHelpSection'],
     },
+    meta: {
+      favicon: '/favicon.ico',
+      icons: [
+        { url: '/favicon.svg', type: 'image/svg+xml' },
+        { url: '/favicon-96x96.png', type: 'image/png', sizes: '96x96' },
+      ],
+      apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
+    },
   },
-  collections: [Users, Media, Pages, Events],
-  globals: [Homepage, MainMenu],
+  collections: [Users, Media, Pages, Events, SpecialPages],
+  globals: [Homepage, MainMenu, Footer],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

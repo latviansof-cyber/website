@@ -1,11 +1,12 @@
-import * as migration_20250929_111647 from './20250929_111647'
-import * as migration_20260609_053333_block_pages from './20260609_053333_block_pages'
-import * as migration_20260609_122916 from './20260609_122916'
-import * as migration_20260609_123744 from './20260609_123744'
-import * as migration_20260609_152706_add_culture_contact_pages from './20260609_152706_add_culture_contact_pages'
-import * as migration_20260609_153453_add_events_collection from './20260609_153453_add_events_collection'
-import * as migration_20260610_073953 from './20260610_073953'
-import * as migration_20260610_074744 from './20260610_074744'
+import * as migration_20250929_111647 from './20250929_111647';
+import * as migration_20260609_053333_block_pages from './20260609_053333_block_pages';
+import * as migration_20260609_122916 from './20260609_122916';
+import * as migration_20260609_123744 from './20260609_123744';
+import * as migration_20260609_152706_add_culture_contact_pages from './20260609_152706_add_culture_contact_pages';
+import * as migration_20260609_153453_add_events_collection from './20260609_153453_add_events_collection';
+import * as migration_20260610_073953 from './20260610_073953';
+import * as migration_20260610_074744 from './20260610_074744';
+import * as migration_20260610_103232_add_footer_and_special_pages from './20260610_103232_add_footer_and_special_pages';
 
 export const migrations = [
   {
@@ -48,4 +49,9 @@ export const migrations = [
     down: migration_20260610_074744.down,
     name: '20260610_074744',
   },
-]
+  {
+    up: migration_20260610_103232_add_footer_and_special_pages.up,
+    down: migration_20260610_103232_add_footer_and_special_pages.down,
+    name: '20260610_103232_add_footer_and_special_pages'
+  },
+];

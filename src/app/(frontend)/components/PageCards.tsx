@@ -2,25 +2,27 @@
 
 import Link from 'next/link'
 import type { WebsitePage } from '@/lib/pages'
+import type { HomepageContent } from '@/lib/homepage'
 import { useLanguage } from '../i18n/LanguageProvider'
 import { Container } from './ui/Container'
 import { Eyebrow } from './ui/Eyebrow'
 import { Section } from './ui/Section'
 
-export function PageCards({ pages }: { pages: WebsitePage[] }) {
+export function PageCards({ pages, homepage }: { pages: WebsitePage[]; homepage: HomepageContent }) {
   const { lang } = useLanguage()
+  const content = homepage[lang]
   const copy =
     lang === 'lv'
       ? {
-          eyebrow: 'Iepazīstiet mūs',
-          title: 'Apvienība un kopiena',
-          intro: 'Īss ievads svarīgākajās tēmās. Atveriet pilno lapu, lai uzzinātu vairāk.',
+          eyebrow: content.exploreEyebrow,
+          title: content.exploreTitle,
+          intro: content.exploreIntro,
           readMore: 'Lasīt vairāk',
         }
       : {
-          eyebrow: 'Explore',
-          title: 'Association and community',
-          intro: 'Start with a short overview, then open the full page when you want the detail.',
+          eyebrow: content.exploreEyebrow,
+          title: content.exploreTitle,
+          intro: content.exploreIntro,
           readMore: 'Read more',
         }
 

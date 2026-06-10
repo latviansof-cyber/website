@@ -14,6 +14,9 @@ export type HomepageContent = {
     heroSecondaryLabel: string
     eventsTitle: string
     eventsIntro: string
+    exploreEyebrow: string
+    exploreTitle: string
+    exploreIntro: string
   }
   lv: {
     heroEyebrow: string
@@ -23,6 +26,9 @@ export type HomepageContent = {
     heroSecondaryLabel: string
     eventsTitle: string
     eventsIntro: string
+    exploreEyebrow: string
+    exploreTitle: string
+    exploreIntro: string
   }
 }
 
@@ -37,6 +43,9 @@ export const fallbackHomepage: HomepageContent = {
     heroSecondaryLabel: contentByLang.en.nav.about,
     eventsTitle: contentByLang.en.events.title,
     eventsIntro: contentByLang.en.events.intro,
+    exploreEyebrow: 'Explore',
+    exploreTitle: 'Association and community',
+    exploreIntro: 'Start with a short overview, then open the full page when you want the detail.',
   },
   lv: {
     heroEyebrow: contentByLang.lv.hero.eyebrow,
@@ -46,6 +55,9 @@ export const fallbackHomepage: HomepageContent = {
     heroSecondaryLabel: contentByLang.lv.nav.about,
     eventsTitle: contentByLang.lv.events.title,
     eventsIntro: contentByLang.lv.events.intro,
+    exploreEyebrow: 'Iepazīstiet mūs',
+    exploreTitle: 'Apvienība un kopiena',
+    exploreIntro: 'Īss ievads svarīgākajās tēmās. Atveriet pilno lapu, lai uzzinātu vairāk.',
   },
 }
 

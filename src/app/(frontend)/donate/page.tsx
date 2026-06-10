@@ -1,10 +1,11 @@
-﻿import type { Metadata } from 'next'
+import type { Metadata } from 'next'
 import { LanguageProvider } from '../i18n/LanguageProvider'
 import { SiteHeader } from '../components/SiteHeader'
 import { SiteFooter } from '../components/SiteFooter'
 import { DonationWidget } from './DonationWidget'
 import { getOgImageUrlByPath } from '@/lib/ogImage'
 import { getMainMenu } from '@/lib/navigation'
+import { getFooter } from '@/lib/footer'
 
 const ogImage = getOgImageUrlByPath('/donate')
 
@@ -38,7 +39,7 @@ export const metadata: Metadata = {
 }
 
 export default async function DonatePage() {
-  const mainMenu = await getMainMenu()
+  const [mainMenu, footer] = await Promise.all([getMainMenu(), getFooter()])
 
   return (
     <LanguageProvider>
@@ -46,7 +47,7 @@ export default async function DonatePage() {
       <main id="main" className="bg-cream text-ink">
         <DonationWidget />
       </main>
-      <SiteFooter />
+      <SiteFooter footer={footer} />
     </LanguageProvider>
   )
 }

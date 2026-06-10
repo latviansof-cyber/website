@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     pages: Page;
     events: Event;
+    'special-pages': SpecialPage;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -82,6 +83,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
+    'special-pages': SpecialPagesSelect<false> | SpecialPagesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -94,10 +96,12 @@ export interface Config {
   globals: {
     homepage: Homepage;
     'main-menu': MainMenu;
+    footer: Footer;
   };
   globalsSelect: {
     homepage: HomepageSelect<false> | HomepageSelect<true>;
     'main-menu': MainMenuSelect<false> | MainMenuSelect<true>;
+    footer: FooterSelect<false> | FooterSelect<true>;
   };
   locale: null;
   widgets: {
@@ -326,6 +330,35 @@ export interface Event {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "special-pages".
+ */
+export interface SpecialPage {
+  id: number;
+  /**
+   * Used only in the Payload admin.
+   */
+  adminTitle: string;
+  slug: string;
+  en: {
+    title: string;
+    /**
+     * Separate paragraphs with a blank line.
+     */
+    content: string;
+  };
+  lv: {
+    title: string;
+    /**
+     * Separate paragraphs with a blank line.
+     */
+    content: string;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -363,6 +396,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'events';
         value: number | Event;
+      } | null)
+    | ({
+        relationTo: 'special-pages';
+        value: number | SpecialPage;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -594,6 +631,29 @@ export interface EventsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "special-pages_select".
+ */
+export interface SpecialPagesSelect<T extends boolean = true> {
+  adminTitle?: T;
+  slug?: T;
+  en?:
+    | T
+    | {
+        title?: T;
+        content?: T;
+      };
+  lv?:
+    | T
+    | {
+        title?: T;
+        content?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -646,6 +706,9 @@ export interface Homepage {
     heroSecondaryLabel: string;
     eventsTitle: string;
     eventsIntro: string;
+    exploreEyebrow: string;
+    exploreTitle: string;
+    exploreIntro: string;
   };
   lv: {
     heroEyebrow: string;
@@ -655,6 +718,9 @@ export interface Homepage {
     heroSecondaryLabel: string;
     eventsTitle: string;
     eventsIntro: string;
+    exploreEyebrow: string;
+    exploreTitle: string;
+    exploreIntro: string;
   };
   /**
    * Optional homepage hero background image.
@@ -689,6 +755,38 @@ export interface MainMenu {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer".
+ */
+export interface Footer {
+  id: number;
+  en: {
+    tagline: string;
+    address: string;
+    rights: string;
+  };
+  lv: {
+    tagline: string;
+    address: string;
+    rights: string;
+  };
+  /**
+   * Drag items to change their order in the website footer.
+   */
+  items: {
+    /**
+     * Use a path such as /privacy, /terms, or a full external URL.
+     */
+    href: string;
+    en: string;
+    lv: string;
+    newTab?: boolean | null;
+    id?: string | null;
+  }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "homepage_select".
  */
 export interface HomepageSelect<T extends boolean = true> {
@@ -702,6 +800,9 @@ export interface HomepageSelect<T extends boolean = true> {
         heroSecondaryLabel?: T;
         eventsTitle?: T;
         eventsIntro?: T;
+        exploreEyebrow?: T;
+        exploreTitle?: T;
+        exploreIntro?: T;
       };
   lv?:
     | T
@@ -713,6 +814,9 @@ export interface HomepageSelect<T extends boolean = true> {
         heroSecondaryLabel?: T;
         eventsTitle?: T;
         eventsIntro?: T;
+        exploreEyebrow?: T;
+        exploreTitle?: T;
+        exploreIntro?: T;
       };
   heroImage?: T;
   heroPrimaryHref?: T;
@@ -726,6 +830,38 @@ export interface HomepageSelect<T extends boolean = true> {
  * via the `definition` "main-menu_select".
  */
 export interface MainMenuSelect<T extends boolean = true> {
+  items?:
+    | T
+    | {
+        href?: T;
+        en?: T;
+        lv?: T;
+        newTab?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer_select".
+ */
+export interface FooterSelect<T extends boolean = true> {
+  en?:
+    | T
+    | {
+        tagline?: T;
+        address?: T;
+        rights?: T;
+      };
+  lv?:
+    | T
+    | {
+        tagline?: T;
+        address?: T;
+        rights?: T;
+      };
   items?:
     | T
     | {

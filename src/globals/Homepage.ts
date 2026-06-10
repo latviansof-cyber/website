@@ -49,6 +49,27 @@ const languageFields = (language: string): Field[] => [
       rows: 4,
     },
   },
+  {
+    name: 'exploreEyebrow',
+    type: 'text',
+    label: `${language} explore eyebrow`,
+    required: true,
+  },
+  {
+    name: 'exploreTitle',
+    type: 'text',
+    label: `${language} explore title`,
+    required: true,
+  },
+  {
+    name: 'exploreIntro',
+    type: 'textarea',
+    label: `${language} explore introduction`,
+    required: true,
+    admin: {
+      rows: 4,
+    },
+  },
 ]
 
 export const Homepage: GlobalConfig = {

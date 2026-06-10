@@ -1,12 +1,16 @@
-﻿'use client'
+'use client'
 
 import Link from 'next/link'
 import { useLanguage } from '../i18n/LanguageProvider'
 import { Container } from './ui/Container'
+import type { FooterContent } from '@/lib/footer'
 
-export function SiteFooter() {
-  const { t } = useLanguage()
+export function SiteFooter({ footer }: { footer: FooterContent }) {
+  const { lang, t } = useLanguage()
   const year = new Date().getFullYear()
+  const content = footer[lang]
+  const items = footer.items
+
   return (
     <footer className="bg-ink text-white" itemScope itemType="https://schema.org/Organization">
       <meta itemProp="name" content="Latvian Association of Darwin" />
@@ -21,10 +25,10 @@ export function SiteFooter() {
             >
               DLA
             </span>
-            <p className="font-serif text-base font-semibold leading-snug">{t.footer.tagline}</p>
+            <p className="font-serif text-base font-semibold leading-snug">{content.tagline}</p>
           </div>
           <p className="mt-4 text-sm text-white/70" itemProp="address">
-            {t.footer.address}
+            {content.address}
           </p>
         </div>
 
@@ -34,36 +38,18 @@ export function SiteFooter() {
             {t.footer.quickLinks}
           </h2>
           <ul role="list" className="mt-3 space-y-2 text-sm text-white/80">
-            <li>
-              <Link href="/about" className="hover:text-amber-200">
-                {t.nav.about}
-              </Link>
-            </li>
-            <li>
-              <Link href="/history" className="hover:text-amber-200">
-                {t.nav.history}
-              </Link>
-            </li>
-            <li>
-              <Link href="/community" className="hover:text-amber-200">
-                {t.nav.about === 'About' ? 'Community' : 'Kopiena'}
-              </Link>
-            </li>
-            <li>
-              <Link href="/membership" className="hover:text-amber-200">
-                {t.nav.about === 'About' ? 'Join the Association' : 'Pievienoties apvienībai'}
-              </Link>
-            </li>
-            <li>
-              <Link href="/#events" className="hover:text-amber-200">
-                {t.nav.events}
-              </Link>
-            </li>
-            <li>
-              <Link href="/donate" className="hover:text-amber-200">
-                {t.nav.donate}
-              </Link>
-            </li>
+            {items.map((item, idx) => (
+              <li key={idx}>
+                <Link
+                  href={item.href}
+                  target={item.newTab ? '_blank' : undefined}
+                  rel={item.newTab ? 'noopener noreferrer' : undefined}
+                  className="hover:text-amber-200"
+                >
+                  {item[lang]}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -104,7 +90,7 @@ export function SiteFooter() {
       <div className="border-t border-white/10">
         <Container className="flex flex-col items-start justify-between gap-2 py-4 text-xs text-white/60 sm:flex-row sm:items-center">
           <p>
-            © {year} Latvian Association of Darwin. {t.footer.rights}
+            © {year} Latvian Association of Darwin. {content.rights}
           </p>
           <p>Built with Next.js + Tailwind CSS</p>
         </Container>

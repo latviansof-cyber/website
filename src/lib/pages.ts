@@ -209,47 +209,6 @@ export const fallbackPages: WebsitePage[] = [
       body: 'Latviešu kultūra ir cieši saistīta ar vēsturi, dabu un kopienu. Dārvinā mēs aktīvi saglabājam un kopjam savas unikālās tradīcijas, nododot tās nākamajām paaudzēm un daloties tajās ar plašāku Austrālijas sabiedrību.\n\nNo tradicionālajām vasaras saulgriežu svinībām – Jāņiem ar vainagu pīšanu, dziesmām un ugunskuriem, līdz valsts svētku atzīmēšanai – mēs godinām mūsu bagāto mantojumu. Mēs arī uzturam saites ar plašāku latviešu diasporu Austrālijā, piedaloties reģionālos dziesmu svētkos, kultūras pasākumos un jauniešu salidojumos.\n\nTradicionālie amatniecības izstrādājumi, tautas dejas un dziedāšana ir mūsu kopienas dzīves centrā, nodrošinot tiltu starp Latviju un mūsu mājām Ziemeļu Teritorijā.',
     },
   }),
-  starterPage({
-    slug: 'contact',
-    order: 60,
-    image: '/images/contact.png',
-    en: {
-      title: 'Contact Us',
-      excerpt:
-        'Get in touch with the Latvian Association of Darwin. We welcome questions, membership inquiries, and cultural collaborations.',
-      body: "We would love to hear from you! Whether you are a Latvian newly arrived in the Northern Territory, a descendant wishing to reconnect with your heritage, or a local resident interested in Latvian culture, our door is always open.\n\nYou can reach out to us via email for general inquiries, membership applications, or event details. We also encourage you to follow our social media channels to stay updated on upcoming community gatherings and initiatives.\n\nLet's connect and build a stronger community together in the Top End!",
-    },
-    lv: {
-      title: 'Kontakti',
-      excerpt:
-        'Sazinieties ar Dārvinas Latviešu Apvienību. Mēs priecāsimies par jūsu jautājumiem, sadarbības priekšlikumiem un vēstulēm.',
-      body: 'Mēs priecāsimies par jūsu ziņām! Neatkarīgi no tā, vai esat latvietis, kurš nesen ieradies Ziemeļu Teritorijā, pēcnācējs, kurš vēlas atjaunot saikni ar savu mantojumu, vai vietējais iedzīvotājs, kuram interesē latviešu kultūra – mūsu durvis ir atvērtas.\n\nSazinieties ar mums pa e-pastu, lai uzdotu jautājumus, pieteiktos dalībai apvienībā vai uzzinātu par pasākumiem. Tāpat aicinām sekot mūsu sociālo tīklu profiliem, lai uzzinātu jaunumus par nākamiem kopienas sarīkojumiem un iniciatīvām.\n\nSazināsimies un veidosim stiprāku kopienu kopā Ziemeļu Teritorijā!',
-    },
-    cta: {
-      en: {
-        heading: 'Want to reach out?',
-        text: 'Contact us via email or join us at the next gathering.',
-        buttons: [
-          {
-            label: 'Send Email',
-            link: 'mailto:hello@darwinlatvians.org',
-            variant: 'primary',
-          },
-        ],
-      },
-      lv: {
-        heading: 'Vēlaties sazināties?',
-        text: 'Sazinieties ar mums pa e-pastu vai pievienojieties nākamajā tikšanās reizē.',
-        buttons: [
-          {
-            label: 'Sūtīt e-pastu',
-            link: 'mailto:hello@darwinlatvians.org',
-            variant: 'primary',
-          },
-        ],
-      },
-    },
-  }),
 ]
 
 function mediaURL(value: unknown): string | undefined {

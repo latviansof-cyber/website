@@ -170,6 +170,29 @@ Piemērojamie tiesību akti
 Saziņa
 Ja jums ir jautājumi par šo EULA, lūdzu, sazinieties ar mums pa e-pastu hello@darwinlatvians.org.`
     }
+  },
+  {
+    slug: 'contact',
+    en: {
+      title: 'Contact Us',
+      content: `We would love to hear from you! Whether you are a Latvian newly arrived in the Northern Territory, a descendant wishing to reconnect with your heritage, or a local resident interested in Latvian culture, our door is always open.
+
+You can reach out to us via email for general inquiries, membership applications, or event details. We also encourage you to follow our social media channels to stay updated on upcoming community gatherings and initiatives.
+
+Let's connect and build a stronger community together in the Top End!
+
+Email: hello@darwinlatvians.org`
+    },
+    lv: {
+      title: 'Kontakti',
+      content: `Mēs priecāsimies par jūsu ziņām! Neatkarīgi no tā, vai esat latvietis, kurš nesen ieradies Ziemeļu Teritorijā, pēcnācējs, kurš vēlas atjaunot saikni ar savu mantojumu, vai vietējais iedzīvotājs, kuram interesē latviešu kultūra – mūsu durvis ir atvērtas.
+
+Sazinieties ar mums pa e-pastu, lai uzdotu jautājumus, pieteiktos dalībai apvienībā vai uzzinātu par pasākumiem. Tāpat aicinām sekot mūsu sociālo tīklu profiliem, lai uzzinātu jaunumus par nākamiem kopienas sarīkojumiem un iniciatīvām.
+
+Sazināsimies un veidosim stiprāku kopienu kopā Ziemeļu Teritorijā!
+
+E-pasts: hello@darwinlatvians.org`
+    }
   }
 ]
 

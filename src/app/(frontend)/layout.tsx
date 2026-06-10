@@ -1,5 +1,6 @@
 ﻿import React from 'react'
 import type { Metadata, Viewport } from 'next'
+import Script from 'next/script'
 import './globals.css'
 import { JsonLd } from './components/JsonLd'
 import {
@@ -75,6 +76,16 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
         />
+        {/* Google Analytics */}
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-54WF6RB2HX" />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-54WF6RB2HX');
+          `}
+        </Script>
       </head>
       <body className="bg-cream text-ink antialiased">
         <JsonLd

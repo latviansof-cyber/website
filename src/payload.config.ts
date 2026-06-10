@@ -57,7 +57,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     components: {
-      beforeDashboard: ['@/components/AdminHelpSection#AdminHelpSection'],
+      afterDashboard: ['@/components/AdminHelpSection#AdminHelpSection'],
       graphics: {
         Logo: '@/components/AdminLogo#AdminLogo',
       },

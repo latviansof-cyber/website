@@ -64,7 +64,9 @@ export function PageCards({ pages, homepage }: { pages: WebsitePage[]; homepage:
                   />
                 </div>
                 <div className="p-7 sm:p-8">
-                  <h3 className="font-serif text-2xl font-bold text-ink">{content.title}</h3>
+                  <Link href={`/${page.slug}`}>
+                    <h3 className="font-serif text-2xl font-bold text-ink transition hover:text-sunset-red">{content.title}</h3>
+                  </Link>
                   <p className="mt-4 leading-7 text-ink-light">{content.excerpt}</p>
                   <Link
                     href={`/${page.slug}`}

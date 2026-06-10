@@ -76,8 +76,6 @@ export async function getWebsiteEvents(): Promise<WebsiteEvent[]> {
       },
     })
 
-    if (result.docs.length === 0) return fallbackEvents
-
     return result.docs.map((event) => ({
       slug: event.slug,
       order: event.order,
@@ -87,7 +85,7 @@ export async function getWebsiteEvents(): Promise<WebsiteEvent[]> {
       lv: event.lv,
     }))
   } catch (error) {
-    console.warn('[events] Payload events unavailable; using fallback content.', error)
-    return fallbackEvents
+    console.warn('[events] Payload events unavailable.', error)
+    return []
   }
 }

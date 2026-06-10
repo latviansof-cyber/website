@@ -53,6 +53,12 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
       false
     );`)
   }
+
+  // 4. Delete old "About" page from standard pages and block tables to avoid routing conflicts
+  await db.run(sql`DELETE FROM \`pages_blocks_hero\` WHERE \`_parent_id\` IN (SELECT \`id\` FROM \`pages\` WHERE \`slug\` = 'about');`)
+  await db.run(sql`DELETE FROM \`pages_blocks_content\` WHERE \`_parent_id\` IN (SELECT \`id\` FROM \`pages\` WHERE \`slug\` = 'about');`)
+  await db.run(sql`DELETE FROM \`pages_blocks_cta\` WHERE \`_parent_id\` IN (SELECT \`id\` FROM \`pages\` WHERE \`slug\` = 'about');`)
+  await db.run(sql`DELETE FROM \`pages\` WHERE \`slug\` = 'about';`)
 }
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {

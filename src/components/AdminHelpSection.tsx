@@ -8,7 +8,7 @@ export const AdminHelpSection = () => {
     <div className={styles.helpContainer}>
       <hr />
       <div className={styles.helpContent}>
-        <h2>📖 Getting Started with the Admin Panel</h2>
+        <h2>Getting Started with the Admin Panel</h2>
 
         <section className={styles.section}>
           <h3>Available Collections</h3>

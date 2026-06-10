@@ -8,6 +8,7 @@ import * as migration_20260610_073953 from './20260610_073953';
 import * as migration_20260610_074744 from './20260610_074744';
 import * as migration_20260610_103232_add_footer_and_special_pages from './20260610_103232_add_footer_and_special_pages';
 import * as migration_20260610_105121_move_about_to_special_pages from './20260610_105121_move_about_to_special_pages';
+import * as migration_20260610_112000_backfill_event_versions from './20260610_112000_backfill_event_versions';
 
 export const migrations = [
   {
@@ -59,5 +60,10 @@ export const migrations = [
     up: migration_20260610_105121_move_about_to_special_pages.up,
     down: migration_20260610_105121_move_about_to_special_pages.down,
     name: '20260610_105121_move_about_to_special_pages'
+  },
+  {
+    up: migration_20260610_112000_backfill_event_versions.up,
+    down: migration_20260610_112000_backfill_event_versions.down,
+    name: '20260610_112000_backfill_event_versions',
   },
 ];

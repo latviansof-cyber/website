@@ -15,7 +15,7 @@ export function SiteFooter({ footer }: { footer: FooterContent }) {
     <footer className="bg-ink text-white" itemScope itemType="https://schema.org/Organization">
       <meta itemProp="name" content="Latvian Association of Darwin" />
       <meta itemProp="alternateName" content="Dārvinas Latviešu Apvienība" />
-      <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
+      <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-3">
         {/* Column 1: Brand */}
         <div>
           <div className="flex items-center gap-3">
@@ -53,23 +53,7 @@ export function SiteFooter({ footer }: { footer: FooterContent }) {
           </ul>
         </div>
 
-        {/* Column 3: Events */}
-        <div>
-          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-200">
-            {t.nav.events}
-          </h2>
-          <ul role="list" className="mt-3 space-y-2 text-sm text-white/80">
-            {t.events.items.slice(0, 3).map((event) => (
-              <li key={event.id}>
-                <Link href="/#events" className="hover:text-amber-200">
-                  {event.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Column 4: Contact */}
+        {/* Column 3: Contact */}
         <div>
           <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-200">
             {t.footer.contactTitle}
@@ -92,7 +76,12 @@ export function SiteFooter({ footer }: { footer: FooterContent }) {
           <p>
             © {year} Latvian Association of Darwin. {content.rights}
           </p>
-          <p>Built with Next.js + Tailwind CSS</p>
+          <p>
+            Found a bag?{' '}
+            <a href="https://vasilkoff.com/contact-us#report" rel="noreferrer" target="_blank">
+              Report here
+            </a>
+          </p>
         </Container>
       </div>
     </footer>

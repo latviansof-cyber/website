@@ -14,6 +14,25 @@ export type SpecialPageContent = {
 
 export const fallbackSpecialPages: SpecialPageContent[] = [
   {
+    slug: 'about',
+    en: {
+      title: 'About the Association',
+      content: `The Latvian Association of Darwin (Dārvinas Latviešu Apvienība) is a community organisation dedicated to bringing together Latvians, Latvian descendants, and friends of Latvia across the Northern Territory. We provide a welcoming place where culture, language, and traditions can be shared, preserved, and enjoyed.
+
+Our community supports cooperation among Latvians in Darwin, across Australia, and with organisations in Latvia and around the world. Cultural events, social gatherings, educational activities, and community initiatives strengthen our shared identity and create a sense of belonging.
+
+Whether you have Latvian heritage, an interest in Baltic culture, or simply want to connect with a vibrant multicultural community, you are welcome.`
+    },
+    lv: {
+      title: 'Par apvienību',
+      content: `Dārvinas Latviešu Apvienība ir kopienas organizācija, kas apvieno latviešus, latviešu pēcnācējus un Latvijas draugus visā Ziemeļu Teritorijā. Mēs piedāvājam draudzīgu vietu, kur kultūra, valoda un tradīcijas tiek kopīgotas, saglabātas un baudītas.
+
+Mūsu kopiena veicina sadarbību starp latviešiem Dārvinā, visā Austrālijā un ar organizācijām Latvijā un pasaulē. Kultūras pasākumi, saviesīgas tikšanās, izglītojošas aktivitātes un kopienas iniciatīvas stiprina mūsu kopīgo identitāti un piederības sajūtu.
+
+Neatkarīgi no tā, vai jums ir latviešu izcelsme, interese par Baltijas kultūru vai vēlme iepazīt dzīvīgu daudzkultūru kopienu, jūs esat laipni gaidīti.`
+    }
+  },
+  {
     slug: 'privacy',
     en: {
       title: 'Privacy Policy',

@@ -22,7 +22,7 @@ export function SpecialPageLayout({ page }: { page: SpecialPageContent }) {
             {content.title}
           </h1>
           <div className="w-16 h-1 bg-gradient-to-r from-sunset-red to-sunset-gold mb-12 rounded-full" />
-          <div className="space-y-6 text-lg leading-8 text-ink-light sm:text-xl sm:leading-9 font-medium bg-white/50 backdrop-blur-sm p-8 sm:p-10 rounded-3xl border border-white/60 shadow-lg">
+          <div className="space-y-6 text-lg leading-8 text-ink-light sm:text-xl sm:leading-9 font-medium">
             {paragraphs.map((paragraph, idx) => (
               <p key={idx}>{paragraph}</p>
             ))}

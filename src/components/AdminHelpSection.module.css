@@ -4,7 +4,7 @@
 
 .helpContainer hr {
   border: none;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--theme-elevation-150);
   margin: 0 0 2rem 0;
 }
 
@@ -12,7 +12,7 @@
   max-width: 900px;
   margin: 0 auto;
   padding: 0 2rem;
-  color: #374151;
+  color: var(--theme-text);
   font-size: 0.95rem;
   line-height: 1.6;
 }
@@ -21,14 +21,14 @@
   font-size: 1.75rem;
   font-weight: 600;
   margin: 0 0 1.5rem 0;
-  color: #1f2937;
+  color: var(--theme-text);
 }
 
 .helpContent h3 {
   font-size: 1.1rem;
   font-weight: 600;
   margin: 1.5rem 0 1rem 0;
-  color: #1f2937;
+  color: var(--theme-text);
 }
 
 .helpContent p {
@@ -51,23 +51,23 @@
   content: '▸';
   position: absolute;
   left: 0;
-  color: #6366f1;
+  color: var(--theme-elevation-600);
   font-weight: bold;
 }
 
 .helpContent strong {
-  color: #1f2937;
+  color: var(--theme-text);
   font-weight: 600;
 }
 
 .helpContent code {
-  background-color: #f3f4f6;
-  border: 1px solid #e5e7eb;
+  background-color: var(--theme-elevation-100);
+  border: 1px solid var(--theme-elevation-200);
   border-radius: 0.25rem;
   padding: 0.125rem 0.375rem;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 0.9rem;
-  color: #d946ef;
+  color: var(--theme-text);
 }
 
 .section {

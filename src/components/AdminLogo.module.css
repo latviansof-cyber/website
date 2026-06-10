@@ -1,0 +1,29 @@
+.brand {
+  align-items: center;
+  color: var(--theme-text);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.logo {
+  border-radius: 8px;
+  display: block;
+  height: 112px;
+  object-fit: contain;
+  width: 112px;
+}
+
+.title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.subtitle {
+  color: var(--theme-elevation-600);
+  font-size: 0.85rem;
+  line-height: 1.3;
+}

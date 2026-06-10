@@ -19,7 +19,7 @@ export function SiteHeader({ navItems }: { navItems: MainMenuItem[] }) {
         {t.nav.skipToContent}
       </a>
       <Container className="flex items-center justify-between gap-4 py-3 sm:py-4">
-        <a href="#top" className="group flex items-center gap-4">
+        <Link href="/#top" className="group flex items-center gap-4">
           <img
             src="/images/logo.png"
             alt="DLA Logo"
@@ -33,7 +33,7 @@ export function SiteHeader({ navItems }: { navItems: MainMenuItem[] }) {
               Dārvinas Latviešu Apvienība
             </span>
           </span>
-        </a>
+        </Link>
 
         <nav aria-label="Primary" className="flex items-center gap-2 sm:gap-4">
           <ul className="hidden items-center gap-2 text-sm font-semibold text-white/90 sm:flex">

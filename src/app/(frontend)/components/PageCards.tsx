@@ -50,7 +50,7 @@ export function PageCards({ pages, homepage }: { pages: WebsitePage[]; homepage:
               >
                 <div
                   className={`aspect-[16/10] overflow-hidden ${
-                    isLogo ? 'bg-cream p-6 sm:p-8' : 'bg-slate-100'
+                    isLogo ? 'bg-cream p-6 sm:p-8' : 'bg-white'
                   }`}
                 >
                   <img

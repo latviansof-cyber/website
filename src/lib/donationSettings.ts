@@ -22,20 +22,20 @@ export type DonationSettingsContent = {
 
 export const fallbackDonationSettings: DonationSettingsContent = {
   en: {
-    bankName: 'Bank',
-    bsb: '000-000',
-    accountNumber: '00-000-0000',
+    bankName: 'Not configured',
+    bsb: 'Not configured',
+    accountNumber: 'Not configured',
     accountName: 'Latvian Association of Darwin',
-    payId: 'donate@latviansofdarwin.org.au',
-    instructions: 'Use your bank app or PayID to send your donation.',
+    payId: 'Not configured',
+    instructions: 'Enter verified donation details in Payload admin.',
   },
   lv: {
-    bankName: 'Banka',
-    bsb: '000-000',
-    accountNumber: '00-000-0000',
+    bankName: 'Nav konfigurēts',
+    bsb: 'Nav konfigurēts',
+    accountNumber: 'Nav konfigurēts',
     accountName: 'Dārvinas Latviešu Apvienība',
-    payId: 'donate@latviansofdarwin.org.au',
-    instructions: 'Izmantojiet savu bankas lietotni vai PayID, lai nosūtītu ziedojumu.',
+    payId: 'Nav konfigurēts',
+    instructions: 'Ievadiet pārbaudītu ziedojumu informāciju Payload administrācijā.',
   },
 }
 

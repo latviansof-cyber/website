@@ -97,7 +97,6 @@ export interface Config {
     homepage: Homepage;
     'main-menu': MainMenu;
     footer: Footer;
-    pages: Page;
     'site-settings': SiteSetting;
     'donation-settings': DonationSetting;
   };
@@ -105,7 +104,6 @@ export interface Config {
     homepage: HomepageSelect<false> | HomepageSelect<true>;
     'main-menu': MainMenuSelect<false> | MainMenuSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
-    pages: PagesSelect<false> | PagesSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     'donation-settings': DonationSettingsSelect<false> | DonationSettingsSelect<true>;
   };

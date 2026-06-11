@@ -10,6 +10,9 @@ import * as migration_20260610_103232_add_footer_and_special_pages from './20260
 import * as migration_20260610_105121_move_about_to_special_pages from './20260610_105121_move_about_to_special_pages';
 import * as migration_20260610_112000_backfill_event_versions from './20260610_112000_backfill_event_versions';
 import * as migration_20260610_113750_move_contact_to_special_pages from './20260610_113750_move_contact_to_special_pages';
+import * as migration_20260611_105341 from './20260611_105341';
+import * as migration_20260611_194132_backfill_special_page_versions from './20260611_194132_backfill_special_page_versions';
+import * as migration_20260611_201944_repair_page_versions from './20260611_201944_repair_page_versions';
 
 export const migrations = [
   {
@@ -70,6 +73,21 @@ export const migrations = [
   {
     up: migration_20260610_113750_move_contact_to_special_pages.up,
     down: migration_20260610_113750_move_contact_to_special_pages.down,
-    name: '20260610_113750_move_contact_to_special_pages'
+    name: '20260610_113750_move_contact_to_special_pages',
+  },
+  {
+    up: migration_20260611_105341.up,
+    down: migration_20260611_105341.down,
+    name: '20260611_105341',
+  },
+  {
+    up: migration_20260611_194132_backfill_special_page_versions.up,
+    down: migration_20260611_194132_backfill_special_page_versions.down,
+    name: '20260611_194132_backfill_special_page_versions',
+  },
+  {
+    up: migration_20260611_201944_repair_page_versions.up,
+    down: migration_20260611_201944_repair_page_versions.down,
+    name: '20260611_201944_repair_page_versions'
   },
 ];

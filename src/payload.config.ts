@@ -16,7 +16,6 @@ import { SpecialPages } from './collections/SpecialPages'
 import { Homepage } from './globals/Homepage'
 import { MainMenu } from './globals/MainMenu'
 import { Footer } from './globals/Footer'
-import { Pages as PagesGlobal } from './globals/Pages'
 import { SiteSettings } from './globals/SiteSettings'
 import { DonationSettings } from './globals/DonationSettings'
 
@@ -61,7 +60,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Pages, Events, SpecialPages],
-  globals: [Homepage, MainMenu, Footer, PagesGlobal, SiteSettings, DonationSettings],
+  globals: [Homepage, MainMenu, Footer, SiteSettings, DonationSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET,
   typescript: {

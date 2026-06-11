@@ -1,13 +1,14 @@
 'use client'
 
-import { useId, useState, type FormEvent } from 'react'
+import { useCallback, useId, useState, type FormEvent } from 'react'
 import { useLanguage } from '../i18n/LanguageProvider'
+import type { DonationSettingsContent } from '@/lib/donationSettings'
 import { Container } from '../components/ui/Container'
 
 type Frequency = 'one-time' | 'monthly'
 
-export function DonationWidget() {
-  const { t } = useLanguage()
+export function DonationWidget({ donationSettings }: { donationSettings?: DonationSettingsContent }) {
+  const { t, lang } = useLanguage()
   const donateCopy = t.footer.donate
 
   const [frequency, setFrequency] = useState<Frequency>('one-time')
@@ -39,11 +40,13 @@ export function DonationWidget() {
     setError(null)
   }
 
-  const handleCopy = (text: string) => {
-    if (typeof navigator !== 'undefined') {
-      navigator.clipboard.writeText(text)
+  const handleCopy = useCallback(async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+    } catch (error) {
+      console.warn('[donate] Failed to copy to clipboard:', error)
     }
-  }
+  }, [])
 
   if (isSuccess) {
     return (
@@ -93,7 +96,7 @@ export function DonationWidget() {
             <p className="mt-3 max-w-3xl text-base leading-relaxed text-slate-600">{donateCopy.urgentIntro}</p>
             <div className="mt-8 grid gap-6 md:grid-cols-3">
               {donateCopy.urgentItems.map((item, i) => (
-                <div key={i} className="rounded-2xl bg-white/60 p-6 shadow-sm border border-white/40 backdrop-blur-sm transition hover:-translate-y-1 hover:shadow-md">
+                <div key={`ui-${i}`} className="rounded-2xl bg-white/60 p-6 shadow-sm border border-white/40 backdrop-blur-sm transition hover:-translate-y-1 hover:shadow-md">
                   <p className="text-lg font-bold text-sunset-orange">{item.title}</p>
                   <p className="mt-2 text-sm leading-relaxed text-slate-600">{item.body}</p>
                 </div>
@@ -106,7 +109,7 @@ export function DonationWidget() {
         <section>
           <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 rounded-full bg-white/50 px-8 py-4 backdrop-blur-sm border border-slate-200">
             {donateCopy.features.map((feature, i) => (
-              <p key={i} className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+              <p key={`f-${i}`} className="flex items-center gap-2 text-sm font-semibold text-slate-700">
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">✓</span>
                 {feature}
               </p>
@@ -122,9 +125,9 @@ export function DonationWidget() {
             <p className="mt-3 max-w-3xl text-base leading-relaxed text-slate-600">{donateCopy.quickIntro}</p>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-            {donateCopy.presetAmounts.map((preset, i) => (
+            {donateCopy.presetAmounts.map((preset) => (
               <button
-                key={i}
+                key={`amount-${preset.amount}`}
                 type="button"
                 onClick={() => { setCustomAmount(preset.amount.toString()) }}
                 className="group flex flex-col items-start rounded-3xl border-2 border-slate-200 bg-white p-6 text-left transition hover:border-sunset-orange hover:shadow-lg focus:outline-none"
@@ -203,7 +206,7 @@ export function DonationWidget() {
               <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-600">{donateCopy.directIntro}</p>
               <div className="mx-auto mt-6 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 shadow-sm">
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 font-bold text-xs">✓</span>
-                <span className="font-bold text-ink">{donateCopy.bankOrgName}</span>
+                <span className="font-bold text-ink">{donationSettings?.[lang === 'lv' ? 'lv' : 'en'].bankName ?? donateCopy.bankOrgName}</span>
               </div>
             </div>
 
@@ -227,16 +230,16 @@ export function DonationWidget() {
                         <div className="flex items-center justify-between rounded-xl bg-white p-3 border border-slate-200 shadow-sm">
                           <div>
                             <p className="text-xs font-bold uppercase tracking-widest text-slate-400">{donateCopy.bankBsbLabel}</p>
-                            <p className="font-mono text-lg font-bold text-ink">{donateCopy.bankBsb}</p>
+                            <p className="font-mono text-lg font-bold text-ink">{donationSettings?.[lang === 'lv' ? 'lv' : 'en'].bsb ?? donateCopy.bankBsb}</p>
                           </div>
-                          <button onClick={() => handleCopy(donateCopy.bankBsb)} className="rounded-lg bg-slate-100 px-4 py-2 text-xs font-bold text-slate-600 transition hover:bg-sunset-orange hover:text-white">Copy</button>
+                          <button onClick={() => handleCopy(donationSettings?.[lang === 'lv' ? 'lv' : 'en'].bsb ?? donateCopy.bankBsb)} className="rounded-lg bg-slate-100 px-4 py-2 text-xs font-bold text-slate-600 transition hover:bg-sunset-orange hover:text-white">Copy</button>
                         </div>
                         <div className="flex items-center justify-between rounded-xl bg-white p-3 border border-slate-200 shadow-sm">
                           <div>
                             <p className="text-xs font-bold uppercase tracking-widest text-slate-400">{donateCopy.bankAccountLabel}</p>
-                            <p className="font-mono text-lg font-bold text-ink">{donateCopy.bankAccount}</p>
+                            <p className="font-mono text-lg font-bold text-ink">{donationSettings?.[lang === 'lv' ? 'lv' : 'en'].accountNumber ?? donateCopy.bankAccount}</p>
                           </div>
-                          <button onClick={() => handleCopy(donateCopy.bankAccount)} className="rounded-lg bg-slate-100 px-4 py-2 text-xs font-bold text-slate-600 transition hover:bg-sunset-orange hover:text-white">Copy</button>
+                          <button onClick={() => handleCopy(donationSettings?.[lang === 'lv' ? 'lv' : 'en'].accountNumber ?? donateCopy.bankAccount)} className="rounded-lg bg-slate-100 px-4 py-2 text-xs font-bold text-slate-600 transition hover:bg-sunset-orange hover:text-white">Copy</button>
                         </div>
                       </div>
                     </div>
@@ -260,9 +263,9 @@ export function DonationWidget() {
                 <div className="flex items-center justify-between rounded-xl bg-white p-4 border border-slate-200 shadow-sm mb-6">
                   <div className="overflow-hidden">
                     <p className="text-xs font-bold uppercase tracking-widest text-slate-400">{donateCopy.payIdEmailLabel}</p>
-                    <p className="truncate text-lg font-bold text-ink">{donateCopy.payIdEmail}</p>
+                    <p className="truncate text-lg font-bold text-ink">{donationSettings?.[lang === 'lv' ? 'lv' : 'en'].payId ?? donateCopy.payIdEmail}</p>
                   </div>
-                  <button onClick={() => handleCopy(donateCopy.payIdEmail)} className="shrink-0 rounded-lg bg-slate-100 px-4 py-2 text-xs font-bold text-slate-600 transition hover:bg-sunset-orange hover:text-white">Copy</button>
+                  <button onClick={() => handleCopy(donationSettings?.[lang === 'lv' ? 'lv' : 'en'].payId ?? donateCopy.payIdEmail)} className="shrink-0 rounded-lg bg-slate-100 px-4 py-2 text-xs font-bold text-slate-600 transition hover:bg-sunset-orange hover:text-white">Copy</button>
                 </div>
 
                 <div className="rounded-2xl bg-amber-50 p-5 border border-amber-100">

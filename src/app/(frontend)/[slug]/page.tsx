@@ -10,6 +10,7 @@ import { fallbackPages, getWebsitePage } from '@/lib/pages'
 import { fallbackSpecialPages, getSpecialPage } from '@/lib/specialPages'
 import { getMainMenu } from '@/lib/navigation'
 import { getFooter } from '@/lib/footer'
+import { getSiteSettings } from '@/lib/siteSettings'
 import { SITE_NAME, SITE_URL, absoluteURL } from '@/lib/site'
 import { getOgImageUrlByPath } from '@/lib/ogImage'
 
@@ -31,8 +32,8 @@ export async function generateMetadata({
   
   if (!page && !specialPage) return {}
 
-  const title = page ? (page.meta.title || page.en.title) : specialPage!.en.title
-  const description = page ? (page.meta.description || page.en.excerpt) : specialPage!.en.title
+  const title = page ? (page.meta.title || page.en.title) : (specialPage!.meta?.en?.title || specialPage!.en.title)
+  const description = page ? (page.meta.description || page.en.excerpt) : (specialPage!.meta?.en?.description || specialPage!.en.title)
   const ogImage = getOgImageUrlByPath(`/${slug}`)
 
   return {
@@ -77,18 +78,19 @@ export default async function WebsiteContentPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const [page, specialPage, mainMenu, footer] = await Promise.all([
+  const [page, specialPage, mainMenu, footer, siteSettings] = await Promise.all([
     getWebsitePage(slug),
     getSpecialPage(slug),
     getMainMenu(),
     getFooter(),
+    getSiteSettings(),
   ])
   
   if (!page && !specialPage) notFound()
 
   return (
     <LanguageProvider>
-      <SiteHeader navItems={mainMenu} />
+      <SiteHeader navItems={mainMenu} siteSettings={siteSettings} />
       {page ? (
         <>
           <JsonLd
@@ -120,7 +122,7 @@ export default async function WebsiteContentPage({
       ) : (
         <SpecialPageLayout page={specialPage} />
       )}
-      <SiteFooter footer={footer} />
+      <SiteFooter footer={footer} siteSettings={siteSettings} />
     </LanguageProvider>
   )
 }

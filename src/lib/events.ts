@@ -1,4 +1,5 @@
 import type { Event as PayloadEvent } from '@/payload-types'
+import { mediaURL } from '@/lib/media'
 import { contentByLang } from '@/app/(frontend)/i18n/content'
 import { getPayloadClient } from './payload'
 
@@ -54,11 +55,6 @@ export const fallbackEvents: WebsiteEvent[] = contentByLang.en.events.items.map(
   }
 })
 
-function mediaURL(value: PayloadEvent['image']): string | undefined {
-  if (value && typeof value === 'object' && 'url' in value && typeof value.url === 'string') {
-    return value.url
-  }
-}
 
 export async function getWebsiteEvents(): Promise<WebsiteEvent[]> {
   try {
@@ -85,7 +81,7 @@ export async function getWebsiteEvents(): Promise<WebsiteEvent[]> {
       lv: event.lv,
     }))
   } catch (error) {
-    console.warn('[events] Payload events unavailable.', error)
-    return []
+    console.warn('[events] Payload events unavailable; using fallback events.', error)
+    return fallbackEvents
   }
 }

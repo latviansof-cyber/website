@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { contentByLang, type Lang, type SiteContent } from './content'
@@ -76,6 +76,6 @@ export function useLanguage(): LanguageContextValue {
   return ctx
 }
 
-// TODO(DLA-201): switch the static `en` initial state to a server-injected value (or render
-//   a loading shell) once Payload's `SiteSettings` global is wired up. The current pattern
-//   can cause a brief "flash of English content" on a Latvian browser visiting the page.
+// TODO: switch the static `en` initial state to a server-injected value (or render
+//   a loading shell) now that Payload's SiteSettings global exists. The current
+//   pattern can cause a brief "flash of English content" on a Latvian browser.

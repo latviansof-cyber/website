@@ -25,6 +25,7 @@
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
     "genog-local": "node scripts/run-og-images-local.mjs",
     "generate:types:cloudflare": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
+    "seed": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed.ts",
     "deploy:database": "cross-env CI=true NODE_ENV=production PAYLOAD_SECRET=ignore payload migrate && wrangler d1 execute D1 --command 'PRAGMA optimize' --env=$CLOUDFLARE_ENV --remote"
   },
   "dependencies": {

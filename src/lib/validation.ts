@@ -141,6 +141,13 @@ export const SiteContentSchema = z.object({
 
 export type SiteContentValidated = z.infer<typeof SiteContentSchema>
 
+export const slugValidator = (value: unknown): true | string => {
+  if (typeof value !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)) {
+    return 'Use lowercase letters, numbers, and hyphens only.'
+  }
+  return true
+}
+
 /**
  * Validate any object as a `SiteContent`. Returns a discriminated result so the
  * LanguageProvider can choose to log + fall back instead of throwing.

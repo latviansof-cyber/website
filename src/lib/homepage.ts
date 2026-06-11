@@ -1,4 +1,5 @@
 import type { Homepage as PayloadHomepage } from '@/payload-types'
+import { mediaURL } from '@/lib/media'
 import { contentByLang } from '@/app/(frontend)/i18n/content'
 import { getPayloadClient } from './payload'
 
@@ -61,11 +62,6 @@ export const fallbackHomepage: HomepageContent = {
   },
 }
 
-function mediaURL(value: PayloadHomepage['heroImage']): string | undefined {
-  if (value && typeof value === 'object' && 'url' in value && typeof value.url === 'string') {
-    return value.url
-  }
-}
 
 export async function getHomepage(): Promise<HomepageContent> {
   try {

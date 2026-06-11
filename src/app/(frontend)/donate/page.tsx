@@ -6,6 +6,8 @@ import { DonationWidget } from './DonationWidget'
 import { getOgImageUrlByPath } from '@/lib/ogImage'
 import { getMainMenu } from '@/lib/navigation'
 import { getFooter } from '@/lib/footer'
+import { getSiteSettings } from '@/lib/siteSettings'
+import { getDonationSettings } from '@/lib/donationSettings'
 
 const ogImage = getOgImageUrlByPath('/donate')
 
@@ -39,15 +41,15 @@ export const metadata: Metadata = {
 }
 
 export default async function DonatePage() {
-  const [mainMenu, footer] = await Promise.all([getMainMenu(), getFooter()])
+  const [mainMenu, footer, siteSettings, donationSettings] = await Promise.all([getMainMenu(), getFooter(), getSiteSettings(), getDonationSettings()])
 
   return (
     <LanguageProvider>
-      <SiteHeader navItems={mainMenu} />
+      <SiteHeader navItems={mainMenu} siteSettings={siteSettings} />
       <main id="main" className="bg-cream text-ink">
-        <DonationWidget />
+        <DonationWidget donationSettings={donationSettings} />
       </main>
-      <SiteFooter footer={footer} />
+      <SiteFooter footer={footer} siteSettings={siteSettings} />
     </LanguageProvider>
   )
 }

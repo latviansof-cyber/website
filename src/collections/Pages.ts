@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { slugValidator } from '@/lib/validation'
 import { CallToAction } from '../blocks/CallToAction'
 import { ContentBlock } from '../blocks/Content'
 import { HeroBlock } from '../blocks/Hero'
@@ -56,12 +57,7 @@ export const Pages: CollectionConfig = {
       required: true,
       unique: true,
       index: true,
-      validate: (value: unknown) => {
-        if (typeof value !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)) {
-          return 'Use lowercase letters, numbers, and hyphens only.'
-        }
-        return true
-      },
+      validate: slugValidator,
     },
     {
       name: 'order',

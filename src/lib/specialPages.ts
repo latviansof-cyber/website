@@ -10,6 +10,16 @@ export type SpecialPageContent = {
   slug: string
   en: SpecialPageLanguage
   lv: SpecialPageLanguage
+  meta?: {
+    en?: {
+      title?: string | null
+      description?: string | null
+    }
+    lv?: {
+      title?: string | null
+      description?: string | null
+    }
+  }
 }
 
 export const fallbackSpecialPages: SpecialPageContent[] = [
@@ -199,29 +209,61 @@ E-pasts: hello@darwinlatvians.org`
 export async function getSpecialPage(slug: string): Promise<SpecialPageContent | undefined> {
   try {
     const payload = await getPayloadClient()
+
+    // First, try to find a published document
     const result = await payload.find({
       collection: 'special-pages',
       depth: 1,
       where: {
-        slug: {
-          equals: slug,
-        },
-        _status: {
-          equals: 'published',
-        },
+        slug: { equals: slug },
+        _status: { equals: 'published' },
       },
     })
 
-    if (result.docs.length === 0) {
+    if (result.docs.length > 0) {
+      const doc = result.docs[0]
+      return {
+        slug: doc.slug,
+        en: doc.en,
+        lv: doc.lv,
+        meta: doc.meta,
+      }
+    }
+
+    // Check if a draft exists (don't overwrite admin's work)
+    const draftResult = await payload.find({
+      collection: 'special-pages',
+      depth: 1,
+      where: {
+        slug: { equals: slug },
+        _status: { equals: 'draft' },
+      },
+    })
+
+    if (draftResult.docs.length > 0) {
+      // Draft exists but not published yet — show fallback until admin publishes
       return fallbackSpecialPages.find((p) => p.slug === slug)
     }
 
-    const doc = result.docs[0]
-    return {
-      slug: doc.slug,
-      en: doc.en,
-      lv: doc.lv,
-    }
+    // No document exists at all — create one from fallback content
+    const fallback = fallbackSpecialPages.find((p) => p.slug === slug)
+    if (!fallback) return undefined
+
+    const displayName = slug.charAt(0).toUpperCase() + slug.slice(1)
+    await payload.create({
+      collection: 'special-pages',
+      draft: false,
+      data: {
+        adminTitle: displayName,
+        slug,
+        en: fallback.en,
+        lv: fallback.lv,
+      },
+      overrideAccess: true,
+    })
+
+    console.log(`[special-pages] Created "${slug}" from fallback content. It can now be edited in the admin panel.`)
+    return fallback
   } catch (error) {
     console.warn(`[special-pages] Payload special page ${slug} unavailable; using fallback.`, error)
     return fallbackSpecialPages.find((p) => p.slug === slug)

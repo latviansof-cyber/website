@@ -30,11 +30,7 @@ export function Hero({ homepage }: { homepage: HomepageContent }) {
       ) : null}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 opacity-70"
-        style={{
-          backgroundImage:
-            'radial-gradient(circle at 50% 100%, rgba(251,191,36,0.6), transparent 60%), radial-gradient(circle at 20% 80%, rgba(249,115,22,0.5), transparent 50%)',
-        }}
+        className="absolute inset-0 -z-10 opacity-70 bg-[radial-gradient(circle_at_50%_100%,rgba(251,191,36,0.6),transparent_60%),radial-gradient(circle_at_20%_80%,rgba(249,115,22,0.5),transparent_50%)]"
       />
       {/* Dark overlay at bottom for smooth transition */}
       <div

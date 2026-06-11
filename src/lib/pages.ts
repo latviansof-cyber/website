@@ -1,4 +1,5 @@
 import type { Page as PayloadPage } from '@/payload-types'
+import { mediaURL } from '@/lib/media'
 import { getPayloadClient } from './payload'
 
 export type PageLanguage = {
@@ -211,11 +212,6 @@ export const fallbackPages: WebsitePage[] = [
   }),
 ]
 
-function mediaURL(value: unknown): string | undefined {
-  if (value && typeof value === 'object' && 'url' in value && typeof value.url === 'string') {
-    return value.url
-  }
-}
 
 function mapLayout(
   layout: PayloadPage['layout'],

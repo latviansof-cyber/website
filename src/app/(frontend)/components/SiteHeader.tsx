@@ -5,10 +5,11 @@ import { useLanguage } from '../i18n/LanguageProvider'
 import { Container } from './ui/Container'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import type { MainMenuItem } from '@/lib/navigation'
+import type { SiteSettingsContent } from '@/lib/siteSettings'
 
 const donateCta = { href: '/donate', labelKey: 'donate' as const }
 
-export function SiteHeader({ navItems }: { navItems: MainMenuItem[] }) {
+export function SiteHeader({ navItems, siteSettings }: { navItems: MainMenuItem[]; siteSettings: SiteSettingsContent }) {
   const { lang, t } = useLanguage()
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 glass-panel-latvian text-white shadow-lg transition-all duration-300">
@@ -22,15 +23,15 @@ export function SiteHeader({ navItems }: { navItems: MainMenuItem[] }) {
         <Link href="/#top" className="group flex items-center gap-4">
           <img
             src="/images/logo.png"
-            alt="DLA Logo"
+            alt={siteSettings.en.associationName}
             className="h-16 w-16 sm:h-20 sm:w-20 object-contain rounded-2xl bg-white p-1.5 drop-shadow-lg transition-transform duration-300 group-hover:scale-105"
           />
           <span className="hidden flex-col leading-tight sm:flex">
             <span className="text-sm font-bold tracking-wide text-white drop-shadow-sm transition-colors group-hover:text-sunset-peach">
-              Latvian Association of Darwin
+              {lang === 'en' ? siteSettings.en.associationName : siteSettings.lv.associationName}
             </span>
             <span className="text-xs text-white/80 font-medium tracking-wide">
-              Dārvinas Latviešu Apvienība
+              {lang === 'en' ? siteSettings.lv.associationName : siteSettings.en.associationName}
             </span>
           </span>
         </Link>
@@ -102,6 +103,3 @@ export function SiteHeader({ navItems }: { navItems: MainMenuItem[] }) {
   )
 }
 
-// TODO(DLA-203): the brand mark ("DLA"), association name and tagline are hard-coded here.
-//   Once the `SiteSettings` global exists in Payload (DLA-203), these should be fetched
-//   from there so non-developers can update them via the admin panel.

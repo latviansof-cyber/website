@@ -97,11 +97,17 @@ export interface Config {
     homepage: Homepage;
     'main-menu': MainMenu;
     footer: Footer;
+    pages: Page;
+    'site-settings': SiteSetting;
+    'donation-settings': DonationSetting;
   };
   globalsSelect: {
     homepage: HomepageSelect<false> | HomepageSelect<true>;
     'main-menu': MainMenuSelect<false> | MainMenuSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'donation-settings': DonationSettingsSelect<false> | DonationSettingsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -352,6 +358,28 @@ export interface SpecialPage {
      * Separate paragraphs with a blank line.
      */
     content: string;
+  };
+  meta?: {
+    en?: {
+      /**
+       * Optional search title. Max 60 characters.
+       */
+      title?: string | null;
+      /**
+       * Optional search description. Max 160 characters.
+       */
+      description?: string | null;
+    };
+    lv?: {
+      /**
+       * Optional search title. Max 60 characters.
+       */
+      title?: string | null;
+      /**
+       * Optional search description. Max 160 characters.
+       */
+      description?: string | null;
+    };
   };
   updatedAt: string;
   createdAt: string;
@@ -648,6 +676,22 @@ export interface SpecialPagesSelect<T extends boolean = true> {
         title?: T;
         content?: T;
       };
+  meta?:
+    | T
+    | {
+        en?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+            };
+        lv?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+            };
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -787,6 +831,60 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  en: {
+    associationName: string;
+    tagline?: string | null;
+    contactEmail?: string | null;
+  };
+  lv: {
+    associationName: string;
+    tagline?: string | null;
+    contactEmail?: string | null;
+  };
+  /**
+   * Links to Facebook, Instagram, etc.
+   */
+  socialLinks?:
+    | {
+        platform: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "donation-settings".
+ */
+export interface DonationSetting {
+  id: number;
+  en: {
+    bankName: string;
+    bsb: string;
+    accountNumber: string;
+    accountName: string;
+    payId?: string | null;
+    instructions?: string | null;
+  };
+  lv: {
+    bankName: string;
+    bsb: string;
+    accountNumber: string;
+    accountName: string;
+    payId?: string | null;
+    instructions?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "homepage_select".
  */
 export interface HomepageSelect<T extends boolean = true> {
@@ -870,6 +968,65 @@ export interface FooterSelect<T extends boolean = true> {
         lv?: T;
         newTab?: T;
         id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  en?:
+    | T
+    | {
+        associationName?: T;
+        tagline?: T;
+        contactEmail?: T;
+      };
+  lv?:
+    | T
+    | {
+        associationName?: T;
+        tagline?: T;
+        contactEmail?: T;
+      };
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "donation-settings_select".
+ */
+export interface DonationSettingsSelect<T extends boolean = true> {
+  en?:
+    | T
+    | {
+        bankName?: T;
+        bsb?: T;
+        accountNumber?: T;
+        accountName?: T;
+        payId?: T;
+        instructions?: T;
+      };
+  lv?:
+    | T
+    | {
+        bankName?: T;
+        bsb?: T;
+        accountNumber?: T;
+        accountName?: T;
+        payId?: T;
+        instructions?: T;
       };
   updatedAt?: T;
   createdAt?: T;

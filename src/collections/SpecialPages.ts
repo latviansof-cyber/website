@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { slugValidator } from '@/lib/validation'
 
 const specialPageFields = (language: string) => [
   {
@@ -59,12 +60,7 @@ export const SpecialPages: CollectionConfig = {
       required: true,
       unique: true,
       index: true,
-      validate: (value: unknown) => {
-        if (typeof value !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)) {
-          return 'Use lowercase letters, numbers, and hyphens only.'
-        }
-        return true
-      },
+      validate: slugValidator,
     },
     {
       type: 'tabs',
@@ -86,6 +82,78 @@ export const SpecialPages: CollectionConfig = {
               name: 'lv',
               type: 'group',
               fields: specialPageFields('Latvian'),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'meta',
+      type: 'group',
+      label: 'SEO and social sharing',
+      fields: [
+        {
+          type: 'tabs',
+          tabs: [
+            {
+              label: 'English',
+              fields: [
+                {
+                  name: 'en',
+                  type: 'group',
+                  fields: [
+                    {
+                      name: 'title',
+                      type: 'text',
+                      label: 'English meta title',
+                      maxLength: 60,
+                      admin: {
+                        description: 'Optional search title. Max 60 characters.',
+                      },
+                    },
+                    {
+                      name: 'description',
+                      type: 'textarea',
+                      label: 'English meta description',
+                      maxLength: 160,
+                      admin: {
+                        description: 'Optional search description. Max 160 characters.',
+                        rows: 3,
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              label: 'Latviski',
+              fields: [
+                {
+                  name: 'lv',
+                  type: 'group',
+                  fields: [
+                    {
+                      name: 'title',
+                      type: 'text',
+                      label: 'Latvian meta title',
+                      maxLength: 60,
+                      admin: {
+                        description: 'Optional search title. Max 60 characters.',
+                      },
+                    },
+                    {
+                      name: 'description',
+                      type: 'textarea',
+                      label: 'Latvian meta description',
+                      maxLength: 160,
+                      admin: {
+                        description: 'Optional search description. Max 160 characters.',
+                        rows: 3,
+                      },
+                    },
+                  ],
+                },
+              ],
             },
           ],
         },

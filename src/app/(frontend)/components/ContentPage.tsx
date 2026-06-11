@@ -51,8 +51,8 @@ function ContentLayout({ block }: { block: ContentLayoutBlock }) {
             <h2 className="mb-7 font-serif text-4xl font-bold text-ink">{block.heading}</h2>
           ) : null}
           <div className="space-y-7 text-lg leading-8 text-ink-light sm:text-xl sm:leading-9">
-            {paragraphs.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
+            {paragraphs.map((paragraph, idx) => (
+              <p key={`p-${idx}`}>{paragraph}</p>
             ))}
           </div>
         </article>

@@ -3,26 +3,9 @@ import { mediaURL } from '@/lib/media'
 import { contentByLang } from '@/app/(frontend)/i18n/content'
 import { getPayloadClient } from './payload'
 
-export type EventAccent = 'emerald' | 'amber' | 'sky' | 'rose' | 'violet' | 'slate'
+import { isEventPast, type WebsiteEvent, type EventAccent } from './eventUtils'
 
-export type WebsiteEvent = {
-  slug: string
-  order: number
-  accentTone: EventAccent
-  image?: string
-  eventDate?: string
-  isPast?: boolean
-  en: {
-    title: string
-    body: string
-    dateText?: string
-  }
-  lv: {
-    title: string
-    body: string
-    dateText?: string
-  }
-}
+export { isEventPast, type WebsiteEvent, type EventAccent }
 
 const fallbackImageBySlug: Record<string, string> = {
   lieldienas: '/images/img2.webp',
@@ -46,6 +29,30 @@ const fallbackAccentBySlug: Record<string, EventAccent> = {
   'past-nov18-2025': 'violet',
 }
 
+const fallbackDateBySlug: Record<string, string> = {
+  lieldienas: '2026-04-05',
+  may4: '2026-05-04',
+  jani: '2026-06-23',
+  'baltijas-cels': '2026-08-23',
+  nov18: '2026-11-18',
+}
+
+const fallbackDateTextEnBySlug: Record<string, string> = {
+  lieldienas: 'April 5, 2026',
+  may4: 'May 4, 2026',
+  jani: 'June 23, 2026',
+  'baltijas-cels': 'August 23, 2026',
+  nov18: 'November 18, 2026',
+}
+
+const fallbackDateTextLvBySlug: Record<string, string> = {
+  lieldienas: '2026. gada 5. aprīlis',
+  may4: '2026. gada 4. maijs',
+  jani: '2026. gada 23. jūnijs',
+  'baltijas-cels': '2026. gada 23. augusts',
+  nov18: '2026. gada 18. novembris',
+}
+
 const baseFallbackEvents: WebsiteEvent[] = contentByLang.en.events.items.map((event, index) => {
   const latvian = contentByLang.lv.events.items.find((item) => item.id === event.id)
 
@@ -54,14 +61,17 @@ const baseFallbackEvents: WebsiteEvent[] = contentByLang.en.events.items.map((ev
     order: (index + 1) * 10,
     accentTone: fallbackAccentBySlug[event.id] ?? 'slate',
     image: fallbackImageBySlug[event.id],
+    eventDate: fallbackDateBySlug[event.id],
     isPast: false,
     en: {
       title: event.title,
       body: event.body,
+      dateText: fallbackDateTextEnBySlug[event.id],
     },
     lv: {
       title: latvian?.title ?? event.title,
       body: latvian?.body ?? event.body,
+      dateText: fallbackDateTextLvBySlug[event.id],
     },
   }
 })
@@ -150,7 +160,8 @@ export async function getWebsiteEvents(): Promise<WebsiteEvent[]> {
       order: event.order,
       accentTone: event.accentTone,
       image: mediaURL(event.image) ?? fallbackImageBySlug[event.slug],
-      eventDate: event.eventDate ?? undefined,
+      eventDate: event.eventDate ?? fallbackDateBySlug[event.slug],
+      facebookUrl: (event as any).facebookUrl?.trim() || undefined,
       isPast: Boolean(event.isPast),
       en: event.en,
       lv: event.lv,

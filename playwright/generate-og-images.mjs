@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url'
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const outputDir = path.join(projectRoot, 'public', 'og-images')
-const baseURL = (process.env.OG_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://darwinlatvians.org')
+const baseURL = (process.env.OG_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://latviansofdarwin.org.au')
   .replace(/\/+$/, '')
 
 function toOgFilename(rawURL) {

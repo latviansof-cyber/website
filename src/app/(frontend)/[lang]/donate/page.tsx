@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { SiteHeader } from '../../components/SiteHeader'
 import { SiteFooter } from '../../components/SiteFooter'
 import { DonationWidget } from '../../donate/DonationWidget'
+import { ErrorBoundary } from '../../components/ui/ErrorBoundary'
 import { getOgImageUrlByPath } from '@/lib/ogImage'
 import { getMainMenu } from '@/lib/navigation'
 import { getFooter } from '@/lib/footer'
@@ -59,7 +60,9 @@ export default async function DonatePage({ params }: { params: Promise<{ lang: s
     <>
       <SiteHeader navItems={mainMenu} siteSettings={siteSettings} />
       <main id="main" className="bg-cream text-ink">
-        <DonationWidget donationSettings={donationSettings} />
+        <ErrorBoundary>
+          <DonationWidget donationSettings={donationSettings} />
+        </ErrorBoundary>
       </main>
       <SiteFooter footer={footer} siteSettings={siteSettings} />
     </>

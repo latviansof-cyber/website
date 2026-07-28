@@ -169,26 +169,26 @@ export const fallbackPages: WebsitePage[] = [
     cta: {
       en: {
         heading: 'Ready to get involved?',
-        text: 'Ask about membership, volunteering, or the next community gathering.',
+        text: 'Ask about membership, volunteering, or how you can contribute to the Latvian community in Darwin.',
         buttons: [
           {
             label: 'Email the Association',
-            link: 'mailto:hello@darwinlatvians.org',
+            link: 'mailto:hello@latviansofdarwin.org.au',
             variant: 'primary',
           },
-          { label: 'See our events', link: '/#events', variant: 'secondary' },
+          { label: 'Support our community', link: '/donate', variant: 'secondary' },
         ],
       },
       lv: {
         heading: 'Vai vēlaties iesaistīties?',
-        text: 'Jautājiet par dalību, brīvprātīgo darbu vai nākamo kopienas tikšanos.',
+        text: 'Jautājiet par dalību, brīvprātīgo darbu vai kā varat atbalstīt latviešu kopienu Dārvinā.',
         buttons: [
           {
             label: 'Rakstīt apvienībai',
-            link: 'mailto:hello@darwinlatvians.org',
+            link: 'mailto:hello@latviansofdarwin.org.au',
             variant: 'primary',
           },
-          { label: 'Skatīt pasākumus', link: '/#events', variant: 'secondary' },
+          { label: 'Ziedot kopienai', link: '/donate', variant: 'secondary' },
         ],
       },
     },
@@ -303,6 +303,42 @@ export async function getWebsitePages(): Promise<WebsitePage[]> {
 }
 
 export async function getWebsitePage(slug: string): Promise<WebsitePage | undefined> {
-  const pages = await getWebsitePages()
-  return pages.find((page) => page.slug === slug)
+  try {
+    const payload = await getPayloadClient()
+    const result = await payload.find({
+      collection: 'pages',
+      depth: 1,
+      limit: 1,
+      pagination: false,
+      where: {
+        _status: { equals: 'published' },
+        slug: { equals: slug },
+      },
+    })
+
+    if (result.docs.length === 0) return fallbackPages.find((p) => p.slug === slug)
+
+    const page = result.docs[0]
+    const fallback = fallbackPages.find((item) => item.slug === page.slug)
+
+    return {
+      slug: page.slug,
+      order: page.order,
+      en: page.en,
+      lv: page.lv,
+      layout: {
+        en: mapLayout(page.layout, 'en', fallback?.layout.en),
+        lv: mapLayout(page.layout, 'lv', fallback?.layout.lv),
+      },
+      meta: {
+        title: page.meta?.title,
+        description: page.meta?.description,
+        image: mediaURL(page.meta?.image) ?? fallback?.meta.image ?? '/images/gathering1.jpg',
+        noIndex: page.meta?.noIndex,
+      },
+    }
+  } catch (error) {
+    console.warn('[pages] Payload page "' + slug + '" unavailable; using fallback.', error)
+    return fallbackPages.find((p) => p.slug === slug)
+  }
 }

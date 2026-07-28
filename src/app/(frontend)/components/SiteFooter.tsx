@@ -99,11 +99,11 @@ export function SiteFooter({
           <ul role="list" className="mt-3 space-y-2 text-sm text-white/80">
             <li>
               <a
-                href={`mailto:${siteSettings?.en.contactEmail ?? 'hello@darwinlatvians.org'}`}
-                className="hover:text-amber-200"
+                href={`mailto:${siteSettings?.en.contactEmail ?? 'hello@latviansofdarwin.org.au'}`}
+                className="hover:text-sunset-gold transition-colors block underline decoration-white/30 underline-offset-4"
                 itemProp="email"
               >
-                {siteSettings?.en.contactEmail ?? 'hello@darwinlatvians.org'}
+                {siteSettings?.en.contactEmail ?? 'hello@latviansofdarwin.org.au'}
               </a>
             </li>
           </ul>

@@ -62,8 +62,8 @@ export async function generateMetadata({
     description,
     alternates: localeAlternates(`/${slug}`, lang),
     robots: {
-      index: page ? !page.meta.noIndex : true,
-      follow: page ? !page.meta.noIndex : true,
+      index: page ? !page.meta.noIndex : specialPage ? !specialPage.meta?.noIndex : true,
+      follow: page ? !page.meta.noIndex : specialPage ? !specialPage.meta?.noIndex : true,
     },
     openGraph: {
       type: 'website',

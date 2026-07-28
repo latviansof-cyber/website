@@ -318,6 +318,10 @@ export interface Event {
   accentTone: 'emerald' | 'amber' | 'sky' | 'rose' | 'violet' | 'slate';
   eventDate?: string | null;
   /**
+   * Optional URL to the Facebook Event page (e.g. https://facebook.com/events/...).
+   */
+  facebookUrl?: string | null;
+  /**
    * Mark if this event has already taken place.
    */
   isPast?: boolean | null;
@@ -383,6 +387,10 @@ export interface SpecialPage {
        */
       description?: string | null;
     };
+    /**
+     * Prevents this page from being indexed by search engines when checked.
+     */
+    noIndex?: boolean | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -644,6 +652,7 @@ export interface EventsSelect<T extends boolean = true> {
   order?: T;
   accentTone?: T;
   eventDate?: T;
+  facebookUrl?: T;
   isPast?: T;
   image?: T;
   en?:
@@ -696,6 +705,7 @@ export interface SpecialPagesSelect<T extends boolean = true> {
               title?: T;
               description?: T;
             };
+        noIndex?: T;
       };
   updatedAt?: T;
   createdAt?: T;

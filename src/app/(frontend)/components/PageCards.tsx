@@ -56,8 +56,8 @@ export function PageCards({
                 className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
               >
                 <div
-                  className={`aspect-[16/10] overflow-hidden ${
-                    isLogo ? 'bg-cream p-6 sm:p-8' : 'bg-white'
+                  className={`aspect-[16/10] overflow-hidden bg-white ${
+                    isLogo ? 'p-6 sm:p-8' : ''
                   }`}
                 >
                   <img

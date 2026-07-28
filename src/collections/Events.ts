@@ -15,6 +15,9 @@ const eventContentFields = (language: string) => [
     required: true,
     admin: {
       rows: 8,
+      components: {
+        Field: '@/components/QuillEditorField#QuillEditorField',
+      },
     },
   },
 ]
@@ -99,12 +102,12 @@ export const Events: CollectionConfig = {
       },
     },
     {
-      name: 'isPast',
-      type: 'checkbox',
-      defaultValue: false,
+      name: 'facebookUrl',
+      type: 'text',
+      label: 'Facebook Event URL',
       admin: {
         position: 'sidebar',
-        description: 'Mark if this event has already taken place.',
+        description: 'Optional URL to the Facebook Event page (e.g. https://facebook.com/events/...).',
       },
     },
     {

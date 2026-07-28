@@ -157,6 +157,15 @@ export const SpecialPages: CollectionConfig = {
             },
           ],
         },
+        {
+          name: 'noIndex',
+          type: 'checkbox',
+          label: 'Hide from search engines',
+          defaultValue: false,
+          admin: {
+            description: 'Prevents this page from being indexed by search engines when checked.',
+          },
+        },
       ],
     },
   ],

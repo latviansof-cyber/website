@@ -19,6 +19,7 @@ export type SpecialPageContent = {
       title?: string | null
       description?: string | null
     }
+    noIndex?: boolean | null
   }
 }
 
@@ -66,7 +67,7 @@ Your Rights
 You have the right to request access to any personal information we hold about you, or request correction or deletion of your personal information.
 
 Contact
-For privacy questions or requests, contact us at hello@darwinlatvians.org.`
+For privacy questions or requests, contact us at hello@latviansofdarwin.org.au.`
     },
     lv: {
       title: 'Privātuma politika',
@@ -90,7 +91,7 @@ Jūsu tiesības
 Jums ir tiesības pieprasīt piekļuvi jebkurai personiskajai informācijai, ko mēs glabājam par jums, vai pieprasīt jūsu personiskās informācijas labošanu vai dzēšanu.
 
 Saziņa
-Ja jums ir jautājumi par privātumu, sazinieties ar mums pa e-pastu hello@darwinlatvians.org.`
+Ja jums ir jautājumi par privātumu, sazinieties ar mums pa e-pastu hello@latviansofdarwin.org.au.`
     }
   },
   {
@@ -112,7 +113,7 @@ Limitation of Liability
 While we strive to keep information accurate and up-to-date, DLA makes no representations or warranties of any kind about the completeness, accuracy, or availability of the website content. Your use of this website is at your own risk.
 
 Contact
-If you have any questions about these Terms & Conditions, please contact us at hello@darwinlatvians.org.`
+If you have any questions about these Terms & Conditions, please contact us at hello@latviansofdarwin.org.au.`
     },
     lv: {
       title: 'Lietošanas noteikumi',
@@ -131,7 +132,7 @@ Atbildības ierobežojums
 Lai gan mēs cenšamies nodrošināt informācijas precizitāti, DLA nesniedz nekādas garantijas par vietnes satura pilnīgumu vai pieejamību. Vietnes izmantošana ir uz jūsu pašu risku.
 
 Saziņa
-Ja jums ir jautājumi par šiem lietošanas noteikumiem, lūdzu, sazinieties ar mums pa e-pastu hello@darwinlatvians.org.`
+Ja jums ir jautājumi par šiem lietošanas noteikumiem, lūdzu, sazinieties ar mums pa e-pastu hello@latviansofdarwin.org.au.`
     }
   },
   {
@@ -156,7 +157,7 @@ Governing Law
 This Agreement is governed by the laws of the Northern Territory, Australia.
 
 Contact
-For any questions regarding this EULA, please contact us at hello@darwinlatvians.org.`
+For any questions regarding this EULA, please contact us at hello@latviansofdarwin.org.au.`
     },
     lv: {
       title: 'Gala lietotāja licences līgums (EULA)',
@@ -178,7 +179,7 @@ Piemērojamie tiesību akti
 Šo Līgumu reglamentē Ziemeļu Teritorijas (Austrālija) tiesību akti.
 
 Saziņa
-Ja jums ir jautājumi par šo EULA, lūdzu, sazinieties ar mums pa e-pastu hello@darwinlatvians.org.`
+Ja jums ir jautājumi par šo EULA, lūdzu, sazinieties ar mums pa e-pastu hello@latviansofdarwin.org.au.`
     }
   },
   {
@@ -191,7 +192,7 @@ You can reach out to us via email for general inquiries, membership applications
 
 Let's connect and build a stronger community together in the Top End!
 
-Email: hello@darwinlatvians.org`
+Email: hello@latviansofdarwin.org.au`
     },
     lv: {
       title: 'Kontakti',
@@ -201,7 +202,7 @@ Sazinieties ar mums pa e-pastu, lai uzdotu jautājumus, pieteiktos dalībai apvi
 
 Sazināsimies un veidosim stiprāku kopienu kopā Ziemeļu Teritorijā!
 
-E-pasts: hello@darwinlatvians.org`
+E-pasts: hello@latviansofdarwin.org.au`
     }
   }
 ]
@@ -262,7 +263,9 @@ export async function getSpecialPage(slug: string): Promise<SpecialPageContent |
       overrideAccess: true,
     })
 
-    console.log(`[special-pages] Created "${slug}" from fallback content. It can now be edited in the admin panel.`)
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[special-pages] Created "${slug}" from fallback content. It can now be edited in the admin panel.`)
+    }
     return fallback
   } catch (error) {
     console.warn(`[special-pages] Payload special page ${slug} unavailable; using fallback.`, error)

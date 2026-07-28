@@ -6,7 +6,8 @@ import { localizeHref } from '@/lib/i18nRouting'
 import { Container } from './ui/Container'
 import { Eyebrow } from './ui/Eyebrow'
 import { Chip } from './ui/Chip'
-import type { WebsiteEvent } from '@/lib/events'
+import { FormattedText } from './ui/FormattedText'
+import { isEventPast, type WebsiteEvent } from '@/lib/eventUtils'
 
 export function EventDetailPage({ event }: { event: WebsiteEvent }) {
   const { lang } = useLanguage()
@@ -14,7 +15,7 @@ export function EventDetailPage({ event }: { event: WebsiteEvent }) {
   const imgSrc = event.image ?? '/images/img1.webp'
   const paragraphs = content.body.split(/\n\s*\n/).filter(Boolean)
 
-  const isPast = event.isPast || (event.eventDate && new Date(event.eventDate) < new Date())
+  const isPast = isEventPast(event)
 
   return (
     <main id="main" className="min-h-screen bg-cream text-ink py-12 sm:py-20">
@@ -56,10 +57,23 @@ export function EventDetailPage({ event }: { event: WebsiteEvent }) {
             </span>
           )}
           {content.dateText || event.eventDate ? (
-            <span className="text-sm font-medium text-ink-light">
-              {content.dateText ?? event.eventDate}
+            <span className="text-sm font-semibold text-ink-light">
+              🗓️ {content.dateText ?? event.eventDate}
             </span>
           ) : null}
+          {Boolean(event.facebookUrl && event.facebookUrl.trim()) && (
+            <a
+              href={event.facebookUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full bg-[#1877F2]/10 px-3.5 py-1 text-xs font-bold text-[#1877F2] border border-[#1877F2]/20 hover:bg-[#1877F2] hover:text-white transition-colors"
+            >
+              <svg className="w-3.5 h-3.5 fill-current shrink-0" viewBox="0 0 24 24">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+              <span>Facebook Event</span>
+            </a>
+          )}
         </div>
 
         <h1 className="font-serif text-3xl sm:text-5xl font-bold text-ink leading-tight mb-6">
@@ -75,9 +89,7 @@ export function EventDetailPage({ event }: { event: WebsiteEvent }) {
 
         {/* Body Text */}
         <article className="prose prose-lg max-w-none text-ink-light space-y-6 text-lg sm:text-xl leading-relaxed">
-          {paragraphs.map((paragraph, idx) => (
-            <p key={`p-${idx}`}>{paragraph}</p>
-          ))}
+          <FormattedText text={content.body} />
         </article>
 
         {/* Footer Actions */}

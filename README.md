@@ -317,3 +317,7 @@ To make these changes, contact a developer to modify the codebase, run migration
 - Content-only edits in `/admin` do not require a code deployment.
 - Schema, styling, integration, and application-code changes require a deployment.
 - Confirm current Cloudflare plan limits and Payload/Workers compatibility against their official documentation before infrastructure changes.
+
+## Social & Links
+
+- **Facebook**: https://www.facebook.com/darwinlatvians

@@ -1,4 +1,4 @@
-﻿import React from 'react'
+import React from 'react'
 import type { Metadata, Viewport } from 'next'
 import Script from 'next/script'
 import { headers } from 'next/headers'
@@ -78,6 +78,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+          fetchPriority="high"
         />
         {/* Google Analytics */}
         <Script async src="https://www.googletagmanager.com/gtag/js?id=G-54WF6RB2HX" />

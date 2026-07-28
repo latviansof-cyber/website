@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import type {
   CallToActionLayoutBlock,
@@ -16,10 +17,14 @@ function HeroLayout({ block }: { block: HeroLayoutBlock }) {
   return (
     <section className="relative isolate overflow-hidden bg-ink py-20 text-white sm:py-28">
       {block.image ? (
-        <img
+        <Image
           src={block.image}
           alt=""
-          className="absolute inset-0 -z-20 h-full w-full object-cover"
+          fill
+          unoptimized
+          sizes="100vw"
+          className="object-cover"
+          loading="eager"
         />
       ) : null}
       <div className="absolute inset-0 -z-10 bg-gradient-to-br from-ink/95 via-sunset-red/80 to-sunset-orange/70" />
@@ -58,12 +63,16 @@ function ContentLayout({ block }: { block: ContentLayoutBlock }) {
           </div>
         </article>
         {showImage ? (
-          <img
+          <Image
             src={block.image}
             alt=""
+            width={800}
+            height={600}
+            unoptimized
             className={`aspect-[4/3] w-full rounded-3xl object-cover shadow-xl ${
               block.imagePosition === 'left' ? 'lg:order-1' : ''
             }`}
+            loading="lazy"
           />
         ) : null}
       </Container>
@@ -73,31 +82,51 @@ function ContentLayout({ block }: { block: ContentLayoutBlock }) {
 
 function CallToActionLayout({ block, lang }: { block: CallToActionLayoutBlock; lang: Lang }) {
   return (
-    <section className="bg-ink py-16 text-white lg:py-20">
-      <Container className="flex flex-col justify-between gap-8 md:flex-row md:items-center">
-        <div className="max-w-2xl">
-          <h2 className="font-serif text-4xl font-bold">{block.heading}</h2>
-          {block.text ? (
-            <p className="mt-4 text-lg leading-relaxed text-white/75">{block.text}</p>
-          ) : null}
-        </div>
-        {block.buttons?.length ? (
-          <div className="flex flex-wrap gap-3">
-            {block.buttons.map((button) => (
-              <Link
-                key={`${button.link}-${button.label}`}
-                href={localizeHref(button.link, lang)}
-                className={
-                  button.variant === 'secondary'
-                    ? 'rounded-full border border-white/50 px-5 py-3 font-bold text-white hover:bg-white/10'
-                    : 'rounded-full bg-sunset-orange px-5 py-3 font-bold text-ink hover:bg-sunset-gold'
-                }
-              >
-                {button.label}
-              </Link>
-            ))}
+    <section className="relative overflow-hidden py-16 lg:py-24 bg-cream">
+      <Container>
+        <div className="relative isolate overflow-hidden rounded-3xl bg-gradient-to-br from-latvian-red via-sunset-red to-sunset-orange px-8 py-12 sm:px-14 sm:py-16 text-white shadow-2xl">
+          {/* Subtle background glow effects */}
+          <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-white/10 blur-3xl pointer-events-none" />
+          <div className="absolute -left-20 -bottom-20 h-72 w-72 rounded-full bg-sunset-gold/20 blur-3xl pointer-events-none" />
+
+          <div className="relative z-10 flex flex-col justify-between gap-8 lg:flex-row lg:items-center">
+            <div className="max-w-2xl">
+              <span className="text-xs font-bold uppercase tracking-widest text-sunset-gold/90 mb-2 block">
+                {lang === 'lv' ? 'Iesaisties kopienā' : 'Get Involved'}
+              </span>
+              <h2 className="font-serif text-3xl font-bold tracking-tight text-white sm:text-5xl">
+                {block.heading}
+              </h2>
+              {block.text ? (
+                <p className="mt-4 text-base sm:text-lg leading-relaxed text-white/90 font-medium">
+                  {block.text}
+                </p>
+              ) : null}
+            </div>
+            {block.buttons?.length ? (
+              <div className="flex flex-wrap items-center gap-4 shrink-0">
+                {block.buttons.map((button) => {
+                  const href = localizeHref(button.link, lang)
+                  const isExternal = href.startsWith('mailto:') || href.startsWith('http')
+                  const className =
+                    button.variant === 'secondary'
+                      ? 'inline-flex items-center gap-2 rounded-full border-2 border-white/80 bg-white/10 px-6 py-3.5 text-sm font-bold text-white shadow-sm backdrop-blur-xs transition hover:bg-white hover:text-ink focus-visible:ring-2 focus-visible:ring-offset-2'
+                      : 'inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-extrabold text-latvian-red shadow-lg transition hover:bg-sunset-gold hover:text-ink focus-visible:ring-2 focus-visible:ring-offset-2'
+
+                  return isExternal ? (
+                    <a key={`${button.link}-${button.label}`} href={href} className={className}>
+                      {button.label}
+                    </a>
+                  ) : (
+                    <Link key={`${button.link}-${button.label}`} href={href} className={className}>
+                      {button.label}
+                    </Link>
+                  )
+                })}
+              </div>
+            ) : null}
           </div>
-        ) : null}
+        </div>
       </Container>
     </section>
   )

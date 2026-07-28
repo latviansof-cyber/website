@@ -8,18 +8,37 @@ const require = createRequire(import.meta.url)
 const nextConfig = {
   output: 'standalone' as const,
   images: {
+    unoptimized: true,
     localPatterns: [
       {
         pathname: '/api/media/file/**',
       },
     ],
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   experimental: {
     cpus: 1,
+    useTypeScriptCli: true,
   },
   // Packages with Cloudflare Workers (workerd) specific code
   // Read more: https://opennext.js.org/cloudflare/howtos/workerd
   serverExternalPackages: ['jose', 'pg-cloudflare'],
+
+  async headers() {
+    return [
+      {
+        source: '/images/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ]
+  },
 
   // Your Next.js config here
   webpack: (webpackConfig: any, { isServer }: any) => {

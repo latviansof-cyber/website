@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useLanguage } from '../i18n/LanguageProvider'
 import { Container } from './ui/Container'
+import { IconHeart } from './ui/IconHeart'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import type { MainMenuItem } from '@/lib/navigation'
 import type { SiteSettingsContent } from '@/lib/siteSettings'
@@ -64,20 +65,7 @@ export function SiteHeader({
             data-testid="nav-donate"
             className="group inline-flex items-center gap-1.5 rounded-full bg-sunset-orange px-4 py-2 text-sm font-bold text-ink shadow-sm transition-all duration-200 hover:bg-sunset-gold hover:shadow-[0_0_18px_rgba(249,115,22,0.45)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300"
           >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2.2}
-              className="h-4 w-4 transition-transform group-hover:scale-110"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-              />
-            </svg>
+            <IconHeart className="h-4 w-4 transition-transform group-hover:scale-110" />
             <span className="hidden sm:inline">{t.nav[donateCta.labelKey]}</span>
             <span className="sr-only sm:hidden">{t.nav[donateCta.labelKey]}</span>
           </Link>
@@ -89,7 +77,7 @@ export function SiteHeader({
 
       <nav
         aria-label="Primary mobile"
-        className="overflow-x-auto border-t border-white/10 bg-latvian-red/80 backdrop-blur-md sm:hidden"
+        className="overflow-x-auto border-t border-white/10 bg-latvian-red/80 backdrop-blur-md sm:hidden sm:aria-hidden"
       >
         <ul className="mx-auto flex w-max min-w-full items-center justify-start gap-1 px-3 py-3 text-sm font-semibold text-white/90">
           {navItems.map((item) => (
@@ -98,7 +86,7 @@ export function SiteHeader({
                 href={localizeHref(item.href, lang)}
                 target={item.newTab ? '_blank' : undefined}
                 rel={item.newTab ? 'noreferrer' : undefined}
-                className="block whitespace-nowrap rounded-full px-3 py-2 transition-colors hover:bg-white/20 hover:text-white"
+                className="block whitespace-nowrap rounded-full px-3 py-2 transition-colors hover:bg-white/20 hover:text-white focus-visible:bg-white/20 focus-visible:text-white focus-visible:outline-none"
               >
                 {item[lang]}
               </a>

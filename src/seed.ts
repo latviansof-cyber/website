@@ -16,12 +16,12 @@ async function main() {
       en: {
         associationName: 'Latvian Association of Darwin',
         tagline: 'Dārvinas Latviešu Apvienība',
-        contactEmail: 'hello@darwinlatvians.org',
+        contactEmail: 'hello@latviansofdarwin.org.au',
       },
       lv: {
         associationName: 'Dārvinas Latviešu Apvienība',
         tagline: 'Latvian Association of Darwin',
-        contactEmail: 'hello@darwinlatvians.org',
+        contactEmail: 'hello@latviansofdarwin.org.au',
       },
     },
   })

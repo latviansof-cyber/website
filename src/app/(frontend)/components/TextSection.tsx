@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useLanguage } from '../i18n/LanguageProvider'
 import { Container } from './ui/Container'
 import { Section } from './ui/Section'
@@ -47,7 +48,7 @@ export function TextSection({ id, tone = 'plain' }: { id: SectionId; tone?: Tone
           >
             {data.body.map((paragraph, idx) => (
               <p
-                key={idx}
+                key={`p-${idx}`}
                 className="first-letter:text-5xl first-letter:font-serif first-letter:font-bold first-letter:text-sunset-red first-letter:mr-2 first-letter:float-left first-letter:mt-1"
               >
                 {paragraph}
@@ -55,10 +56,14 @@ export function TextSection({ id, tone = 'plain' }: { id: SectionId; tone?: Tone
             ))}
           </div>
           <div className="relative h-80 sm:h-[500px] w-full rounded-3xl overflow-hidden shadow-2xl group">
-            <img
+            <Image
               src={imageSrc}
               alt={data.title}
-              className="object-cover w-full h-full transform transition-transform duration-700 group-hover:scale-110"
+              fill
+              unoptimized
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover transform transition-transform duration-700 group-hover:scale-110"
+              loading={id === 'about' ? 'eager' : 'lazy'}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-ink/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           </div>

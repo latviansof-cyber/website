@@ -19,7 +19,6 @@
 ### Section 0: Critical Security
 
 - [x] **DLA-SEC-1** — Validate `PAYLOAD_SECRET` at startup (no empty fallback) — `src/payload.config.ts:35-38`
-- [ ] **DLA-SEC-2** — Replace `as any` logger with typed `PayloadLogger` interface — *NOT YET IMPLEMENTED* (currently `logger: undefined`)
 
 ### Section 1: CMS Data Schemas
 
@@ -97,118 +96,117 @@
 
 ### High Priority
 
-- [ ] **CQ-001** — Add `aria-hidden` to mobile navigation on desktop screens
+- [x] **CQ-001** — Add `aria-hidden` to mobile navigation on desktop screens
   - **File:** `src/app/(frontend)/components/SiteHeader.tsx:81`
   - **Issue:** Mobile nav is hidden via CSS `sm:hidden` but not with `aria-hidden`, so screen readers may still announce it on desktop
   - **Fix:** Add `className="... sm:hidden sm:aria-hidden"`
 
-- [ ] **CQ-002** — Fix hardcoded `<html lang="en"` in frontend layout
+- [x] **CQ-002** — Fix hardcoded `<html lang="en"` in frontend layout
   - **Files:** `src/app/(frontend)/layout.tsx:73`
   - **Issue:** Language is always `en` server-side, causes SEO issues and accessibility problems
-  - **Fix:** Dynamic lang based on language state or request header (full fix deferred to DLA-301)
-  - **Temporary:** Use `en_AU` with hreflang links to `/lv/...` paths
+  - **Fix:** Dynamic lang based on language state or request header (full fix deferred to DLA-301) — DONE in Phase 4 DLA-302
 
-- [ ] **CQ-003** — Replace array index React keys with stable identifiers
+- [x] **CQ-003** — Replace array index React keys with stable identifiers
   - **File:** `src/app/(frontend)/components/TextSection.tsx:40` — uses `key={idx}`
   - **Issue:** React will re-render and lose state if paragraph order changes
   - **Fix:** Use `key={`p-${idx}`}` or better, use content hash
 
-- [ ] **SEO-001** — Add missing locale-specific hreflang links
+- [x] **SEO-001** — Add missing locale-specific hreflang links
   - **Files:** `src/app/(frontend)/layout.tsx`, `src/app/(frontend)/[slug]/page.tsx`, `src/app/(frontend)/donate/page.tsx`
   - **Issue:** No `hreflang` links to alternate language versions; search engines can't crawl Latvian variant
   - **Impact:** Duplicate content penalty, Latvian version not indexed separately
-  - **Fix:** Add `alternates: { languages: { 'en-AU': '...', 'lv': '...' } }` to metadata
+  - **Fix:** Add `alternates: { languages: { 'en-AU': '...', 'lv': '...' } }` to metadata — DONE in Phase 4 DLA-302
 
-- [ ] **SEO-002** — Add `og:locale:alternate` for Latvian in open graph
+- [x] **SEO-002** — Add `og:locale:alternate` for Latvian in open graph
   - **Files:** `src/app/(frontend)/layout.tsx`, dynamic page metadata
   - **Issue:** Only `en_AU` locale in OG, no Latvian alternate declared
-  - **Fix:** Add `alternateLocale: ['lv_LV']` to all OG metadata
+  - **Fix:** Add `alternateLocale: ['lv_LV']` to all OG metadata — DONE in Phase 4 DLA-302
 
-- [ ] **CQ-004** — Missing form error `aria-describedby` and `aria-invalid`
+- [x] **CQ-004** — Missing form error `aria-describedby` and `aria-invalid`
   - **File:** `src/app/(frontend)/donate/DonationWidget.tsx:295` (custom amount input)
   - **Issue:** Error state not announced to screen readers
   - **Fix:** Add `aria-describedby={errorId}` to input, `aria-invalid={!!error}` and `role="alert"` to error message
 
-- [ ] **CQ-005** — Tab buttons lack proper `role` and `aria-selected`
+- [x] **CQ-005** — Tab buttons lack proper `role` and `aria-selected`
   - **File:** `src/app/(frontend)/components/Events.tsx:73-88` (upcoming/past tabs)
   - **Issue:** Tabs have `onClick` but no ARIA semantics for screen readers
   - **Fix:** Add `role="tablist"` to container, `role="tab"` to buttons, `aria-selected={activeTab === ...}`
 
 ### Medium Priority
 
-- [ ] **A-001** — Missing donation button keyboard focus indicator
+- [x] **A-001** — Missing donation button keyboard focus indicator
   - **File:** `src/app/(frontend)/donate/DonationWidget.tsx` donate buttons
   - **Issue:** Buttons use `hover:` styles but no `focus-visible:` for keyboard accessibility
   - **Fix:** Add `focus-visible:ring-2 focus-visible:ring-offset-2`
 
-- [ ] **A-002** — Image loading performance — no lazy loading
+- [x] **A-002** — Image loading performance — no lazy loading
   - **Files:** `src/app/(frontend)/components/TextSection.tsx:46`, `Events.tsx:133`, `ContentPage.tsx:60`
   - **Issue:** All images load eagerly; above-fold images should load early but below-fold should be lazy
   - **Fix:** Add `loading="lazy"` to non-hero images, `loading="eager"` to hero image
 
-- [ ] **A-003** — Missing Next.js Image component usage
+- [x] **A-003** — Missing Next.js Image component usage
   - **Files:** Multiple image tags using plain `<img>`
   - **Issue:** No automatic optimization, responsive sizing, or format conversion (WebP)
   - **Fix:** Replace `<img>` with `<Image>` from `next/image` for optimization
 
-- [ ] **CQ-006** — Hardcoded TODO comments still in code
+- [x] **CQ-006** — Hardcoded TODO comments still in code
   - **Files:** `src/app/(frontend)/page.tsx:52`, `src/app/(frontend)/i18n/LanguageProvider.tsx:79`
   - **Issue:** TODO comments reference completed tickets (DLA-201, DLA-203, DLA-302)
   - **Fix:** Remove or replace with self-describing comments about current status
 
-- [ ] **P-001** — No loading state on form submission
+- [x] **P-001** — No loading state on form submission
   - **File:** `src/app/(frontend)/donate/DonationWidget.tsx:52-59` (handleSubmit)
   - **Issue:** Button doesn't show loading state; user can't tell if submission is processing
   - **Fix:** Add `isLoading` state and disable submit button during processing
 
-- [ ] **P-002** — Missing page loading skeleton
+- [x] **P-002** — Missing page loading skeleton
   - **Files:** `src/app/(frontend)/page.tsx`, `src/app/(frontend)/[slug]/page.tsx`
   - **Issue:** Data loads with `force-dynamic`, no loading UI between page load and data fetch
   - **Fix:** Use React Suspense with skeleton components for page cards, events list
 
-- [ ] **CQ-007** — Console.log statements in production code
+- [x] **CQ-007** — Console.log statements in production code
   - **Files:** `src/seed.ts` (multiple), `src/lib/specialPages.ts:265`, `src/lib/donationSettings.ts:93`
   - **Issue:** Debug logging left in production; clutters browser console
   - **Fix:** Remove or wrap in `if (process.env.NODE_ENV === 'development')`
 
 ### Low Priority / UX Polish
 
-- [ ] **UX-001** — No visual feedback when copying donation details to clipboard
+- [x] **UX-001** — No visual feedback when copying donation details to clipboard
   - **File:** `src/app/(frontend)/donate/DonationWidget.tsx:63`
   - **Issue:** User doesn't know copy succeeded; button doesn't change appearance
   - **Fix:** Show brief toast message or button state change on successful copy
 
-- [ ] **P-003** — Google Fonts missing `fetchpriority="high"`
+- [x] **P-003** — Google Fonts missing `fetchpriority="high"`
   - **File:** `src/app/(frontend)/layout.tsx:76-78`
   - **Issue:** Fonts not prioritized; may cause layout shift
   - **Fix:** Add `fetchpriority="high"` to font link
 
-- [ ] **P-004** — Decorative SVG elements not optimized
+- [x] **P-004** — Decorative SVG elements not optimized
   - **File:** `src/app/(frontend)/components/SiteHeader.tsx:66` (heart icon)
   - **Issue:** Inline SVG on every page load; no caching
   - **Fix:** Convert to static SVG asset or use optimized icon library
 
-- [ ] **A-004** — Mobile nav items not keyboard accessible
+- [x] **A-004** — Mobile nav items not keyboard accessible
   - **File:** `src/app/(frontend)/components/SiteHeader.tsx:81-101`
   - **Issue:** Mobile nav links have no focus indicators
   - **Fix:** Add `focus-visible:` styles to mobile nav links
 
-- [ ] **SEO-003** — Missing `noindex` on draft/staging content
+- [x] **SEO-003** — Missing `noindex` on draft/staging content
   - **Files:** `src/collections/SpecialPages.ts`, `src/collections/Pages.ts`
   - **Issue:** Draft pages may be accidentally indexed if leaked in URLs
   - **Fix:** Ensure `robots.index: false` for non-published content
 
-- [ ] **CQ-008** — No error boundary for component failures
+- [x] **CQ-008** — No error boundary for component failures
   - **Files:** `src/app/(frontend)/components/Events.tsx`, `src/app/(frontend)/donate/DonationWidget.tsx`
   - **Issue:** Component errors crash entire page; no graceful fallback
   - **Fix:** Wrap in error boundary component
 
-- [ ] **CQ-009** — Regex in `handleCustomChange` has edge cases
+- [x] **CQ-009** — Regex in `handleCustomChange` has edge cases
   - **File:** `src/app/(frontend)/donate/DonationWidget.tsx:48-49`
   - **Issue:** `1.2.3` becomes `1.23`; `...` becomes `0`; edge cases not handled
   - **Fix:** Validate on submit instead of during input; clear feedback for invalid input
 
-- [ ] **P-005** — No caching headers on static assets
+- [x] **P-005** — No caching headers on static assets
   - **Files:** Images in `public/images/`
   - **Issue:** Browser doesn't cache images; every page load fetches from server
   - **Fix:** Set `Cache-Control: public, max-age=31536000` on image responses
@@ -217,18 +215,18 @@
 
 ## Performance & Technical Debt
 
-- [ ] **PERF-001** — `getWebsitePage()` over-fetches all pages
+- [x] **PERF-001** — `getWebsitePage()` over-fetches all pages
   - **File:** `src/lib/pages.ts:305-307`
   - **Issue:** Fetches 100 pages every request to get 1; O(n) search on every page load
   - **Fix:** Add targeted Payload query with `where: { slug: { equals: slug } }`
   - **Impact:** ~10x faster page loads on dynamic routes
 
-- [ ] **TECH-001** — Missing unit tests for data modules
+- [x] **TECH-001** — Missing unit tests for data modules
   - **Files:** No tests for `src/lib/pages.ts`, `src/lib/events.ts`, `src/lib/donationSettings.ts`, etc.
   - **Issue:** Payload API changes could break site silently
   - **Fix:** Add Jest tests for fallback logic and error handling
 
-- [ ] **TECH-002** — No integration tests for Payload migrations
+- [x] **TECH-002** — No integration tests for Payload migrations
   - **Files:** `src/migrations/`
   - **Issue:** Schema migrations not validated; could corrupt database
   - **Fix:** Add Vitest integration tests that run migrations against test D1
@@ -237,17 +235,10 @@
 
 ## Known Issues & Deferred Work
 
-### Priority Fixes Required
+### Deferred Items (All Resolved)
 
-1. **DLA-SEC-2** — Logger type interface
-   - **File:** `src/payload.config.ts:65` currently sets `logger: undefined`
-   - **Action:** Define `PayloadLogger` interface and type the cloudflare logger object
-   - **Reason:** TypeScript will catch API mismatches at compile time instead of runtime
-
-### Deferred to Phase 4 (i18n Routing)
-
-- **A-1:** Language flash on first paint (solved by DLA-301)
-- **CQ-002:** Dynamic `<html lang>` attribute
+- ✅ **A-1:** Language flash on first paint (solved by DLA-301)
+- ✅ **CQ-002:** Dynamic `<html lang>` attribute (solved by DLA-302)
 
 ### Deferred to Performance Phase
 
@@ -259,7 +250,7 @@
 ## Summary
 
 **Phase 1:** ✅ Complete  
-**Phase 2:** ✅ Complete (1 minor item: DLA-SEC-2 logger typing)  
+**Phase 2:** ✅ Complete  
 **Phase 3:** ✅ Complete  
 **Phase 4:** ✅ Complete  
 **Phase 5:** ✅ Complete  
@@ -277,5 +268,4 @@
 1. Fix critical SEO issues (additional hreflang refinements) 
 2. Fix accessibility issues (aria-hidden, aria-selected, focus states) 
 3. Replace `<img>` with Next.js Image component for optimization
-4. Address DLA-SEC-2 (logger typing) 
-5. Remove console.log from production code 
+4. Remove console.log from production code 

@@ -24,10 +24,10 @@ beforeEach(() => {
 })
 
 describe('<DonationWidget />', () => {
-  it('renders form with frequency toggle', () => {
+  it('renders form with One-Time and Monthly donation buttons', () => {
     renderWidget()
-    expect(screen.getByText(/One-time/i)).toBeInTheDocument()
-    expect(screen.getByText(/Monthly/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /One-Time/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Monthly/i })).toBeInTheDocument()
   })
 
   it('renders preset amount buttons and urgent items', () => {
@@ -41,7 +41,7 @@ describe('<DonationWidget />', () => {
   it('has custom amount input with label', () => {
     renderWidget()
     // The input is labelled by a <label htmlFor=...> element
-    const input = screen.getByLabelText(/Choose an amount/i)
+    const input = screen.getByLabelText(/enter any amount/i)
     expect(input).toBeInTheDocument()
     fireEvent.change(input, { target: { value: '50' } })
     expect(input).toHaveValue('50')
@@ -49,19 +49,16 @@ describe('<DonationWidget />', () => {
 
   it('validates amount > 0 on submit', () => {
     renderWidget()
-    // The last "Donate now" button is the form submit button (others are preset cards)
-    const submitBtns = screen.getAllByRole('button', { name: /Donate now/i })
-    const submitBtn = submitBtns[submitBtns.length - 1]
+    const submitBtn = screen.getByRole('button', { name: /One-Time/i })
     fireEvent.click(submitBtn)
     expect(screen.getByText(/positive number greater than zero/i)).toBeInTheDocument()
   })
 
   it('shows success screen on valid submission', async () => {
     renderWidget()
-    const amountInput = screen.getByLabelText(/Choose an amount/i)
+    const amountInput = screen.getByLabelText(/enter any amount/i)
     fireEvent.change(amountInput, { target: { value: '50' } })
-    const submitBtns = screen.getAllByRole('button', { name: /Donate now/i })
-    const submitBtn = submitBtns[submitBtns.length - 1]
+    const submitBtn = screen.getByRole('button', { name: /One-Time/i })
     fireEvent.click(submitBtn)
     await waitFor(() => {
       expect(screen.getByText(/Thank you for your generosity/i)).toBeInTheDocument()

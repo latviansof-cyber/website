@@ -4,6 +4,7 @@ import { useCallback, useId, useState, type FormEvent } from 'react'
 import { useLanguage } from '../i18n/LanguageProvider'
 import type { DonationSettingsContent } from '@/lib/donationSettings'
 import { Container } from '../components/ui/Container'
+import { localizeHref } from '@/lib/i18nRouting'
 
 type Frequency = 'one-time' | 'monthly'
 
@@ -149,7 +150,7 @@ export function DonationWidget({
                 return item.url ? (
                   <a
                     key={`ui-${i}`}
-                    href={item.url}
+                    href={localizeHref(item.url, lang)}
                     target={item.newTab ? '_blank' : undefined}
                     rel={item.newTab ? 'noopener noreferrer' : undefined}
                     className={className}
@@ -216,7 +217,7 @@ export function DonationWidget({
               return preset.url ? (
                 <a
                   key={`amount-${preset.amount}`}
-                  href={preset.url}
+                  href={localizeHref(preset.url, lang)}
                   target={preset.newTab ? '_blank' : undefined}
                   rel={preset.newTab ? 'noopener noreferrer' : undefined}
                   className={className}

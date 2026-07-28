@@ -1,11 +1,10 @@
 import { notFound, redirect } from 'next/navigation'
 import type { Metadata } from 'next'
-import { ContentPage } from '../components/ContentPage'
-import { SpecialPageLayout } from '../components/SpecialPageLayout'
-import { JsonLd } from '../components/JsonLd'
-import { LanguageProvider } from '../i18n/LanguageProvider'
-import { SiteFooter } from '../components/SiteFooter'
-import { SiteHeader } from '../components/SiteHeader'
+import { ContentPage } from '../../components/ContentPage'
+import { SpecialPageLayout } from '../../components/SpecialPageLayout'
+import { JsonLd } from '../../components/JsonLd'
+import { SiteFooter } from '../../components/SiteFooter'
+import { SiteHeader } from '../../components/SiteHeader'
 import { fallbackPages, getWebsitePage } from '@/lib/pages'
 import { fallbackSpecialPages, getSpecialPage } from '@/lib/specialPages'
 import { getWebsiteEvent } from '@/lib/events'
@@ -14,6 +13,7 @@ import { getFooter } from '@/lib/footer'
 import { getSiteSettings } from '@/lib/siteSettings'
 import { SITE_NAME, SITE_URL, absoluteURL } from '@/lib/site'
 import { getOgImageUrlByPath } from '@/lib/ogImage'
+import { isLang, localeAlternates } from '@/lib/i18nRouting'
 
 export const dynamic = 'force-dynamic'
 
@@ -26,43 +26,50 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ lang: string; slug: string }>
 }): Promise<Metadata> {
-  const { slug } = await params
+  const { lang, slug } = await params
+  if (!isLang(lang)) return {}
   const [page, specialPage, event] = await Promise.all([
     getWebsitePage(slug),
     getSpecialPage(slug),
     getWebsiteEvent(slug),
   ])
-  
+
   if (event && !page && !specialPage) {
+    const content = event[lang]
     return {
-      title: `${event.en.title} | ${SITE_NAME}`,
-      description: event.en.body.slice(0, 160),
+      title: `${content.title} | ${SITE_NAME}`,
+      description: content.body.slice(0, 160),
     }
   }
 
   if (!page && !specialPage) return {}
 
-  const title = page ? (page.meta.title || page.en.title) : (specialPage!.meta?.en?.title || specialPage!.en.title)
-  const description = page ? (page.meta.description || page.en.excerpt) : (specialPage!.meta?.en?.description || specialPage!.en.title)
+  const pageContent = page?.[lang]
+  const specialContent = specialPage?.[lang]
+  const specialMeta = specialPage?.meta?.[lang]
+  const title = page
+    ? (lang === 'en' ? page.meta.title : undefined) || pageContent!.title
+    : specialMeta?.title || specialContent!.title
+  const description = page
+    ? (lang === 'en' ? page.meta.description : undefined) || pageContent!.excerpt
+    : specialMeta?.description || specialContent!.title
   const ogImage = getOgImageUrlByPath(`/${slug}`)
 
   return {
     title,
     description,
-    alternates: {
-      canonical: `/${slug}`,
-    },
+    alternates: localeAlternates(`/${slug}`, lang),
     robots: {
       index: page ? !page.meta.noIndex : true,
       follow: page ? !page.meta.noIndex : true,
     },
     openGraph: {
       type: 'website',
-      locale: 'en_AU',
-      alternateLocale: 'lv_LV',
-      url: `/${slug}`,
+      locale: lang === 'lv' ? 'lv_LV' : 'en_AU',
+      alternateLocale: lang === 'lv' ? 'en_AU' : 'lv_LV',
+      url: `/${lang}/${slug}`,
       siteName: SITE_NAME,
       title,
       description,
@@ -71,7 +78,7 @@ export async function generateMetadata({
           url: ogImage,
           width: 1200,
           height: 630,
-          alt: page ? page.en.title : specialPage!.en.title,
+          alt: page ? pageContent!.title : specialContent!.title,
         },
       ],
     },
@@ -87,9 +94,10 @@ export async function generateMetadata({
 export default async function WebsiteContentPage({
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ lang: string; slug: string }>
 }) {
-  const { slug } = await params
+  const { lang, slug } = await params
+  if (!isLang(lang)) notFound()
   const [page, specialPage, event, mainMenu, footer, siteSettings] = await Promise.all([
     getWebsitePage(slug),
     getSpecialPage(slug),
@@ -98,16 +106,16 @@ export default async function WebsiteContentPage({
     getFooter(),
     getSiteSettings(),
   ])
-  
+
   if (!page && !specialPage) {
     if (event) {
-      redirect(`/events/${slug}`)
+      redirect(`/${lang}/events/${slug}`)
     }
     notFound()
   }
 
   return (
-    <LanguageProvider>
+    <>
       <SiteHeader navItems={mainMenu} siteSettings={siteSettings} />
       {page ? (
         <>
@@ -115,10 +123,11 @@ export default async function WebsiteContentPage({
             data={{
               '@context': 'https://schema.org',
               '@type': 'WebPage',
-              '@id': `${SITE_URL}${page.slug}#webpage`,
-              url: `${SITE_URL}${page.slug}`,
-              name: page.meta.title || page.en.title,
-              description: page.meta.description || page.en.excerpt,
+              '@id': `${SITE_URL}${lang}/${page.slug}#webpage`,
+              url: `${SITE_URL}${lang}/${page.slug}`,
+              name: (lang === 'en' ? page.meta.title : undefined) || page[lang].title,
+              description:
+                (lang === 'en' ? page.meta.description : undefined) || page[lang].excerpt,
               primaryImageOfPage: {
                 '@type': 'ImageObject',
                 url: absoluteURL(page.meta.image),
@@ -132,7 +141,7 @@ export default async function WebsiteContentPage({
               about: {
                 '@id': `${SITE_URL}#organization`,
               },
-              inLanguage: ['en-AU', 'lv-LV'],
+              inLanguage: lang === 'lv' ? 'lv-LV' : 'en-AU',
             }}
           />
           <ContentPage page={page} />
@@ -141,6 +150,6 @@ export default async function WebsiteContentPage({
         <SpecialPageLayout page={specialPage} />
       )}
       <SiteFooter footer={footer} siteSettings={siteSettings} />
-    </LanguageProvider>
+    </>
   )
 }

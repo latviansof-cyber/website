@@ -1,55 +1,5 @@
-import type { Metadata } from 'next'
-import { LanguageProvider } from '../i18n/LanguageProvider'
-import { SiteHeader } from '../components/SiteHeader'
-import { SiteFooter } from '../components/SiteFooter'
-import { DonationWidget } from './DonationWidget'
-import { getOgImageUrlByPath } from '@/lib/ogImage'
-import { getMainMenu } from '@/lib/navigation'
-import { getFooter } from '@/lib/footer'
-import { getSiteSettings } from '@/lib/siteSettings'
-import { getDonationSettings } from '@/lib/donationSettings'
+import { permanentRedirect } from 'next/navigation'
 
-const ogImage = getOgImageUrlByPath('/donate')
-
-export const dynamic = 'force-dynamic'
-
-export const metadata: Metadata = {
-  title: 'Donate',
-  description:
-    'Support the Latvian Association of Darwin with a one-time or monthly donation. Your gift funds cultural events, language programs, and community gatherings across the Northern Territory.',
-  alternates: {
-    canonical: '/donate',
-  },
-  openGraph: {
-    title: 'Donate to the Latvian Association of Darwin',
-    description:
-      'Support cultural events, language programs, and Latvian community gatherings in the Northern Territory.',
-    url: '/donate',
-    images: [
-      {
-        url: ogImage,
-        width: 1200,
-        height: 630,
-        alt: 'Donate to the Latvian Association of Darwin',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    images: [ogImage],
-  },
-}
-
-export default async function DonatePage() {
-  const [mainMenu, footer, siteSettings, donationSettings] = await Promise.all([getMainMenu(), getFooter(), getSiteSettings(), getDonationSettings()])
-
-  return (
-    <LanguageProvider>
-      <SiteHeader navItems={mainMenu} siteSettings={siteSettings} />
-      <main id="main" className="bg-cream text-ink">
-        <DonationWidget donationSettings={donationSettings} />
-      </main>
-      <SiteFooter footer={footer} siteSettings={siteSettings} />
-    </LanguageProvider>
-  )
+export default function LegacyDonatePage() {
+  permanentRedirect('/en/donate')
 }

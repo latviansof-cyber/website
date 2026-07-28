@@ -12,7 +12,11 @@ export function SpecialPageLayout({ page }: { page: SpecialPageContent }) {
 
   return (
     <main id="main" className="bg-cream text-ink">
-      <Section id="special-page" tone="plain" className="py-20 sm:py-28 bg-white relative overflow-hidden">
+      <Section
+        id="special-page"
+        tone="plain"
+        className="py-20 sm:py-28 bg-white relative overflow-hidden"
+      >
         {/* Subtle background decoration */}
         <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-sunset-orange/5 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-64 h-64 bg-sunset-gold/5 rounded-full blur-3xl" />

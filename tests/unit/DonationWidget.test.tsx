@@ -5,9 +5,15 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { LanguageProvider } from '@/app/(frontend)/i18n/LanguageProvider'
 import { DonationWidget } from '@/app/(frontend)/donate/DonationWidget'
 
+jest.mock('next/navigation', () => ({
+  usePathname: () => '/en/donate',
+  useRouter: () => ({ push: jest.fn() }),
+  useSearchParams: () => new URLSearchParams(),
+}))
+
 function renderWidget() {
   return render(
-    <LanguageProvider>
+    <LanguageProvider initialLang="en">
       <DonationWidget />
     </LanguageProvider>,
   )

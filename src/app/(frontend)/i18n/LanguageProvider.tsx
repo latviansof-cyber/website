@@ -1,8 +1,9 @@
 'use client'
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
-import { contentByLang, type Lang, type SiteContent } from './content'
-import { LangSchema } from '@/lib/validation'
+import { createContext, useCallback, useContext, useEffect, useMemo, type ReactNode } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { contentByLang, type SiteContent } from './content'
+import { localizeHref, type Lang } from '@/lib/i18nRouting'
 
 interface LanguageContextValue {
   lang: Lang
@@ -11,54 +12,35 @@ interface LanguageContextValue {
   t: SiteContent
 }
 
-const STORAGE_KEY = 'dla.lang'
-
 const LanguageContext = createContext<LanguageContextValue | null>(null)
 
-function detectInitialLang(): Lang {
-  if (typeof window === 'undefined') return 'en'
-  try {
-    const stored = window.localStorage.getItem(STORAGE_KEY)
-    const parsed = LangSchema.safeParse(stored)
-    if (parsed.success) return parsed.data
-  } catch (error) {
-    // Storage may be unavailable (private mode, Safari ITP, etc.)
-    // eslint-disable-next-line no-console
-    console.warn('[i18n] localStorage unavailable, falling back to navigator', error)
-  }
-  const navLang = window.navigator.language?.toLowerCase() ?? ''
-  if (navLang.startsWith('lv')) return 'lv'
-  return 'en'
-}
+export function LanguageProvider({
+  children,
+  initialLang,
+}: {
+  children: ReactNode
+  initialLang: Lang
+}) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const lang = initialLang
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  // Start with 'en' on the server so HTML is deterministic; sync from storage on mount.
-  const [lang, setLangState] = useState<Lang>('en')
-
-  useEffect(() => {
-    setLangState(detectInitialLang())
-  }, [])
-
-  const setLang = useCallback((next: Lang) => {
-    const parsed = LangSchema.safeParse(next)
-    if (!parsed.success) {
-      // eslint-disable-next-line no-console
-      console.warn('[i18n] setLang received invalid value, ignoring', next)
-      return
-    }
-    setLangState(parsed.data)
-    try {
-      window.localStorage.setItem(STORAGE_KEY, parsed.data)
-      document.documentElement.lang = parsed.data
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn('[i18n] failed to persist language preference', error)
-    }
-  }, [])
+  const setLang = useCallback(
+    (next: Lang) => {
+      const query = searchParams.toString()
+      router.push(`${localizeHref(pathname, next)}${query ? `?${query}` : ''}`)
+    },
+    [pathname, router, searchParams],
+  )
 
   const toggleLang = useCallback(() => {
     setLang(lang === 'en' ? 'lv' : 'en')
   }, [lang, setLang])
+
+  useEffect(() => {
+    document.documentElement.lang = lang === 'lv' ? 'lv' : 'en-AU'
+  }, [lang])
 
   const value = useMemo<LanguageContextValue>(
     () => ({ lang, setLang, toggleLang, t: contentByLang[lang] }),
@@ -75,7 +57,3 @@ export function useLanguage(): LanguageContextValue {
   }
   return ctx
 }
-
-// TODO: switch the static `en` initial state to a server-injected value (or render
-//   a loading shell) now that Payload's SiteSettings global exists. The current
-//   pattern can cause a brief "flash of English content" on a Latvian browser.

@@ -22,7 +22,12 @@ export function Button({ variant = 'primary', className = '', children, ...rest 
 }
 
 type LinkButtonProps = ComponentProps<typeof Link> & { variant?: Variant; children: ReactNode }
-export function LinkButton({ variant = 'primary', className = '', children, ...rest }: LinkButtonProps) {
+export function LinkButton({
+  variant = 'primary',
+  className = '',
+  children,
+  ...rest
+}: LinkButtonProps) {
   return (
     <Link {...rest} className={[base, variants[variant], className].join(' ')}>
       {children}

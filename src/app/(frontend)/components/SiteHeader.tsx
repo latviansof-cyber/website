@@ -6,10 +6,17 @@ import { Container } from './ui/Container'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import type { MainMenuItem } from '@/lib/navigation'
 import type { SiteSettingsContent } from '@/lib/siteSettings'
+import { localizeHref } from '@/lib/i18nRouting'
 
 const donateCta = { href: '/donate', labelKey: 'donate' as const }
 
-export function SiteHeader({ navItems, siteSettings }: { navItems: MainMenuItem[]; siteSettings: SiteSettingsContent }) {
+export function SiteHeader({
+  navItems,
+  siteSettings,
+}: {
+  navItems: MainMenuItem[]
+  siteSettings: SiteSettingsContent
+}) {
   const { lang, t } = useLanguage()
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 glass-panel-latvian text-white shadow-lg transition-all duration-300">
@@ -20,7 +27,7 @@ export function SiteHeader({ navItems, siteSettings }: { navItems: MainMenuItem[
         {t.nav.skipToContent}
       </a>
       <Container className="flex items-center justify-between gap-4 py-3 sm:py-4">
-        <Link href="/#top" className="group flex items-center gap-4">
+        <Link href={localizeHref('/#top', lang)} className="group flex items-center gap-4">
           <img
             src="/images/logo.png"
             alt={siteSettings.en.associationName}
@@ -41,7 +48,7 @@ export function SiteHeader({ navItems, siteSettings }: { navItems: MainMenuItem[
             {navItems.map((item) => (
               <li key={item.href}>
                 <a
-                  href={item.href}
+                  href={localizeHref(item.href, lang)}
                   target={item.newTab ? '_blank' : undefined}
                   rel={item.newTab ? 'noreferrer' : undefined}
                   className="rounded-full px-4 py-2 transition-all duration-200 hover:bg-white/20 hover:text-white hover:shadow-[0_0_10px_rgba(255,255,255,0.2)]"
@@ -52,7 +59,7 @@ export function SiteHeader({ navItems, siteSettings }: { navItems: MainMenuItem[
             ))}
           </ul>
           <Link
-            href={donateCta.href}
+            href={localizeHref(donateCta.href, lang)}
             aria-label={t.nav[donateCta.labelKey]}
             data-testid="nav-donate"
             className="group inline-flex items-center gap-1.5 rounded-full bg-sunset-orange px-4 py-2 text-sm font-bold text-ink shadow-sm transition-all duration-200 hover:bg-sunset-gold hover:shadow-[0_0_18px_rgba(249,115,22,0.45)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300"
@@ -88,7 +95,7 @@ export function SiteHeader({ navItems, siteSettings }: { navItems: MainMenuItem[
           {navItems.map((item) => (
             <li key={item.href}>
               <a
-                href={item.href}
+                href={localizeHref(item.href, lang)}
                 target={item.newTab ? '_blank' : undefined}
                 rel={item.newTab ? 'noreferrer' : undefined}
                 className="block whitespace-nowrap rounded-full px-3 py-2 transition-colors hover:bg-white/20 hover:text-white"
@@ -102,4 +109,3 @@ export function SiteHeader({ navItems, siteSettings }: { navItems: MainMenuItem[
     </header>
   )
 }
-

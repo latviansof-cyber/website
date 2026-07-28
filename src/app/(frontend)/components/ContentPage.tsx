@@ -10,6 +10,7 @@ import type {
 import { useLanguage } from '../i18n/LanguageProvider'
 import { Container } from './ui/Container'
 import { Eyebrow } from './ui/Eyebrow'
+import { localizeHref, type Lang } from '@/lib/i18nRouting'
 
 function HeroLayout({ block }: { block: HeroLayoutBlock }) {
   return (
@@ -70,7 +71,7 @@ function ContentLayout({ block }: { block: ContentLayoutBlock }) {
   )
 }
 
-function CallToActionLayout({ block }: { block: CallToActionLayoutBlock }) {
+function CallToActionLayout({ block, lang }: { block: CallToActionLayoutBlock; lang: Lang }) {
   return (
     <section className="bg-ink py-16 text-white lg:py-20">
       <Container className="flex flex-col justify-between gap-8 md:flex-row md:items-center">
@@ -85,7 +86,7 @@ function CallToActionLayout({ block }: { block: CallToActionLayoutBlock }) {
             {block.buttons.map((button) => (
               <Link
                 key={`${button.link}-${button.label}`}
-                href={button.link}
+                href={localizeHref(button.link, lang)}
                 className={
                   button.variant === 'secondary'
                     ? 'rounded-full border border-white/50 px-5 py-3 font-bold text-white hover:bg-white/10'
@@ -112,7 +113,8 @@ export function ContentPage({ page }: { page: WebsitePage }) {
       {page.layout[lang].map((block, index) => {
         const key = `${block.blockType}-${index}`
         if (block.blockType === 'hero') return <HeroLayout key={key} block={block} />
-        if (block.blockType === 'cta') return <CallToActionLayout key={key} block={block} />
+        if (block.blockType === 'cta')
+          return <CallToActionLayout key={key} block={block} lang={lang} />
         return <ContentLayout key={key} block={block} />
       })}
     </main>

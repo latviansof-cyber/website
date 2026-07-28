@@ -5,8 +5,15 @@ import { useLanguage } from '../i18n/LanguageProvider'
 import { Container } from './ui/Container'
 import type { SiteSettingsContent } from '@/lib/siteSettings'
 import type { FooterContent } from '@/lib/footer'
+import { localizeHref } from '@/lib/i18nRouting'
 
-export function SiteFooter({ footer, siteSettings }: { footer: FooterContent; siteSettings?: SiteSettingsContent }) {
+export function SiteFooter({
+  footer,
+  siteSettings,
+}: {
+  footer: FooterContent
+  siteSettings?: SiteSettingsContent
+}) {
   const { lang, t } = useLanguage()
   const year = new Date().getFullYear()
   const content = footer[lang]
@@ -14,8 +21,14 @@ export function SiteFooter({ footer, siteSettings }: { footer: FooterContent; si
 
   return (
     <footer className="bg-ink text-white" itemScope itemType="https://schema.org/Organization">
-      <meta itemProp="name" content={siteSettings?.en.associationName ?? 'Latvian Association of Darwin'} />
-      <meta itemProp="alternateName" content={siteSettings?.lv.associationName ?? 'Dārvinas Latviešu Apvienība'} />
+      <meta
+        itemProp="name"
+        content={siteSettings?.en.associationName ?? 'Latvian Association of Darwin'}
+      />
+      <meta
+        itemProp="alternateName"
+        content={siteSettings?.lv.associationName ?? 'Dārvinas Latviešu Apvienība'}
+      />
       <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-3">
         {/* Column 1: Brand */}
         <div>
@@ -43,7 +56,7 @@ export function SiteFooter({ footer, siteSettings }: { footer: FooterContent; si
             {items.map((item) => (
               <li key={item.href}>
                 <Link
-                  href={item.href}
+                  href={localizeHref(item.href, lang)}
                   target={item.newTab ? '_blank' : undefined}
                   rel={item.newTab ? 'noopener noreferrer' : undefined}
                   className="hover:text-amber-200"
@@ -99,7 +112,8 @@ export function SiteFooter({ footer, siteSettings }: { footer: FooterContent; si
       <div className="border-t border-white/10">
         <Container className="flex flex-col items-start justify-between gap-2 py-4 text-xs text-white/60 sm:flex-row sm:items-center">
           <p>
-            © {year} {siteSettings?.en.associationName ?? 'Latvian Association of Darwin'}. {content.rights}
+            © {year} {siteSettings?.en.associationName ?? 'Latvian Association of Darwin'}.{' '}
+            {content.rights}
           </p>
           <p>
             Found a bug?{' '}

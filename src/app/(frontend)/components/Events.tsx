@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useLanguage } from '../i18n/LanguageProvider'
+import { localizeHref } from '@/lib/i18nRouting'
 import { Container } from './ui/Container'
 import { Section } from './ui/Section'
 import { Eyebrow } from './ui/Eyebrow'
@@ -34,7 +35,7 @@ export function Events({
 
   const displayedEvents = activeEvents.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+    currentPage * ITEMS_PER_PAGE,
   )
 
   const handleTabChange = (tab: 'upcoming' | 'past') => {
@@ -99,11 +100,11 @@ export function Events({
               {isLatvian
                 ? `Rāda ${(currentPage - 1) * ITEMS_PER_PAGE + 1}–${Math.min(
                     currentPage * ITEMS_PER_PAGE,
-                    activeEvents.length
+                    activeEvents.length,
                   )} no ${activeEvents.length}`
                 : `Showing ${(currentPage - 1) * ITEMS_PER_PAGE + 1}–${Math.min(
                     currentPage * ITEMS_PER_PAGE,
-                    activeEvents.length
+                    activeEvents.length,
                   )} of ${activeEvents.length}`}
             </span>
           )}
@@ -149,7 +150,7 @@ export function Events({
                       {eventContent.title}
                     </h3>
                     <div className="mt-4 w-10 h-0.5 bg-slate-200 group-hover:bg-sunset-gold transition-colors duration-300" />
-                    
+
                     <details className="group/details mt-6">
                       <summary className="cursor-pointer list-none focus:outline-none">
                         <p className="line-clamp-3 text-base leading-relaxed text-ink-light font-medium group-open/details:hidden">
@@ -167,7 +168,7 @@ export function Events({
 
                         <div className="pt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100">
                           <Link
-                            href={`/events/${event.slug}`}
+                            href={localizeHref(`/events/${event.slug}`, lang)}
                             className="inline-flex items-center gap-1 font-bold text-sunset-orange hover:text-sunset-red transition-colors text-sm"
                           >
                             {isLatvian ? 'Skatīt pilnu informāciju' : 'See full info'} →
@@ -188,7 +189,10 @@ export function Events({
 
         {/* Pagination controls (6 tiles per page) */}
         {totalPages > 1 && (
-          <nav aria-label="Events pagination" className="mt-14 flex items-center justify-center gap-3">
+          <nav
+            aria-label="Events pagination"
+            className="mt-14 flex items-center justify-center gap-3"
+          >
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}

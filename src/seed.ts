@@ -31,6 +31,21 @@ async function main() {
   await payload.updateGlobal({
     slug: 'donation-settings',
     data: {
+      priorityLinks: en.footer.donate.urgentItems.map((item, index) => ({
+        enTitle: item.title,
+        enBody: item.body,
+        lvTitle: lv.footer.donate.urgentItems[index]?.title ?? item.title,
+        lvBody: lv.footer.donate.urgentItems[index]?.body ?? item.body,
+      })),
+      features: en.footer.donate.features.map((label, index) => ({
+        enLabel: label,
+        lvLabel: lv.footer.donate.features[index] ?? label,
+      })),
+      donationOptions: en.footer.donate.presetAmounts.map((option, index) => ({
+        amount: option.amount,
+        enBody: option.body,
+        lvBody: lv.footer.donate.presetAmounts[index]?.body ?? option.body,
+      })),
       en: {
         bankName: 'Not configured',
         bsb: 'Not configured',
@@ -139,11 +154,17 @@ async function main() {
             blockType: 'hero',
             en: {
               heading: slug === 'community' ? 'Our Community' : 'Membership',
-              text: slug === 'community' ? 'The Latvian community in Darwin' : 'Join the Latvian Association of Darwin',
+              text:
+                slug === 'community'
+                  ? 'The Latvian community in Darwin'
+                  : 'Join the Latvian Association of Darwin',
             },
             lv: {
               heading: slug === 'community' ? 'Mūsu Kopiena' : 'Dalība',
-              text: slug === 'community' ? 'Latviešu kopiena Dārvinā' : 'Pievienojieties Dārvinas Latviešu Apvienībai',
+              text:
+                slug === 'community'
+                  ? 'Latviešu kopiena Dārvinā'
+                  : 'Pievienojieties Dārvinas Latviešu Apvienībai',
             },
             alignment: 'center',
           },
@@ -151,11 +172,17 @@ async function main() {
             blockType: 'content',
             en: {
               heading: null,
-              body: slug === 'community' ? 'Welcome to the Latvian community in Darwin.' : 'Become a member of the Latvian Association of Darwin.',
+              body:
+                slug === 'community'
+                  ? 'Welcome to the Latvian community in Darwin.'
+                  : 'Become a member of the Latvian Association of Darwin.',
             },
             lv: {
               heading: null,
-              body: slug === 'community' ? 'Laipni lūdzam Latviešu kopienā Dārvinā.' : 'Kļūsti par Dārvinas Latviešu Apvienības biedru.',
+              body:
+                slug === 'community'
+                  ? 'Laipni lūdzam Latviešu kopienā Dārvinā.'
+                  : 'Kļūsti par Dārvinas Latviešu Apvienības biedru.',
             },
             tone: 'plain',
             imagePosition: 'none',
@@ -185,12 +212,25 @@ async function main() {
         adminTitle: slug.charAt(0).toUpperCase() + slug.slice(1),
         slug,
         en: {
-          title: fallbackSpecialPages.find((p) => p.slug === slug)?.en.title ?? slug.charAt(0).toUpperCase() + slug.slice(1),
-          content: fallbackSpecialPages.find((p) => p.slug === slug)?.en.content ?? `Content for ${slug}`,
+          title:
+            fallbackSpecialPages.find((p) => p.slug === slug)?.en.title ??
+            slug.charAt(0).toUpperCase() + slug.slice(1),
+          content:
+            fallbackSpecialPages.find((p) => p.slug === slug)?.en.content ?? `Content for ${slug}`,
         },
         lv: {
-          title: fallbackSpecialPages.find((p) => p.slug === slug)?.lv.title ?? (slug === 'about' ? 'Par Mums' : slug === 'privacy' ? 'Privātums' : slug === 'terms' ? 'Noteikumi' : 'EULA'),
-          content: fallbackSpecialPages.find((p) => p.slug === slug)?.lv.content ?? `Saturs priekš ${slug}`,
+          title:
+            fallbackSpecialPages.find((p) => p.slug === slug)?.lv.title ??
+            (slug === 'about'
+              ? 'Par Mums'
+              : slug === 'privacy'
+                ? 'Privātums'
+                : slug === 'terms'
+                  ? 'Noteikumi'
+                  : 'EULA'),
+          content:
+            fallbackSpecialPages.find((p) => p.slug === slug)?.lv.content ??
+            `Saturs priekš ${slug}`,
         },
       },
       overrideAccess: true,

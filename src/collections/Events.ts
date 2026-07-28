@@ -89,6 +89,25 @@ export const Events: CollectionConfig = {
       },
     },
     {
+      name: 'eventDate',
+      type: 'date',
+      admin: {
+        position: 'sidebar',
+        date: {
+          pickerAppearance: 'dayAndTime',
+        },
+      },
+    },
+    {
+      name: 'isPast',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'Mark if this event has already taken place.',
+      },
+    },
+    {
       name: 'image',
       type: 'upload',
       relationTo: 'media',

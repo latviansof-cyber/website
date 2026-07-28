@@ -316,6 +316,11 @@ export interface Event {
   slug: string;
   order: number;
   accentTone: 'emerald' | 'amber' | 'sky' | 'rose' | 'violet' | 'slate';
+  eventDate?: string | null;
+  /**
+   * Mark if this event has already taken place.
+   */
+  isPast?: boolean | null;
   /**
    * Recommended: landscape image at least 1200 × 800 pixels.
    */
@@ -638,6 +643,8 @@ export interface EventsSelect<T extends boolean = true> {
   slug?: T;
   order?: T;
   accentTone?: T;
+  eventDate?: T;
+  isPast?: T;
   image?: T;
   en?:
     | T
@@ -857,11 +864,56 @@ export interface SiteSetting {
   createdAt?: string | null;
 }
 /**
+ * Manage the donation options, card links, and payment details shown on /donate.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "donation-settings".
  */
 export interface DonationSetting {
   id: number;
+  /**
+   * The square cards near the top of the Donate page. Add a URL to make a card a link.
+   */
+  priorityLinks?:
+    | {
+        enTitle: string;
+        enBody: string;
+        lvTitle: string;
+        lvBody: string;
+        /**
+         * Optional. Use a site path or a full external URL.
+         */
+        url?: string | null;
+        newTab?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * The short ticked options displayed above the donation cards.
+   */
+  features?:
+    | {
+        enLabel: string;
+        lvLabel: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * The square amount cards. If a URL is supplied, the card links directly to it; otherwise it fills the custom amount form.
+   */
+  donationOptions?:
+    | {
+        amount: number;
+        enBody: string;
+        lvBody: string;
+        /**
+         * Optional full payment URL or site path.
+         */
+        url?: string | null;
+        newTab?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
   en: {
     bankName: string;
     bsb: string;
@@ -1006,6 +1058,34 @@ export interface SiteSettingsSelect<T extends boolean = true> {
  * via the `definition` "donation-settings_select".
  */
 export interface DonationSettingsSelect<T extends boolean = true> {
+  priorityLinks?:
+    | T
+    | {
+        enTitle?: T;
+        enBody?: T;
+        lvTitle?: T;
+        lvBody?: T;
+        url?: T;
+        newTab?: T;
+        id?: T;
+      };
+  features?:
+    | T
+    | {
+        enLabel?: T;
+        lvLabel?: T;
+        id?: T;
+      };
+  donationOptions?:
+    | T
+    | {
+        amount?: T;
+        enBody?: T;
+        lvBody?: T;
+        url?: T;
+        newTab?: T;
+        id?: T;
+      };
   en?:
     | T
     | {

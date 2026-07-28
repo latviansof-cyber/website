@@ -13,6 +13,8 @@ import * as migration_20260610_113750_move_contact_to_special_pages from './2026
 import * as migration_20260611_105341 from './20260611_105341';
 import * as migration_20260611_194132_backfill_special_page_versions from './20260611_194132_backfill_special_page_versions';
 import * as migration_20260611_201944_repair_page_versions from './20260611_201944_repair_page_versions';
+import * as migration_20260728_041536 from './20260728_041536';
+import * as migration_20260728_042055 from './20260728_042055';
 
 export const migrations = [
   {
@@ -88,6 +90,16 @@ export const migrations = [
   {
     up: migration_20260611_201944_repair_page_versions.up,
     down: migration_20260611_201944_repair_page_versions.down,
-    name: '20260611_201944_repair_page_versions'
+    name: '20260611_201944_repair_page_versions',
+  },
+  {
+    up: migration_20260728_041536.up,
+    down: migration_20260728_041536.down,
+    name: '20260728_041536',
+  },
+  {
+    up: migration_20260728_042055.up,
+    down: migration_20260728_042055.down,
+    name: '20260728_042055'
   },
 ];

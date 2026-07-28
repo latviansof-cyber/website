@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import { ContentPage } from '../components/ContentPage'
 import { SpecialPageLayout } from '../components/SpecialPageLayout'
@@ -8,6 +8,7 @@ import { SiteFooter } from '../components/SiteFooter'
 import { SiteHeader } from '../components/SiteHeader'
 import { fallbackPages, getWebsitePage } from '@/lib/pages'
 import { fallbackSpecialPages, getSpecialPage } from '@/lib/specialPages'
+import { getWebsiteEvent } from '@/lib/events'
 import { getMainMenu } from '@/lib/navigation'
 import { getFooter } from '@/lib/footer'
 import { getSiteSettings } from '@/lib/siteSettings'
@@ -28,8 +29,19 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const [page, specialPage] = await Promise.all([getWebsitePage(slug), getSpecialPage(slug)])
+  const [page, specialPage, event] = await Promise.all([
+    getWebsitePage(slug),
+    getSpecialPage(slug),
+    getWebsiteEvent(slug),
+  ])
   
+  if (event && !page && !specialPage) {
+    return {
+      title: `${event.en.title} | ${SITE_NAME}`,
+      description: event.en.body.slice(0, 160),
+    }
+  }
+
   if (!page && !specialPage) return {}
 
   const title = page ? (page.meta.title || page.en.title) : (specialPage!.meta?.en?.title || specialPage!.en.title)
@@ -78,15 +90,21 @@ export default async function WebsiteContentPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const [page, specialPage, mainMenu, footer, siteSettings] = await Promise.all([
+  const [page, specialPage, event, mainMenu, footer, siteSettings] = await Promise.all([
     getWebsitePage(slug),
     getSpecialPage(slug),
+    getWebsiteEvent(slug),
     getMainMenu(),
     getFooter(),
     getSiteSettings(),
   ])
   
-  if (!page && !specialPage) notFound()
+  if (!page && !specialPage) {
+    if (event) {
+      redirect(`/events/${slug}`)
+    }
+    notFound()
+  }
 
   return (
     <LanguageProvider>

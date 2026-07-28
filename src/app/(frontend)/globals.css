@@ -58,4 +58,11 @@
   .text-glow-orange {
     text-shadow: 0 0 20px rgba(249, 115, 22, 0.4);
   }
+  .line-clamp-12 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 12;
+    overflow: hidden;
+  }
 }
+

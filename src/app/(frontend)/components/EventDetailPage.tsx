@@ -7,6 +7,7 @@ import { Container } from './ui/Container'
 import { Eyebrow } from './ui/Eyebrow'
 import { Chip } from './ui/Chip'
 import { FormattedText } from './ui/FormattedText'
+import { IconHeart } from './ui/IconHeart'
 import { isEventPast, type WebsiteEvent } from '@/lib/eventUtils'
 
 export function EventDetailPage({ event }: { event: WebsiteEvent }) {
@@ -103,9 +104,10 @@ export function EventDetailPage({ event }: { event: WebsiteEvent }) {
 
           <Link
             href={localizeHref('/donate', lang)}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-sunset-orange text-ink font-bold hover:bg-sunset-gold transition-all shadow-md"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-sunset-gold text-ink font-bold hover:bg-amber-300 transition-all shadow-md active:scale-95"
           >
-            {lang === 'lv' ? 'Ziedot kopienai' : 'Support our community'} →
+            <IconHeart className="h-4 w-4" />
+            {lang === 'lv' ? 'Ziedot kopienai' : 'Support our community'}
           </Link>
         </div>
       </Container>

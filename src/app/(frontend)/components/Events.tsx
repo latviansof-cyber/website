@@ -37,6 +37,8 @@ function EventCard({
   const dayNum = hasValidDate ? eventDateObj.getDate() : null
   const yearNum = hasValidDate ? eventDateObj.getFullYear() : null
 
+  const isPast = isEventPast(event)
+
   return (
     <li
       key={event.slug}
@@ -57,7 +59,16 @@ function EventCard({
           className="object-cover transition-transform duration-700 group-hover:scale-110"
           loading="lazy"
         />
-        <div className="absolute top-4 left-4">
+        <div className="absolute top-4 left-4 flex flex-wrap items-center gap-2 z-10">
+          {isPast ? (
+            <span className="rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] bg-slate-200 text-slate-700 shadow-md">
+              {isLatvian ? 'Aizvadīts' : 'Past event'}
+            </span>
+          ) : (
+            <span className="rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] bg-emerald-100 text-emerald-800 shadow-md">
+              {isLatvian ? 'Nākamais' : 'Upcoming'}
+            </span>
+          )}
           <Chip
             tone={event.accentTone}
             className="px-3 py-1 font-bold tracking-wide shadow-md backdrop-blur-md bg-white/90"
@@ -94,24 +105,7 @@ function EventCard({
           </h3>
           <div className="mt-4 w-10 h-0.5 bg-slate-200 group-hover:bg-sunset-gold transition-colors duration-300" />
 
-          <details className="group/details mt-6">
-            <summary className="cursor-pointer list-none focus:outline-none">
-              <FormattedText text={eventContent.body} className="line-clamp-3 text-base leading-relaxed text-ink-light font-medium group-open/details:hidden" />
-              <span className="mt-4 inline-block font-bold text-sunset-red hover:text-sunset-orange group-open/details:hidden">
-                {isLatvian ? 'Lasīt vairāk' : 'Read more'}
-              </span>
-            </summary>
-
-            <div className="mt-4 space-y-4">
-              <FormattedText text={eventContent.body} className="line-clamp-12 text-base leading-relaxed text-ink-light" />
-
-              <div className="pt-2">
-                <summary className="cursor-pointer list-none font-bold text-slate-400 hover:text-slate-600 text-sm">
-                  {isLatvian ? 'Rādīt mazāk' : 'Show less'}
-                </summary>
-              </div>
-            </div>
-          </details>
+          <FormattedText text={eventContent.body} className="mt-4 line-clamp-3 text-base leading-relaxed text-ink-light font-medium" />
         </div>
 
         <div className="pt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 mt-6">
@@ -152,7 +146,7 @@ export function Events({
   const content = homepage[lang]
   const isLatvian = lang === 'lv'
 
-  const [pastPage, setPastPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(1)
 
   const getEventTime = (e: WebsiteEvent) => {
     if (!e.eventDate) return Number.MAX_SAFE_INTEGER
@@ -160,18 +154,17 @@ export function Events({
     return isNaN(t) ? Number.MAX_SAFE_INTEGER : t
   }
 
-  const upcomingEvents = events
-    .filter((e) => !isEventPast(e))
-    .sort((a, b) => getEventTime(a) - getEventTime(b))
+  const sortedEvents = [...events].sort((a, b) => {
+    const aPast = isEventPast(a)
+    const bPast = isEventPast(b)
+    if (aPast !== bPast) return aPast ? 1 : -1
+    return getEventTime(a) - getEventTime(b)
+  })
 
-  const pastEvents = events
-    .filter((e) => isEventPast(e))
-    .sort((a, b) => getEventTime(b) - getEventTime(a))
-
-  const totalPastPages = Math.ceil(pastEvents.length / ITEMS_PER_PAGE) || 1
-  const displayedPastEvents = pastEvents.slice(
-    (pastPage - 1) * ITEMS_PER_PAGE,
-    pastPage * ITEMS_PER_PAGE,
+  const totalPages = Math.ceil(sortedEvents.length / ITEMS_PER_PAGE) || 1
+  const displayedEvents = sortedEvents.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE,
   )
 
   return (
@@ -185,11 +178,11 @@ export function Events({
         {/* Background glow */}
         <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-tr from-sunset-peach/50 to-white rounded-full blur-3xl opacity-60" />
 
-        <Container className="relative z-10 space-y-16">
+        <Container className="relative z-10 space-y-12">
           {/* Header */}
           <div className="max-w-3xl flex flex-col items-start">
             <Eyebrow className="text-sunset-orange tracking-widest font-bold uppercase mb-4">
-              03 — {content.eventsTitle}
+              {isLatvian ? 'Kopienas kalendārs' : 'Community Calendar'}
             </Eyebrow>
             <h2
               id="events-title"
@@ -203,111 +196,61 @@ export function Events({
             </p>
           </div>
 
-          {/* Section 1: UPCOMING EVENTS */}
-          <section aria-labelledby="upcoming-events-heading">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-4 mb-8">
-              <div className="flex items-center gap-3">
-                <span className="w-3.5 h-3.5 rounded-full bg-emerald-500 animate-pulse" />
-                <h3 id="upcoming-events-heading" className="font-serif text-2xl sm:text-3xl font-bold text-ink">
-                  {isLatvian ? 'Nākamie pasākumi' : 'Upcoming Events'}
-                </h3>
-                <span className="rounded-full bg-emerald-100 px-3 py-0.5 text-xs font-extrabold text-emerald-800">
-                  {upcomingEvents.length}
-                </span>
-              </div>
+          {/* Single Unified Events Grid */}
+          {displayedEvents.length === 0 ? (
+            <div className="p-10 text-center rounded-3xl border border-slate-200 bg-slate-50/60">
+              <p className="text-lg font-medium text-ink-light">
+                {isLatvian
+                  ? 'Pašlaik nav pieejamu pasākumu.'
+                  : 'No events currently available.'}
+              </p>
             </div>
+          ) : (
+            <ul role="list" className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              {displayedEvents.map((event, i) => (
+                <EventCard key={event.slug} event={event} lang={lang} isLatvian={isLatvian} index={i} />
+              ))}
+            </ul>
+          )}
 
-            {upcomingEvents.length === 0 ? (
-              <div className="p-10 text-center rounded-3xl border border-slate-200 bg-slate-50/60">
-                <p className="text-lg font-medium text-ink-light">
-                  {isLatvian
-                    ? 'Pašlaik nav ieplānotu nākamo pasākumu. Sekojiet līdzi jaunumiem!'
-                    : 'No upcoming events currently scheduled. Stay tuned for updates!'}
-                </p>
-              </div>
-            ) : (
-              <ul role="list" className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                {upcomingEvents.map((event, i) => (
-                  <EventCard key={event.slug} event={event} lang={lang} isLatvian={isLatvian} index={i} />
+          {/* Pagination for single list */}
+          {totalPages > 1 && (
+            <nav
+              aria-label="Events pagination"
+              className="mt-14 flex items-center justify-center gap-3"
+            >
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2.5 rounded-xl font-bold text-sm border border-slate-200 bg-white text-ink disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition-all shadow-sm"
+              >
+                ← {isLatvian ? 'Iepriekšējā' : 'Previous'}
+              </button>
+
+              <div className="flex items-center gap-1.5">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                  <button
+                    key={pageNum}
+                    onClick={() => setCurrentPage(pageNum)}
+                    className={`w-10 h-10 rounded-xl font-bold text-sm transition-all ${
+                      currentPage === pageNum
+                        ? 'bg-sunset-red text-white shadow-md'
+                        : 'bg-white text-ink border border-slate-200 hover:bg-slate-50'
+                    }`}
+                  >
+                    {pageNum}
+                  </button>
                 ))}
-              </ul>
-            )}
-          </section>
-
-          {/* Section 2: PAST EVENTS */}
-          {pastEvents.length > 0 && (
-            <section aria-labelledby="past-events-heading" className="pt-6">
-              <div className="flex items-center justify-between border-b border-slate-200 pb-4 mb-8">
-                <div className="flex items-center gap-3">
-                  <h3 id="past-events-heading" className="font-serif text-2xl sm:text-3xl font-bold text-ink">
-                    {isLatvian ? 'Aizvadītie pasākumi' : 'Past Events'}
-                  </h3>
-                  <span className="rounded-full bg-slate-100 px-3 py-0.5 text-xs font-extrabold text-slate-600">
-                    {pastEvents.length}
-                  </span>
-                </div>
-
-                {displayedPastEvents.length > 0 && (
-                  <span className="text-sm font-semibold text-ink-light hidden sm:inline">
-                    {isLatvian
-                      ? `Rāda ${(pastPage - 1) * ITEMS_PER_PAGE + 1}–${Math.min(
-                          pastPage * ITEMS_PER_PAGE,
-                          pastEvents.length,
-                        )} no ${pastEvents.length}`
-                      : `Showing ${(pastPage - 1) * ITEMS_PER_PAGE + 1}–${Math.min(
-                          pastPage * ITEMS_PER_PAGE,
-                          pastEvents.length,
-                        )} of ${pastEvents.length}`}
-                  </span>
-                )}
               </div>
 
-              <ul role="list" className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                {displayedPastEvents.map((event, i) => (
-                  <EventCard key={event.slug} event={event} lang={lang} isLatvian={isLatvian} index={i} />
-                ))}
-              </ul>
-
-              {/* Pagination for past events if > 6 */}
-              {totalPastPages > 1 && (
-                <nav
-                  aria-label="Past events pagination"
-                  className="mt-14 flex items-center justify-center gap-3"
-                >
-                  <button
-                    onClick={() => setPastPage((p) => Math.max(1, p - 1))}
-                    disabled={pastPage === 1}
-                    className="px-4 py-2.5 rounded-xl font-bold text-sm border border-slate-200 bg-white text-ink disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition-all shadow-sm"
-                  >
-                    ← {isLatvian ? 'Iepriekšējā' : 'Previous'}
-                  </button>
-
-                  <div className="flex items-center gap-1.5">
-                    {Array.from({ length: totalPastPages }, (_, i) => i + 1).map((pageNum) => (
-                      <button
-                        key={pageNum}
-                        onClick={() => setPastPage(pageNum)}
-                        className={`w-10 h-10 rounded-xl font-bold text-sm transition-all ${
-                          pastPage === pageNum
-                            ? 'bg-sunset-red text-white shadow-md'
-                            : 'bg-white text-ink border border-slate-200 hover:bg-slate-50'
-                        }`}
-                      >
-                        {pageNum}
-                      </button>
-                    ))}
-                  </div>
-
-                  <button
-                    onClick={() => setPastPage((p) => Math.min(totalPastPages, p + 1))}
-                    disabled={pastPage === totalPastPages}
-                    className="px-4 py-2.5 rounded-xl font-bold text-sm border border-slate-200 bg-white text-ink disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition-all shadow-sm"
-                  >
-                    {isLatvian ? 'Nākamā' : 'Next'} →
-                  </button>
-                </nav>
-              )}
-            </section>
+              <button
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2.5 rounded-xl font-bold text-sm border border-slate-200 bg-white text-ink disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition-all shadow-sm"
+              >
+                {isLatvian ? 'Nākamā' : 'Next'} →
+              </button>
+            </nav>
           )}
         </Container>
       </Section>

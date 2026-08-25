@@ -2,62 +2,110 @@
 
 import { useLanguage } from '../i18n/LanguageProvider'
 import { Container } from './ui/Container'
-import { Eyebrow } from './ui/Eyebrow'
 import { LinkButton } from './ui/Button'
+import { IconHeart } from './ui/IconHeart'
 import type { HomepageContent } from '@/lib/homepage'
 import { localizeHref } from '@/lib/i18nRouting'
 
+function HeroFeatureIcon({ type }: { type: 'community' | 'heritage' | 'volunteer' }) {
+  if (type === 'community') {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        aria-hidden="true"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm8 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM2.75 19a5.25 5.25 0 0 1 10.5 0M13 14.2A5.25 5.25 0 0 1 21.25 19"
+        />
+      </svg>
+    )
+  }
+
+  if (type === 'volunteer') {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        aria-hidden="true"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M12 21V10m0 4c-4.25 0-7-2.75-7-7 4.25 0 7 2.75 7 7Zm0-4c0-4.25 2.75-7 7-7 0 4.25-2.75 7-7 7Z"
+        />
+      </svg>
+    )
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M5 3.75v16.5M5 5h13l-2.3 3.5L18 12H5" />
+    </svg>
+  )
+}
+
 export function Hero({ homepage }: { homepage: HomepageContent }) {
-  const { lang } = useLanguage()
+  const { lang, t } = useLanguage()
   const content = homepage[lang]
+  const heroImageSrc = homepage.heroImage || '/images/img1.webp'
 
   return (
     <section
       id="top"
       aria-labelledby="hero-title"
-      className="relative isolate overflow-hidden bg-ink text-white min-h-[90vh] flex flex-col justify-center"
+      className="relative isolate overflow-hidden bg-ink text-white"
     >
-      {/* Decorative gradient + glow blobs to simulate a sunset */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-20 bg-gradient-to-br from-ink via-sunset-red/90 to-sunset-orange/80"
-      />
-      {homepage.heroImage ? (
+      {/* Background Image */}
+      <div className="absolute inset-0 -z-20">
         <img
-          src={homepage.heroImage}
-          alt=""
-          className="absolute inset-0 -z-20 h-full w-full object-cover"
+          src={heroImageSrc}
+          alt="Latvian Association of Darwin Community"
+          className="h-full w-full object-cover"
         />
-      ) : null}
+        {/* Gradient Overlay mirroring uaant-website hero */}
+        <div className="absolute inset-0 bg-gradient-to-r from-ink/95 via-ink/80 to-ink/50" />
+      </div>
+
+      {/* Radial glow accents for NT warmth */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 opacity-70 bg-[radial-gradient(circle_at_50%_100%,rgba(251,191,36,0.6),transparent_60%),radial-gradient(circle_at_20%_80%,rgba(249,115,22,0.5),transparent_50%)]"
-      />
-      {/* Dark overlay at bottom for smooth transition */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-b from-transparent to-cream"
+        className="absolute inset-0 -z-10 opacity-40 bg-[radial-gradient(circle_at_20%_40%,rgba(249,115,22,0.35),transparent_50%),radial-gradient(circle_at_80%_80%,rgba(251,191,36,0.25),transparent_50%)]"
       />
 
-      <Container className="relative flex flex-col items-center text-center gap-7 py-24 sm:py-32 lg:py-40 z-10">
-        <div className="glass-panel-dark p-8 sm:p-12 rounded-3xl flex flex-col items-center gap-6 max-w-5xl mx-auto shadow-2xl border-white/20 transform transition-transform hover:scale-[1.01] duration-500">
-          <Eyebrow className="text-sunset-gold tracking-widest uppercase font-semibold">
+      <Container className="flex min-h-[75vh] w-full max-w-7xl items-center py-20">
+        {/* Content Column */}
+        <div className="max-w-2xl text-white space-y-6">
+          {/* Eyebrow Badge */}
+          <p className="inline-flex rounded-full border border-white/35 bg-white/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-md shadow-sm">
             {content.heroEyebrow}
-          </Eyebrow>
+          </p>
+
+          {/* Main Title */}
           <h1
             id="hero-title"
-            className="max-w-4xl text-balance font-serif text-5xl font-bold leading-[1.1] sm:text-7xl lg:text-8xl text-glow-orange"
+            className="font-serif text-4xl font-black leading-tight sm:text-5xl lg:text-6xl text-white text-balance drop-shadow-lg"
           >
             {content.heroTitle}
           </h1>
-          <p className="max-w-2xl text-pretty text-lg leading-relaxed text-white/90 sm:text-xl font-medium drop-shadow-md">
+
+          {/* Subtitle Accent */}
+          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-sunset-gold sm:text-base">
             {content.heroSubtitle}
           </p>
-          <div className="flex flex-col gap-4 sm:flex-row mt-4">
+
+          {/* Action Buttons Group */}
+          <div className="flex flex-wrap gap-3.5 pt-2">
             <LinkButton
               href={localizeHref(homepage.heroPrimaryHref, lang)}
               variant="primary"
-              className="bg-sunset-orange hover:bg-sunset-gold text-ink font-bold border-none shadow-[0_0_15px_rgba(249,115,22,0.5)] hover:shadow-[0_0_25px_rgba(251,191,36,0.7)] transition-all duration-300"
+              className="bg-sunset-gold hover:bg-amber-300 text-ink font-bold border-none shadow-[0_0_20px_rgba(251,191,36,0.4)] transition-all duration-300 active:scale-95"
             >
               {content.heroPrimaryLabel}
               <span
@@ -67,13 +115,45 @@ export function Hero({ homepage }: { homepage: HomepageContent }) {
                 →
               </span>
             </LinkButton>
+
             <LinkButton
               href={localizeHref(homepage.heroSecondaryHref, lang)}
               variant="ghost"
-              className="ring-white/40 text-white hover:bg-white/20 backdrop-blur-sm transition-all duration-300"
+              className="border border-white/70 text-white hover:bg-white/15 backdrop-blur-sm transition-all duration-300"
             >
               {content.heroSecondaryLabel}
             </LinkButton>
+
+            <LinkButton
+              href={localizeHref('/donate', lang)}
+              variant="primary"
+              className="bg-sunset-gold text-ink font-bold border-none shadow-md transition-all duration-300 hover:bg-amber-300 hover:scale-105 active:scale-95"
+            >
+              <IconHeart className="h-4 w-4 transition-transform group-hover:scale-110" />
+              {t.nav.donate}
+            </LinkButton>
+          </div>
+
+          {/* Glass Feature Chips Grid */}
+          <div className="grid gap-3 pt-4 text-xs sm:text-sm font-medium text-white/90 sm:grid-cols-3">
+            <div className="glass-panel-dark flex items-center justify-center gap-2 px-4 py-3 text-center rounded-xl border border-white/20 backdrop-blur-md hover:border-sunset-gold transition-colors shadow-md">
+              <span className="size-5 shrink-0 text-sunset-gold">
+                <HeroFeatureIcon type="community" />
+              </span>
+              <span>{lang === 'lv' ? 'Visiem atvērta kopiena' : 'Open & Welcoming to All'}</span>
+            </div>
+            <div className="glass-panel-dark flex items-center justify-center gap-2 px-4 py-3 text-center rounded-xl border border-white/20 backdrop-blur-md hover:border-sunset-gold transition-colors shadow-md">
+              <span className="size-5 shrink-0 text-sunset-gold">
+                <HeroFeatureIcon type="volunteer" />
+              </span>
+              <span>{lang === 'lv' ? 'Brīvprātīgo vadīta' : 'Volunteer Driven'}</span>
+            </div>
+            <div className="glass-panel-dark flex items-center justify-center gap-2 px-4 py-3 text-center rounded-xl border border-white/20 backdrop-blur-md hover:border-sunset-gold transition-colors shadow-md">
+              <span className="size-5 shrink-0 text-sunset-gold">
+                <HeroFeatureIcon type="heritage" />
+              </span>
+              <span>{lang === 'lv' ? 'Kultūras mantojums' : 'Preserving Latvian Heritage'}</span>
+            </div>
           </div>
         </div>
       </Container>

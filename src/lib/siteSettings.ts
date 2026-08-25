@@ -21,7 +21,7 @@ export type SiteSettingsContent = {
 
 export const fallbackSiteSettings: SiteSettingsContent = {
   en: {
-    associationName: 'Latvian Association of Darwin',
+    associationName: 'Latvian Association of Darwin Incorporated',
     tagline: 'Dārvinas Latviešu Apvienība',
     contactEmail: 'hello@latviansofdarwin.org.au',
   },

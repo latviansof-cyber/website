@@ -3,9 +3,12 @@ import { notFound } from 'next/navigation'
 import { Hero } from '../components/Hero'
 import { PageCards } from '../components/PageCards'
 import { Events } from '../components/Events'
+import { SupportAssociation } from '../components/SupportAssociation'
+import { TrustedPartners } from '../components/TrustedPartners'
 import { getWebsitePages } from '@/lib/pages'
 import { getWebsiteEvents } from '@/lib/events'
 import { getHomepage } from '@/lib/homepage'
+import { getSiteSettings } from '@/lib/siteSettings'
 import { SITE_DESCRIPTION, SITE_NAME, SITE_NAME_LV } from '@/lib/site'
 import { isLang, languages, localeAlternates } from '@/lib/i18nRouting'
 
@@ -35,10 +38,11 @@ export async function generateMetadata({
 export default async function HomePage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
   if (!isLang(lang)) notFound()
-  const [pages, events, homepage] = await Promise.all([
+  const [pages, events, homepage, siteSettings] = await Promise.all([
     getWebsitePages(),
     getWebsiteEvents(),
     getHomepage(),
+    getSiteSettings(),
   ])
 
   return (
@@ -46,6 +50,8 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
       <Hero homepage={homepage} />
       <PageCards pages={pages} homepage={homepage} />
       <Events events={events} homepage={homepage} />
+      <SupportAssociation siteSettings={siteSettings} />
+      <TrustedPartners />
     </main>
   )
 }

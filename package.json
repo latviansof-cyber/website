@@ -12,6 +12,7 @@
     "devsafe": "rm -rf .next && rm -rf .open-next && cross-env NODE_OPTIONS=--no-deprecation next dev",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "deploy": "pnpm run deploy:database && pnpm run deploy:app",
+    "deploy:sh": "./deploy.sh",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "build": "cross-env PAYLOAD_BUILD=true NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build --webpack",
     "build:next": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build --webpack",

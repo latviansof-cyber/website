@@ -63,7 +63,7 @@ export function SiteHeader({
             href={localizeHref(donateCta.href, lang)}
             aria-label={t.nav[donateCta.labelKey]}
             data-testid="nav-donate"
-            className="group inline-flex items-center gap-1.5 rounded-full bg-sunset-orange px-4 py-2 text-sm font-bold text-ink shadow-sm transition-all duration-200 hover:bg-sunset-gold hover:shadow-[0_0_18px_rgba(249,115,22,0.45)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300"
+            className="group inline-flex items-center gap-1.5 rounded-full bg-sunset-gold px-5 py-2 text-sm font-bold text-ink shadow-sm transition-all duration-200 hover:bg-amber-300 hover:shadow-md hover:scale-105 active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300"
           >
             <IconHeart className="h-4 w-4 transition-transform group-hover:scale-110" />
             <span className="hidden sm:inline">{t.nav[donateCta.labelKey]}</span>

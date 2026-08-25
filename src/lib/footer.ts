@@ -37,12 +37,13 @@ export const fallbackFooter: FooterContent = {
   },
   items: [
     { href: '/about', en: contentByLang.en.nav.about, lv: contentByLang.lv.nav.about },
-    { href: '/history', en: contentByLang.en.nav.history, lv: contentByLang.lv.nav.history },
-    { href: '/community', en: 'Community', lv: 'Kopiena' },
-    { href: '/membership', en: 'Join the Association', lv: 'Pievienoties apvienībai' },
+    { href: '/contact', en: 'Contact Us', lv: 'Kontakti' },
+    { href: '/privacy', en: 'Privacy Policy', lv: 'Privātuma politika' },
+    { href: '/terms', en: 'Terms & Conditions', lv: 'Lietošanas noteikumi' },
+    { href: '/eula', en: 'EULA', lv: 'EULA' },
     { href: '/#events', en: contentByLang.en.nav.events, lv: contentByLang.lv.nav.events },
     { href: '/donate', en: contentByLang.en.nav.donate, lv: contentByLang.lv.nav.donate },
-  ]
+  ],
 }
 
 export const getFooter = cache(async (): Promise<FooterContent> => {

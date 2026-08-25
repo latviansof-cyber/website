@@ -276,7 +276,7 @@ export function DonationWidget({
                           type="button"
                           disabled={isSubmitting}
                           onClick={(e) => submitWithFrequency('monthly', e)}
-                          className="rounded-full bg-sunset-orange px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-md transition hover:bg-sunset-gold hover:text-ink focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50"
+                          className="rounded-full bg-sunset-gold px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-ink shadow-md transition hover:bg-amber-300 focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50"
                         >
                           {isSubmitting && frequency === 'monthly'
                             ? '...'

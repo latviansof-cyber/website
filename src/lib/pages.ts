@@ -125,13 +125,13 @@ export const fallbackPages: WebsitePage[] = [
       title: 'Our History',
       excerpt:
         'From informal gatherings in the 1980s to an incorporated association serving the Top End today.',
-      body: "The Latvian Association of Darwin is one of Australia's newest Latvian community organisations. It was officially incorporated on 22 August 2023 to support the growing Latvian community in the Northern Territory.\n\nThe Association builds on informal cultural, social, and commemorative gatherings held by Latvians in Darwin since the 1980s. National day celebrations, cultural events, and diaspora commemorations created the foundation for a permanent organisation.\n\nToday the Association honours that history while building a welcoming, active community for future generations.",
+      body: "The Latvian Association of Darwin (Latvian Association of Darwin Incorporated) is one of Australia's newest Latvian community organisations. It was officially incorporated on 22 October 2023 (ABN 25 545 712 911) to support the growing Latvian community in the Northern Territory.\n\nThe Association builds on informal cultural, social, and commemorative gatherings held by Latvians in Darwin since the 1980s. National day celebrations, cultural events, and diaspora commemorations created the foundation for a permanent organisation.\n\nToday the Association honours that history while building a welcoming, active community for future generations.",
     },
     lv: {
       title: 'Mūsu vēsture',
       excerpt:
         'No neformālām tikšanās reizēm 20. gadsimta astoņdesmitajos gados līdz reģistrētai Top End kopienas organizācijai.',
-      body: 'Dārvinas Latviešu Apvienība ir viena no Austrālijas jaunākajām latviešu kopienas organizācijām. Tā tika oficiāli reģistrēta 2023. gada 22. augustā, lai atbalstītu augošo latviešu kopienu Ziemeļu Teritorijā.\n\nApvienība turpina neformālo kultūras, sabiedrisko un piemiņas pasākumu tradīciju, ko Dārvinā dzīvojošie latvieši veidojuši kopš 20. gadsimta astoņdesmitajiem gadiem. Valsts svētki, kultūras sarīkojumi un diasporas piemiņas dienas radīja pamatu pastāvīgai organizācijai.\n\nŠodien Apvienība godina šo vēsturi un vienlaikus veido aktīvu, atvērtu kopienu nākamajām paaudzēm.',
+      body: 'Dārvinas Latviešu Apvienība ir viena no Austrālijas jaunākajām latviešu kopienas organizācijām. Tā tika oficiāli reģistrēta 2023. gada 22. oktobrī (ABN 25 545 712 911), lai atbalstītu augošo latviešu kopienu Ziemeļu Teritorijā.\n\nApvienība turpina neformālo kultūras, sabiedrisko un piemiņas pasākumu tradīciju, ko Dārvinā dzīvojošie latvieši veidojuši kopš 20. gadsimta astoņdesmitajiem gadiem. Valsts svētki, kultūras sarīkojumi un diasporas piemiņas dienas radīja pamatu pastāvīgai organizācijai.\n\nŠodien Apvienība godina šo vēsturi un vienlaikus veido aktīvu, atvērtu kopienu nākamajām paaudzēm.',
     },
   }),
   starterPage({

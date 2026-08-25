@@ -35,6 +35,7 @@ export type HomepageContent = {
 }
 
 export const fallbackHomepage: HomepageContent = {
+  heroImage: '/images/img1.webp',
   heroPrimaryHref: '#events',
   heroSecondaryHref: '/about',
   en: {

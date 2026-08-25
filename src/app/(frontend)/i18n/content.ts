@@ -38,7 +38,7 @@ const en: SiteContent = {
   history: {
     title: 'Our History',
     body: [
-      `The Latvian Association of Darwin (Dārvinas Latviešu Apvienība) is one of Australia's newest Latvian community organisations, officially incorporated on 22 August 2023 to support the growing Latvian community in the Northern Territory.`,
+      `The Latvian Association of Darwin (Dārvinas Latviešu Apvienība) is one of Australia's newest Latvian community organisations, officially incorporated on 22 October 2023 (ABN 25 545 712 911) to support the growing Latvian community in the Northern Territory.`,
       `Although formally established in 2023, the Association builds on many years of informal cultural, social, and commemorative gatherings held by Latvians living in Darwin going back to the 1980s. These community traditions—ranging from celebrations of Latvian national days to cultural events and diaspora commemorations—created a strong foundation for a permanent organisation to represent and unite Latvians across the Top End.`,
       `The Association was formed with a clear purpose: to preserve and promote Latvian culture, language, and heritage in Darwin, to support Latvian descendants, and to strengthen connections with Latvian organisations across Australia and internationally.`,
       `Today, the Latvian Association of Darwin continues to grow as a vibrant and welcoming community—honouring the past, celebrating the present, and ensuring Latvian culture thrives for future generations in the Northern Territory.`,
@@ -86,6 +86,10 @@ const en: SiteContent = {
   footer: {
     tagline: 'Latvian Association of Darwin — Dārvinas Latviešu Apvienība',
     quickLinks: 'Quick Links',
+    resources: 'Resources',
+    getInvolved: 'Get Involved',
+    getInvolvedText: 'Whether you have Latvian heritage or want to connect with a vibrant community, there is always a place for you in our association.',
+    incorporatedSince: 'Incorporated Entity from 22 October 2023',
     contactTitle: 'Get in Touch',
     contact: 'Get in touch',
     rights: 'All rights reserved.',
@@ -138,7 +142,7 @@ const en: SiteContent = {
       directLabel: 'Direct Payment',
       directTitle: 'Bank Transfer & PayID',
       directIntro: 'Recommended for larger donations. Direct transfers carry no processing fees and we can issue a receipt on request.',
-      bankOrgName: 'Latvian Association of Darwin Inc',
+      bankOrgName: 'Latvian Association of Darwin Incorporated',
       bankStep1Title: 'Open your banking app',
       bankStep1Body: 'Log in and select "Make a transfer" or "New payment"',
       bankStep2Title: 'Enter these details',
@@ -203,7 +207,7 @@ const lv: SiteContent = {
   history: {
     title: 'Mūsu vēsture',
     body: [
-      'Dārvinas Latviešu Apvienība ir viena no Austrālijas jaunākajām latviešu kopienas organizācijām, oficiāli reģistrēta 2023. gada 22. augustā, lai atbalstītu augošo latviešu kopienu Ziemeļu Teritorijā.',
+      'Dārvinas Latviešu Apvienība ir viena no Austrālijas jaunākajām latviešu kopienas organizācijām, oficiāli reģistrēta 2023. gada 22. oktobrī (ABN 25 545 712 911), lai atbalstītu augošo latviešu kopienu Ziemeļu Teritorijā.',
       'Lai gan formāli dibināta 2023. gadā, Apvienība balstās uz daudzu gadu neformāliem kultūras, sociāliem un piemiņas pulcēšanās brīžiem, ko Dārvinā dzīvojošie latvieši rīkoja jau kopš 1980. gadiem. Šīs kopienas tradīcijas — sākot no Latvijas nacionālo dienu svinēšanām līdz kultūras pasākumiem un diasporas piemiņas brīžiem — radīja spēcīgu pamatu pastāvīgai organizācijai, kas pārstāvētu un vienotu latviešus visā Top End reģionā.',
       'Apvienība tika izveidota ar skaidru mērķi: saglabāt un veicināt latviešu kultūru, valodu un mantojumu Dārvinā, atbalstīt latviešu pēcnācējus un stiprināt saiknes ar latviešu organizācijām visā Austrālijā un starptautiski.',
       'Šodien Dārvinas Latviešu Apvienība turpina augt kā dzīva un uzņemoša kopiena — godinot pagātni, svinot tagadni un nodrošinot, ka latviešu kultūra plaukst nākamajām paaudzēm Ziemeļu Teritorijā.',
@@ -248,7 +252,11 @@ const lv: SiteContent = {
   },
   footer: {
     tagline: 'Dārvinas Latviešu Apvienība — Latvian Association of Darwin',
-    quickLinks: 'Ātrā saite',
+    quickLinks: 'Ātrās saites',
+    resources: 'Resursi',
+    getInvolved: 'Iesaisties',
+    getInvolvedText: 'Neatkarīgi no tā, vai jums ir latviešu izcelsme, vai vēlaties pievienoties mūsu kopienai, jūs vienmēr esat laipni gaidīti mūsu apvienībā.',
+    incorporatedSince: 'Reģistrēta asociācija no 2023. gada 22. oktobra',
     contactTitle: 'Sazināties ar mums',
     contact: 'Sazināties ar mums',
     rights: 'Visas tiesības aizsargātas.',

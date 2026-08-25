@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { slugValidator } from '@/lib/validation'
+import { formatSlug, slugValidator } from '@/lib/validation'
 
 const specialPageFields = (language: string) => [
   {
@@ -61,6 +61,12 @@ export const SpecialPages: CollectionConfig = {
       unique: true,
       index: true,
       validate: slugValidator,
+      hooks: {
+        beforeValidate: [formatSlug('adminTitle')],
+      },
+      admin: {
+        description: 'Auto-generated from title if left blank. Automatically converted to lowercase kebab-case.',
+      },
     },
     {
       type: 'tabs',
@@ -90,7 +96,7 @@ export const SpecialPages: CollectionConfig = {
     {
       name: 'meta',
       type: 'group',
-      label: 'SEO and social sharing',
+      label: 'Google Search & Link Previews (WhatsApp, Facebook, Search)',
       fields: [
         {
           type: 'tabs',
@@ -171,7 +177,7 @@ export const SpecialPages: CollectionConfig = {
   ],
   versions: {
     drafts: {
-      autosave: true,
+      autosave: false,
     },
   },
 }

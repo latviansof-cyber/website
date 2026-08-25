@@ -2,6 +2,11 @@ import { notFound } from 'next/navigation'
 import type { ReactNode } from 'react'
 import type { Metadata } from 'next'
 import { LanguageProvider } from '../i18n/LanguageProvider'
+import { SiteHeader } from '../components/SiteHeader'
+import { SiteFooter } from '../components/SiteFooter'
+import { getMainMenu } from '@/lib/navigation'
+import { getFooter } from '@/lib/footer'
+import { getSiteSettings } from '@/lib/siteSettings'
 import { isLang, languages } from '@/lib/i18nRouting'
 import { SITE_NAME } from '@/lib/site'
 
@@ -37,5 +42,17 @@ export default async function LocaleLayout({
   const { lang } = await params
   if (!isLang(lang)) notFound()
 
-  return <LanguageProvider initialLang={lang}>{children}</LanguageProvider>
+  const [mainMenu, footer, siteSettings] = await Promise.all([
+    getMainMenu(),
+    getFooter(),
+    getSiteSettings(),
+  ])
+
+  return (
+    <LanguageProvider initialLang={lang}>
+      <SiteHeader navItems={mainMenu} siteSettings={siteSettings} />
+      {children}
+      <SiteFooter footer={footer} siteSettings={siteSettings} />
+    </LanguageProvider>
+  )
 }

@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import type { SiteSetting as PayloadSiteSettings } from '@/payload-types'
 import { getPayloadClient } from './payload'
 
@@ -32,7 +33,7 @@ export const fallbackSiteSettings: SiteSettingsContent = {
   socialLinks: [],
 }
 
-export async function getSiteSettings(): Promise<SiteSettingsContent> {
+export const getSiteSettings = cache(async (): Promise<SiteSettingsContent> => {
   try {
     const payload = await getPayloadClient()
     const data = await payload.findGlobal({
@@ -49,4 +50,4 @@ export async function getSiteSettings(): Promise<SiteSettingsContent> {
     console.warn('[siteSettings] Payload site settings unavailable; using fallback content.', error)
     return fallbackSiteSettings
   }
-}
+})

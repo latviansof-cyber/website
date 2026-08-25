@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { getPayloadClient } from './payload'
 
 export type MainMenuItem = {
@@ -17,7 +18,7 @@ export const fallbackMainMenu: MainMenuItem[] = [
   { href: '/#events', en: 'Events', lv: 'Pasākumi' },
 ]
 
-export async function getMainMenu(): Promise<MainMenuItem[]> {
+export const getMainMenu = cache(async (): Promise<MainMenuItem[]> => {
   try {
     const payload = await getPayloadClient()
     const menu = await payload.findGlobal({
@@ -29,4 +30,4 @@ export async function getMainMenu(): Promise<MainMenuItem[]> {
     console.warn('[navigation] Payload main menu unavailable; using fallback menu.', error)
     return fallbackMainMenu
   }
-}
+})

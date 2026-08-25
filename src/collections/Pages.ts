@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { slugValidator } from '@/lib/validation'
+import { formatMetaDescription, formatMetaTitle, formatSlug, slugValidator } from '@/lib/validation'
 import { CallToAction } from '../blocks/CallToAction'
 import { ContentBlock } from '../blocks/Content'
 import { HeroBlock } from '../blocks/Hero'
@@ -12,12 +12,25 @@ const languageFields = (label: string) => [
     required: true,
   },
   {
+    name: 'body',
+    type: 'textarea' as const,
+    label: `${label} page content / body`,
+    required: false,
+    admin: {
+      description: 'Main page content with formatted text, headings, lists, and links.',
+      rows: 10,
+      components: {
+        Field: '@/components/QuillEditorField#QuillEditorField',
+      },
+    },
+  },
+  {
     name: 'excerpt',
     type: 'textarea' as const,
-    label: `${label} excerpt`,
-    required: true,
+    label: `${label} short summary (Excerpt)`,
+    required: false,
     admin: {
-      description: 'A short summary used on cards and listing pages.',
+      description: 'Optional 1-2 sentence summary for cards. If left blank, auto-generates from page content.',
       rows: 3,
     },
   },
@@ -58,6 +71,12 @@ export const Pages: CollectionConfig = {
       unique: true,
       index: true,
       validate: slugValidator,
+      hooks: {
+        beforeValidate: [formatSlug('adminTitle')],
+      },
+      admin: {
+        description: 'Auto-generated from title if left blank. Automatically converted to lowercase kebab-case.',
+      },
     },
     {
       name: 'order',
@@ -96,30 +115,36 @@ export const Pages: CollectionConfig = {
     {
       name: 'layout',
       type: 'blocks',
-      required: true,
-      minRows: 1,
+      required: false,
       blocks: [HeroBlock, ContentBlock, CallToAction],
       admin: {
+        description: 'Advanced layout builder (Hero, Content sections, Call to Action buttons).',
         initCollapsed: true,
       },
     },
     {
       name: 'meta',
       type: 'group',
-      label: 'SEO and social sharing',
+      label: 'Google Search & Link Previews (WhatsApp, Facebook, Search)',
       fields: [
         {
           name: 'title',
           type: 'text',
+          hooks: {
+            beforeValidate: [formatMetaTitle],
+          },
           admin: {
-            description: 'Optional search/social title. Defaults to the English page title.',
+            description: 'Title shown on Google search and when sharing links in messages or social media. Auto-prefilled from Page Title if left blank.',
           },
         },
         {
           name: 'description',
           type: 'textarea',
+          hooks: {
+            beforeValidate: [formatMetaDescription],
+          },
           admin: {
-            description: 'Optional search/social description. Defaults to the English excerpt.',
+            description: 'Summary shown on Google search and when sharing links in messages or social media. Auto-prefilled from Page Content if left blank.',
             rows: 3,
           },
         },
@@ -128,7 +153,7 @@ export const Pages: CollectionConfig = {
           type: 'upload',
           relationTo: 'media',
           admin: {
-            description: 'Recommended size: 1200 × 630 pixels.',
+            description: 'Thumbnail image shown when sharing this link on Facebook, WhatsApp, LinkedIn, or Twitter. Recommended size: 1200 × 630 pixels.',
           },
         },
         {
@@ -141,7 +166,7 @@ export const Pages: CollectionConfig = {
   ],
   versions: {
     drafts: {
-      autosave: true,
+      autosave: false,
     },
   },
 }

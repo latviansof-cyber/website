@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import type { Footer as PayloadFooter } from '@/payload-types'
 import { contentByLang } from '@/app/(frontend)/i18n/content'
 import { getPayloadClient } from './payload'
@@ -44,7 +45,7 @@ export const fallbackFooter: FooterContent = {
   ]
 }
 
-export async function getFooter(): Promise<FooterContent> {
+export const getFooter = cache(async (): Promise<FooterContent> => {
   try {
     const payload = await getPayloadClient()
     const footer = await payload.findGlobal({
@@ -61,4 +62,4 @@ export async function getFooter(): Promise<FooterContent> {
     console.warn('[footer] Payload footer unavailable; using fallback content.', error)
     return fallbackFooter
   }
-}
+})

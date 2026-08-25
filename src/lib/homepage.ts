@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import type { Homepage as PayloadHomepage } from '@/payload-types'
 import { mediaURL } from '@/lib/media'
 import { contentByLang } from '@/app/(frontend)/i18n/content'
@@ -63,7 +64,7 @@ export const fallbackHomepage: HomepageContent = {
 }
 
 
-export async function getHomepage(): Promise<HomepageContent> {
+export const getHomepage = cache(async (): Promise<HomepageContent> => {
   try {
     const payload = await getPayloadClient()
     const homepage = await payload.findGlobal({
@@ -82,4 +83,4 @@ export async function getHomepage(): Promise<HomepageContent> {
     console.warn('[homepage] Payload homepage unavailable; using fallback content.', error)
     return fallbackHomepage
   }
-}
+})

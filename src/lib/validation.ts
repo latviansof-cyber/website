@@ -141,6 +141,54 @@ export const SiteContentSchema = z.object({
 
 export type SiteContentValidated = z.infer<typeof SiteContentSchema>
 
+import type { FieldHook } from 'payload'
+
+export function sanitizeSlug(val: string): string {
+  return val
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+}
+
+export const formatSlug =
+  (fallbackField: string = 'adminTitle'): FieldHook =>
+  ({ value, data }) => {
+    if (typeof value === 'string' && value.trim().length > 0) {
+      return sanitizeSlug(value)
+    }
+
+    const fallbackData = data?.[fallbackField] || data?.en?.title || data?.title
+    if (typeof fallbackData === 'string' && fallbackData.trim().length > 0) {
+      return sanitizeSlug(fallbackData)
+    }
+
+    return value
+  }
+
+export const formatMetaTitle: FieldHook = ({ value, data }) => {
+  if (typeof value === 'string' && value.trim().length > 0) {
+    return value
+  }
+  const fallback = data?.en?.title || data?.title || data?.adminTitle
+  return typeof fallback === 'string' ? fallback.trim() : value
+}
+
+export const formatMetaDescription: FieldHook = ({ value, data }) => {
+  if (typeof value === 'string' && value.trim().length > 0) {
+    return value
+  }
+  const fallbackText = data?.en?.excerpt || data?.en?.body || data?.content || ''
+  if (typeof fallbackText === 'string' && fallbackText.trim().length > 0) {
+    const clean = fallbackText.replace(/<[^>]*>/g, '').trim()
+    return clean.length > 160 ? clean.slice(0, 157).trim() + '...' : clean
+  }
+  return value
+}
+
 export const slugValidator = (value: unknown): true | string => {
   if (typeof value !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)) {
     return 'Use lowercase letters, numbers, and hyphens only.'

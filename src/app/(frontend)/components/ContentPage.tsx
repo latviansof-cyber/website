@@ -13,6 +13,8 @@ import { Container } from './ui/Container'
 import { Eyebrow } from './ui/Eyebrow'
 import { localizeHref, type Lang } from '@/lib/i18nRouting'
 
+import { FormattedText } from './ui/FormattedText'
+
 function HeroLayout({ block }: { block: HeroLayoutBlock }) {
   return (
     <section className="relative isolate overflow-hidden bg-ink py-20 text-white sm:py-28">
@@ -42,7 +44,6 @@ function HeroLayout({ block }: { block: HeroLayoutBlock }) {
 }
 
 function ContentLayout({ block }: { block: ContentLayoutBlock }) {
-  const paragraphs = block.body.split(/\n\s*\n/).filter(Boolean)
   const showImage = block.image && block.imagePosition !== 'none'
 
   return (
@@ -56,11 +57,10 @@ function ContentLayout({ block }: { block: ContentLayoutBlock }) {
           {block.heading ? (
             <h2 className="mb-7 font-serif text-4xl font-bold text-ink">{block.heading}</h2>
           ) : null}
-          <div className="space-y-7 text-lg leading-8 text-ink-light sm:text-xl sm:leading-9">
-            {paragraphs.map((paragraph, idx) => (
-              <p key={`p-${idx}`}>{paragraph}</p>
-            ))}
-          </div>
+          <FormattedText
+            text={block.body}
+            className="space-y-7 text-lg leading-8 text-ink-light sm:text-xl sm:leading-9"
+          />
         </article>
         {showImage ? (
           <Image

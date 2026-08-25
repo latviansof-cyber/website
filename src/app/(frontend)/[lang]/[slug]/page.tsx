@@ -15,7 +15,7 @@ import { SITE_NAME, SITE_URL, absoluteURL } from '@/lib/site'
 import { getOgImageUrlByPath } from '@/lib/ogImage'
 import { isLang, localeAlternates } from '@/lib/i18nRouting'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600 // ISR: revalidate once per hour
 
 export function generateStaticParams() {
   const pageSlugs = fallbackPages.map((page) => ({ slug: page.slug }))
@@ -98,13 +98,10 @@ export default async function WebsiteContentPage({
 }) {
   const { lang, slug } = await params
   if (!isLang(lang)) notFound()
-  const [page, specialPage, event, mainMenu, footer, siteSettings] = await Promise.all([
+  const [page, specialPage, event] = await Promise.all([
     getWebsitePage(slug),
     getSpecialPage(slug),
     getWebsiteEvent(slug),
-    getMainMenu(),
-    getFooter(),
-    getSiteSettings(),
   ])
 
   if (!page && !specialPage) {
@@ -116,7 +113,6 @@ export default async function WebsiteContentPage({
 
   return (
     <>
-      <SiteHeader navItems={mainMenu} siteSettings={siteSettings} />
       {page ? (
         <>
           <JsonLd
@@ -149,7 +145,6 @@ export default async function WebsiteContentPage({
       ) : (
         <SpecialPageLayout page={specialPage} />
       )}
-      <SiteFooter footer={footer} siteSettings={siteSettings} />
     </>
   )
 }

@@ -11,11 +11,22 @@ export function middleware(request: NextRequest) {
 
   requestHeaders.set('x-site-lang', lang === 'lv' ? 'lv' : 'en')
 
-  return NextResponse.next({
+  const response = NextResponse.next({
     request: {
       headers: requestHeaders,
     },
   })
+
+  // Set Cache-Control headers for CDN & browser caching
+  // max-age: browser cache (1 hour)
+  // s-maxage: edge cache like Cloudflare (24 hours)
+  // stale-while-revalidate: serve stale for 7 days while revalidating
+  response.headers.set(
+    'Cache-Control',
+    'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800'
+  )
+
+  return response
 }
 
 export const config = {

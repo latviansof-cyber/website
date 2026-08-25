@@ -12,7 +12,7 @@ import { SITE_NAME, SITE_URL, absoluteURL } from '@/lib/site'
 import { getOgImageUrlByPath } from '@/lib/ogImage'
 import { isLang, localeAlternates } from '@/lib/i18nRouting'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600
 
 export async function generateStaticParams() {
   const events = await getWebsiteEvents()
@@ -72,19 +72,13 @@ export default async function EventPage({
 }) {
   const { lang, slug } = await params
   if (!isLang(lang)) notFound()
-  const [event, mainMenu, footer, siteSettings] = await Promise.all([
-    getWebsiteEvent(slug),
-    getMainMenu(),
-    getFooter(),
-    getSiteSettings(),
-  ])
+  const event = await getWebsiteEvent(slug)
 
   if (!event) notFound()
 
   const content = event[lang]
   return (
     <>
-      <SiteHeader navItems={mainMenu} siteSettings={siteSettings} />
       <JsonLd
         data={{
           '@context': 'https://schema.org',
@@ -103,7 +97,6 @@ export default async function EventPage({
         }}
       />
       <EventDetailPage event={event} />
-      <SiteFooter footer={footer} siteSettings={siteSettings} />
     </>
   )
 }

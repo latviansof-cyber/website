@@ -13,7 +13,7 @@ import { isLang, localeAlternates } from '@/lib/i18nRouting'
 
 const ogImage = getOgImageUrlByPath('/donate')
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600 // ISR: revalidate once per hour
 
 export async function generateMetadata({
   params,
@@ -49,22 +49,13 @@ export async function generateMetadata({
 export default async function DonatePage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
   if (!isLang(lang)) notFound()
-  const [mainMenu, footer, siteSettings, donationSettings] = await Promise.all([
-    getMainMenu(),
-    getFooter(),
-    getSiteSettings(),
-    getDonationSettings(),
-  ])
+  const donationSettings = await getDonationSettings()
 
   return (
-    <>
-      <SiteHeader navItems={mainMenu} siteSettings={siteSettings} />
-      <main id="main" className="bg-cream text-ink">
-        <ErrorBoundary>
-          <DonationWidget donationSettings={donationSettings} />
-        </ErrorBoundary>
-      </main>
-      <SiteFooter footer={footer} siteSettings={siteSettings} />
-    </>
+    <main id="main" className="bg-cream text-ink">
+      <ErrorBoundary>
+        <DonationWidget donationSettings={donationSettings} />
+      </ErrorBoundary>
+    </main>
   )
 }

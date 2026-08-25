@@ -16,6 +16,7 @@ import * as migration_20260611_201944_repair_page_versions from './20260611_2019
 import * as migration_20260728_041536 from './20260728_041536';
 import * as migration_20260728_042055 from './20260728_042055';
 import * as migration_20260728_074335 from './20260728_074335';
+import * as migration_20260825_143000_add_body_to_pages from './20260825_143000_add_body_to_pages';
 
 export const migrations = [
   {
@@ -106,6 +107,11 @@ export const migrations = [
   {
     up: migration_20260728_074335.up,
     down: migration_20260728_074335.down,
-    name: '20260728_074335'
+    name: '20260728_074335',
+  },
+  {
+    up: migration_20260825_143000_add_body_to_pages.up,
+    down: migration_20260825_143000_add_body_to_pages.down,
+    name: '20260825_143000_add_body_to_pages',
   },
 ];

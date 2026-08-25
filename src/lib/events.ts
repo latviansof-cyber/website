@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import type { Event as PayloadEvent } from '@/payload-types'
 import { mediaURL } from '@/lib/media'
 import { contentByLang } from '@/app/(frontend)/i18n/content'
@@ -135,7 +136,7 @@ const pastFallbackEvents: WebsiteEvent[] = [
 
 export const fallbackEvents: WebsiteEvent[] = [...baseFallbackEvents, ...pastFallbackEvents]
 
-export async function getWebsiteEvents(): Promise<WebsiteEvent[]> {
+export const getWebsiteEvents = cache(async (): Promise<WebsiteEvent[]> => {
   try {
     const payload = await getPayloadClient()
     const result = await payload.find({
@@ -170,11 +171,39 @@ export async function getWebsiteEvents(): Promise<WebsiteEvent[]> {
     console.warn('[events] Payload events unavailable; using fallback events.', error)
     return fallbackEvents
   }
-}
+})
 
-export async function getWebsiteEvent(slug: string): Promise<WebsiteEvent | null> {
-  const events = await getWebsiteEvents()
-  const found = events.find((e) => e.slug === slug)
-  if (found) return found
+export const getWebsiteEvent = cache(async (slug: string): Promise<WebsiteEvent | null> => {
+  try {
+    const payload = await getPayloadClient()
+    const result = await payload.find({
+      collection: 'events',
+      depth: 1,
+      limit: 1,
+      pagination: false,
+      where: {
+        _status: { equals: 'published' },
+        slug: { equals: slug },
+      },
+    })
+
+    if (result.docs.length > 0) {
+      const event = result.docs[0]
+      return {
+        slug: event.slug,
+        order: event.order,
+        accentTone: event.accentTone,
+        image: mediaURL(event.image) ?? fallbackImageBySlug[event.slug],
+        eventDate: event.eventDate ?? fallbackDateBySlug[event.slug],
+        facebookUrl: (event as any).facebookUrl?.trim() || undefined,
+        isPast: Boolean(event.isPast),
+        en: event.en,
+        lv: event.lv,
+      }
+    }
+  } catch (error) {
+    console.warn('[events] Payload event "' + slug + '" unavailable; checking fallbacks.', error)
+  }
+
   return fallbackEvents.find((e) => e.slug === slug) ?? null
-}
+})

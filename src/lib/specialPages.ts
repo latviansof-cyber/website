@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import type { SpecialPage as PayloadSpecialPage } from '@/payload-types'
 import { getPayloadClient } from './payload'
 
@@ -207,7 +208,7 @@ E-pasts: hello@latviansofdarwin.org.au`
   }
 ]
 
-export async function getSpecialPage(slug: string): Promise<SpecialPageContent | undefined> {
+export const getSpecialPage = cache(async (slug: string): Promise<SpecialPageContent | undefined> => {
   try {
     const payload = await getPayloadClient()
 
@@ -271,4 +272,4 @@ export async function getSpecialPage(slug: string): Promise<SpecialPageContent |
     console.warn(`[special-pages] Payload special page ${slug} unavailable; using fallback.`, error)
     return fallbackSpecialPages.find((p) => p.slug === slug)
   }
-}
+})

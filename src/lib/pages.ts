@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import type { Page as PayloadPage } from '@/payload-types'
 import { mediaURL } from '@/lib/media'
 import { getPayloadClient } from './payload'
@@ -213,11 +214,26 @@ export const fallbackPages: WebsitePage[] = [
 ]
 
 
+export const getWebsitePage = cache(async (slug: string): Promise<WebsitePage | undefined> => {
+  const pages = await getWebsitePages()
+  return pages.find((page) => page.slug === slug)
+})
+
+function cleanExcerpt(rawExcerpt: string | undefined | null, rawBody: string | undefined | null): string {
+  const text = (rawExcerpt || rawBody || '').replace(/<[^>]*>/g, '').trim()
+  if (!text) return ''
+  if (text.length <= 250) return text
+  const firstParagraph = text.split(/\n+/)[0].trim()
+  if (firstParagraph.length <= 250) return firstParagraph
+  return firstParagraph.slice(0, 220).trim() + '...'
+}
+
 function mapLayout(
   layout: PayloadPage['layout'],
   language: 'en' | 'lv',
   fallbackLayout: PageLayoutBlock[] = [],
 ): PageLayoutBlock[] {
+  if (!Array.isArray(layout)) return fallbackLayout
   return layout.map((block, index) => {
     const fallbackBlock = fallbackLayout[index]
 
@@ -259,7 +275,43 @@ function mapLayout(
   })
 }
 
-export async function getWebsitePages(): Promise<WebsitePage[]> {
+function resolvePageLayout(
+  page: any,
+  language: 'en' | 'lv',
+  fallbackLayout: PageLayoutBlock[] = [],
+): PageLayoutBlock[] {
+  if (Array.isArray(page.layout) && page.layout.length > 0) {
+    return mapLayout(page.layout, language, fallbackLayout)
+  }
+
+  const langObj = page[language] || {}
+  const title = langObj.title || page.adminTitle || ''
+  const bodyText = langObj.body || langObj.excerpt || ''
+  const excerptText = cleanExcerpt(langObj.excerpt, langObj.body)
+
+  if (bodyText) {
+    const layout: PageLayoutBlock[] = [
+      {
+        blockType: 'hero',
+        eyebrow: language === 'lv' ? 'Dārvinas Latviešu Apvienība' : 'Latvian Association of Darwin',
+        heading: title,
+        text: excerptText,
+        alignment: 'left',
+      },
+      {
+        blockType: 'content',
+        body: bodyText,
+        imagePosition: 'none',
+        tone: 'plain',
+      },
+    ]
+    return layout
+  }
+
+  return fallbackLayout
+}
+
+export const getWebsitePages = cache(async (): Promise<WebsitePage[]> => {
   try {
     const payload = await getPayloadClient()
     const result = await payload.find({
@@ -277,16 +329,22 @@ export async function getWebsitePages(): Promise<WebsitePage[]> {
 
     if (result.docs.length === 0) return fallbackPages
 
-    return result.docs.map((page) => {
+    return result.docs.map((page: any) => {
       const fallback = fallbackPages.find((item) => item.slug === page.slug)
       return {
         slug: page.slug,
         order: page.order,
-        en: page.en,
-        lv: page.lv,
+        en: {
+          title: page.en?.title || fallback?.en.title || '',
+          excerpt: cleanExcerpt(page.en?.excerpt, page.en?.body) || fallback?.en.excerpt || '',
+        },
+        lv: {
+          title: page.lv?.title || fallback?.lv.title || '',
+          excerpt: cleanExcerpt(page.lv?.excerpt, page.lv?.body) || fallback?.lv.excerpt || '',
+        },
         layout: {
-          en: mapLayout(page.layout, 'en', fallback?.layout.en),
-          lv: mapLayout(page.layout, 'lv', fallback?.layout.lv),
+          en: resolvePageLayout(page, 'en', fallback?.layout.en),
+          lv: resolvePageLayout(page, 'lv', fallback?.layout.lv),
         },
         meta: {
           title: page.meta?.title,
@@ -300,45 +358,6 @@ export async function getWebsitePages(): Promise<WebsitePage[]> {
     console.warn('[pages] Payload pages unavailable; using fallback content.', error)
     return fallbackPages
   }
-}
+})
 
-export async function getWebsitePage(slug: string): Promise<WebsitePage | undefined> {
-  try {
-    const payload = await getPayloadClient()
-    const result = await payload.find({
-      collection: 'pages',
-      depth: 1,
-      limit: 1,
-      pagination: false,
-      where: {
-        _status: { equals: 'published' },
-        slug: { equals: slug },
-      },
-    })
 
-    if (result.docs.length === 0) return fallbackPages.find((p) => p.slug === slug)
-
-    const page = result.docs[0]
-    const fallback = fallbackPages.find((item) => item.slug === page.slug)
-
-    return {
-      slug: page.slug,
-      order: page.order,
-      en: page.en,
-      lv: page.lv,
-      layout: {
-        en: mapLayout(page.layout, 'en', fallback?.layout.en),
-        lv: mapLayout(page.layout, 'lv', fallback?.layout.lv),
-      },
-      meta: {
-        title: page.meta?.title,
-        description: page.meta?.description,
-        image: mediaURL(page.meta?.image) ?? fallback?.meta.image ?? '/images/gathering1.jpg',
-        noIndex: page.meta?.noIndex,
-      },
-    }
-  } catch (error) {
-    console.warn('[pages] Payload page "' + slug + '" unavailable; using fallback.', error)
-    return fallbackPages.find((p) => p.slug === slug)
-  }
-}

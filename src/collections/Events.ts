@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { slugValidator } from '@/lib/validation'
+import { formatSlug, slugValidator } from '@/lib/validation'
 
 const eventContentFields = (language: string) => [
   {
@@ -64,6 +64,12 @@ export const Events: CollectionConfig = {
       unique: true,
       index: true,
       validate: slugValidator,
+      hooks: {
+        beforeValidate: [formatSlug('adminTitle')],
+      },
+      admin: {
+        description: 'Auto-generated from title if left blank. Automatically converted to lowercase kebab-case.',
+      },
     },
     {
       name: 'order',
@@ -146,7 +152,7 @@ export const Events: CollectionConfig = {
   ],
   versions: {
     drafts: {
-      autosave: true,
+      autosave: false,
     },
   },
 }

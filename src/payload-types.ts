@@ -187,34 +187,48 @@ export interface Page {
    * Used only in the Payload admin.
    */
   adminTitle: string;
+  /**
+   * Auto-generated from title if left blank. Automatically converted to lowercase kebab-case.
+   */
   slug: string;
   order: number;
   en: {
     title: string;
     /**
-     * A short summary used on cards and listing pages.
+     * Main page content with formatted text, headings, lists, and links.
      */
-    excerpt: string;
+    body?: string | null;
+    /**
+     * Optional 1-2 sentence summary for cards. If left blank, auto-generates from page content.
+     */
+    excerpt?: string | null;
   };
   lv: {
     title: string;
     /**
-     * A short summary used on cards and listing pages.
+     * Main page content with formatted text, headings, lists, and links.
      */
-    excerpt: string;
+    body?: string | null;
+    /**
+     * Optional 1-2 sentence summary for cards. If left blank, auto-generates from page content.
+     */
+    excerpt?: string | null;
   };
-  layout: (HeroLayoutBlock | ContentLayoutBlock | CallToActionLayoutBlock)[];
+  /**
+   * Advanced layout builder (Hero, Content sections, Call to Action buttons).
+   */
+  layout?: (HeroLayoutBlock | ContentLayoutBlock | CallToActionLayoutBlock)[] | null;
   meta?: {
     /**
-     * Optional search/social title. Defaults to the English page title.
+     * Title shown on Google search and when sharing links in messages or social media. Auto-prefilled from Page Title if left blank.
      */
     title?: string | null;
     /**
-     * Optional search/social description. Defaults to the English excerpt.
+     * Summary shown on Google search and when sharing links in messages or social media. Auto-prefilled from Page Content if left blank.
      */
     description?: string | null;
     /**
-     * Recommended size: 1200 × 630 pixels.
+     * Thumbnail image shown when sharing this link on Facebook, WhatsApp, LinkedIn, or Twitter. Recommended size: 1200 × 630 pixels.
      */
     image?: (number | null) | Media;
     noIndex?: boolean | null;
@@ -313,6 +327,9 @@ export interface Event {
    * Used only in the Payload admin.
    */
   adminTitle: string;
+  /**
+   * Auto-generated from title if left blank. Automatically converted to lowercase kebab-case.
+   */
   slug: string;
   order: number;
   accentTone: 'emerald' | 'amber' | 'sky' | 'rose' | 'violet' | 'slate';
@@ -321,10 +338,6 @@ export interface Event {
    * Optional URL to the Facebook Event page (e.g. https://facebook.com/events/...).
    */
   facebookUrl?: string | null;
-  /**
-   * Mark if this event has already taken place.
-   */
-  isPast?: boolean | null;
   /**
    * Recommended: landscape image at least 1200 × 800 pixels.
    */
@@ -351,6 +364,9 @@ export interface SpecialPage {
    * Used only in the Payload admin.
    */
   adminTitle: string;
+  /**
+   * Auto-generated from title if left blank. Automatically converted to lowercase kebab-case.
+   */
   slug: string;
   en: {
     title: string;
@@ -532,12 +548,14 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         title?: T;
+        body?: T;
         excerpt?: T;
       };
   lv?:
     | T
     | {
         title?: T;
+        body?: T;
         excerpt?: T;
       };
   layout?:
@@ -653,7 +671,6 @@ export interface EventsSelect<T extends boolean = true> {
   accentTone?: T;
   eventDate?: T;
   facebookUrl?: T;
-  isPast?: T;
   image?: T;
   en?:
     | T

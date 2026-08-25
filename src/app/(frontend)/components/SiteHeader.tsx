@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useLanguage } from '../i18n/LanguageProvider'
 import { Container } from './ui/Container'
 import { IconHeart } from './ui/IconHeart'
@@ -29,9 +30,11 @@ export function SiteHeader({
       </a>
       <Container className="flex items-center justify-between gap-4 py-3 sm:py-4">
         <Link href={localizeHref('/#top', lang)} className="group flex items-center gap-4">
-          <img
+          <Image
             src="/images/logo.png"
             alt={siteSettings.en.associationName}
+            width={80}
+            height={80}
             className="h-16 w-16 sm:h-20 sm:w-20 object-contain rounded-2xl bg-white p-1.5 drop-shadow-lg transition-transform duration-300 group-hover:scale-105"
           />
           <span className="hidden flex-col leading-tight sm:flex">

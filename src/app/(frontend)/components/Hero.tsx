@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useLanguage } from '../i18n/LanguageProvider'
 import { Container } from './ui/Container'
 import { LinkButton } from './ui/Button'
@@ -64,10 +65,13 @@ export function Hero({ homepage }: { homepage: HomepageContent }) {
     >
       {/* Background Image */}
       <div className="absolute inset-0 -z-20">
-        <img
+        <Image
           src={heroImageSrc}
           alt="Latvian Association of Darwin Community"
-          className="h-full w-full object-cover"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
         />
         {/* Gradient Overlay mirroring uaant-website hero */}
         <div className="absolute inset-0 bg-gradient-to-r from-ink/95 via-ink/80 to-ink/50" />

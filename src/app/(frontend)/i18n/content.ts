@@ -45,7 +45,7 @@ const en: SiteContent = {
     ],
   },
   events: {
-    title: 'Events',
+    title: 'Community Calendar',
     intro:
       'Throughout the year we gather to honour Latvian traditions, mark national days, and welcome the seasons. Everyone is warmly invited to join us.',
     items: [
@@ -214,7 +214,7 @@ const lv: SiteContent = {
     ],
   },
   events: {
-    title: 'Pasākumi',
+    title: 'Kopienas kalendārs',
     intro:
       'Gada garumā mēs pulcējamies, lai godinātu latviešu tradīcijas, atzīmētu nacionālās dienas un sagaidītu gadalaiku maiņu. Visi ir laipni aicināti pievienoties.',
     items: [

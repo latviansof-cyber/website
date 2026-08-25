@@ -1,7 +1,6 @@
 import React from 'react'
 import type { Metadata, Viewport } from 'next'
 import Script from 'next/script'
-import { headers } from 'next/headers'
 import './globals.css'
 import { JsonLd } from './components/JsonLd'
 import {
@@ -68,10 +67,8 @@ export const viewport: Viewport = {
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
-  const requestHeaders = await headers()
-  const lang = requestHeaders.get('x-site-lang') === 'lv' ? 'lv' : 'en-AU'
   return (
-    <html lang={lang}>
+    <html lang="en-AU">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />

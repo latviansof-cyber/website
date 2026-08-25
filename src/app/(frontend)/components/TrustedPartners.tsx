@@ -1,6 +1,7 @@
 'use client'
 
 import { useId, useState } from 'react'
+import Image from 'next/image'
 import { useLanguage } from '../i18n/LanguageProvider'
 import { Container } from './ui/Container'
 
@@ -64,10 +65,11 @@ function TrustedPartnerCard({ supporter, lang }: { supporter: Supporter; lang: '
         rel="noopener noreferrer"
         className="flex aspect-[4/3] w-full items-center justify-center p-2 focus-visible:outline-2 focus-visible:outline-sunset-orange"
       >
-        <img
+        <Image
           src={supporter.url}
           alt={`${supporter.alt} logo`}
-          loading="lazy"
+          width={160}
+          height={64}
           className="max-h-16 w-auto object-contain transition-all duration-300 group-hover:scale-105"
         />
       </a>

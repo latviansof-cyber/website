@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import type { WebsitePage } from '@/lib/pages'
 import type { HomepageContent } from '@/lib/homepage'
 import { useLanguage } from '../i18n/LanguageProvider'
@@ -59,10 +60,12 @@ export function PageCards({
                   className="relative block h-48 sm:h-56 w-full overflow-hidden cursor-pointer bg-white"
                   aria-label={pageContent.title}
                 >
-                  <img
+                  <Image
                     src={page.meta.image}
-                    alt=""
-                    className={`h-full w-full transition-transform duration-700 ${
+                    alt={pageContent.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className={`transition-transform duration-700 ${
                       isLogo
                         ? 'object-contain p-6 sm:p-8 group-hover:scale-105'
                         : 'object-cover group-hover:scale-110'

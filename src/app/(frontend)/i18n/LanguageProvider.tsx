@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useCallback, useContext, useEffect, useMemo, type ReactNode } from 'react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { contentByLang, type SiteContent } from './content'
 import { localizeHref, type Lang } from '@/lib/i18nRouting'
 
@@ -23,15 +23,14 @@ export function LanguageProvider({
 }) {
   const router = useRouter()
   const pathname = usePathname()
-  const searchParams = useSearchParams()
   const lang = initialLang
 
   const setLang = useCallback(
     (next: Lang) => {
-      const query = searchParams.toString()
-      router.push(`${localizeHref(pathname, next)}${query ? `?${query}` : ''}`)
+      const query = typeof window !== 'undefined' ? window.location.search : ''
+      router.push(`${localizeHref(pathname, next)}${query}`)
     },
-    [pathname, router, searchParams],
+    [pathname, router],
   )
 
   const toggleLang = useCallback(() => {

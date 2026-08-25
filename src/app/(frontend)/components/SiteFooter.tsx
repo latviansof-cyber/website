@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useLanguage } from '../i18n/LanguageProvider'
 import { Container } from './ui/Container'
 import { IconHeart } from './ui/IconHeart'
@@ -61,7 +62,7 @@ export function SiteFooter({
         <div className="space-y-4">
           <Link href={localizeHref('/', lang)} className="inline-flex items-center gap-3 group">
             <span className="flex size-14 items-center justify-center rounded-full border border-white/30 bg-white/10 p-1 shadow-[0_8px_24px_rgba(122,34,49,0.35)] backdrop-blur-sm transition-transform duration-300 group-hover:scale-105">
-              <img
+              <Image
                 src="/images/logo.png"
                 alt="Latvian Association of Darwin logo"
                 width={44}

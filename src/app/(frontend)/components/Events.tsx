@@ -182,7 +182,7 @@ export function Events({
           {/* Header */}
           <div className="max-w-3xl flex flex-col items-start">
             <Eyebrow className="text-sunset-orange tracking-widest font-bold uppercase mb-4">
-              {isLatvian ? 'Kopienas kalendārs' : 'Community Calendar'}
+              {isLatvian ? 'Pasākumi' : 'Events'}
             </Eyebrow>
             <h2
               id="events-title"

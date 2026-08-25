@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useLanguage } from '../i18n/LanguageProvider'
 import { localizeHref } from '@/lib/i18nRouting'
 import { Container } from './ui/Container'
@@ -85,7 +86,14 @@ export function EventDetailPage({ event }: { event: WebsiteEvent }) {
 
         {/* Hero Image */}
         <div className="relative w-full aspect-[16/9] rounded-3xl overflow-hidden shadow-2xl mb-12 border border-slate-200">
-          <img src={imgSrc} alt={content.title} className="w-full h-full object-cover" />
+          <Image
+            src={imgSrc}
+            alt={content.title}
+            fill
+            priority
+            sizes="(max-width: 896px) 100vw, 896px"
+            className="object-cover"
+          />
         </div>
 
         {/* Body Text */}

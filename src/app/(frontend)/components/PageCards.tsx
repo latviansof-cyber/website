@@ -31,7 +31,7 @@ export function PageCards({
     <Section id="about" ariaLabel={copy.title} tone="muted" className="relative overflow-hidden py-24 sm:py-32 bg-slate-50/50">
       <Container className="relative z-10 space-y-12">
         <div className="max-w-3xl flex flex-col items-start">
-          <Eyebrow className="text-sunset-orange tracking-widest font-bold uppercase mb-4">
+          <Eyebrow className="text-sunset-red tracking-widest font-bold uppercase mb-4">
             {copy.eyebrow}
           </Eyebrow>
           <h2 className="font-serif text-4xl font-bold tracking-tight text-ink sm:text-5xl lg:text-6xl">
@@ -89,7 +89,8 @@ export function PageCards({
                   <div className="pt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 mt-6">
                     <Link
                       href={localizeHref(`/${page.slug}`, lang)}
-                      className="inline-flex items-center gap-1 font-bold text-sunset-orange hover:text-sunset-red transition-colors text-sm"
+                      className="inline-flex items-center gap-1 font-bold text-sunset-red hover:text-latvian-red transition-colors text-sm"
+                      aria-label={`${copy.seeFullInfo}: ${pageContent.title}`}
                     >
                       {copy.seeFullInfo} →
                     </Link>

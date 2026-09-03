@@ -42,6 +42,10 @@ next-env.d.ts
 
 /media
 
+# Temporary media optimization
+.tmp-media-opt/
+temp_IMG_*.JPEG
+
 # Playwright
 node_modules/
 /test-results/

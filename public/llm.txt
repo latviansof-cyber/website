@@ -1,0 +1,24 @@
+# Latvian Association of Darwin Inc (Dārvinas Latviešu Apvienība)
+
+> The Latvian Association of Darwin Inc is a community organization in Darwin, Northern Territory, Australia, dedicated to preserving and sharing Latvian culture, heritage, language, and community connections in the Top End.
+
+## Overview
+- **Organization Name**: Latvian Association of Darwin Inc (Dārvinas Latviešu Apvienība)
+- **Location**: Darwin, Northern Territory, Australia
+- **ABN**: 25 545 712 911
+- **Incorporation Date**: 22 October 2023
+- **Contact Email**: hello@latviansofdarwin.org.au / support@latviansofdarwin.org.au
+- **Official Website**: https://latviansofdarwin.org.au
+
+## Primary Pages & Documentation
+- [/en](https://latviansofdarwin.org.au/en): English Homepage & Overview
+- [/lv](https://latviansofdarwin.org.au/lv): Latvian Homepage & Overview
+- [/en/history](https://latviansofdarwin.org.au/en/history): History of Latvians in Northern Territory & Darwin since the 1980s
+- [/en/community](https://latviansofdarwin.org.au/en/community): Community activities, gatherings & cultural projects in the Top End
+- [/en/membership](https://latviansofdarwin.org.au/en/membership): Join the association, membership details & benefits
+- [/en/culture](https://latviansofdarwin.org.au/en/culture): Latvian traditions, midsummer Jāņi celebrations & heritage
+- [/en/events](https://latviansofdarwin.org.au/en/events): Upcoming & past cultural events (18. novembris, Jāņi, Lieldienas, Baltic Way)
+- [/en/donate](https://latviansofdarwin.org.au/en/donate): Support association projects and cultural preservation
+
+## Key Information
+Founded by Latvian migrants and community members in Darwin, the Association fosters cultural heritage, language preservation, community celebrations, and intercultural partnerships with Aboriginal and local Top End communities.

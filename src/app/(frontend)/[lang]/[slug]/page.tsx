@@ -18,9 +18,16 @@ import { isLang, localeAlternates } from '@/lib/i18nRouting'
 export const revalidate = 3600 // ISR: revalidate once per hour
 
 export function generateStaticParams() {
-  const pageSlugs = fallbackPages.map((page) => ({ slug: page.slug }))
-  const specialSlugs = fallbackSpecialPages.map((page) => ({ slug: page.slug }))
-  return [...pageSlugs, ...specialSlugs]
+  const pageSlugs = fallbackPages.map((page) => page.slug)
+  const specialSlugs = fallbackSpecialPages.map((page) => page.slug)
+  const allSlugs = Array.from(new Set([...pageSlugs, ...specialSlugs]))
+
+  return ['en', 'lv'].flatMap((lang) =>
+    allSlugs.map((slug) => ({
+      lang,
+      slug,
+    })),
+  )
 }
 
 export async function generateMetadata({

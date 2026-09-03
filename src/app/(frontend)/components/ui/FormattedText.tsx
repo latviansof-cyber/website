@@ -1,14 +1,16 @@
 import React from 'react'
+import { normalizeYouTubeEmbeds } from '@/lib/youtubeEmbed'
 
 export function FormattedText({ text, className }: { text: string; className?: string }) {
   if (!text) return null
 
-  const isHtml = /<[a-z][\s\S]*>/i.test(text)
+  const isHtml = /<[a-z][\s\S]*>/i.test(text) || /&lt;iframe\b/i.test(text)
   if (isHtml) {
+    const html = normalizeYouTubeEmbeds(text)
     return (
       <div
-        className={`prose prose-slate max-w-none text-ink-light ${className ?? ''}`}
-        dangerouslySetInnerHTML={{ __html: text }}
+        className={`formatted-text prose prose-slate max-w-none text-ink-light ${className ?? ''}`}
+        dangerouslySetInnerHTML={{ __html: html }}
       />
     )
   }

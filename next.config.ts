@@ -26,6 +26,27 @@ const nextConfig = {
   // Read more: https://opennext.js.org/cloudflare/howtos/workerd
   serverExternalPackages: ['jose', 'pg-cloudflare'],
 
+  async rewrites() {
+    return [
+      {
+        source: '/get-involved',
+        destination: '/membership',
+      },
+      {
+        source: '/:lang(en|lv)/get-involved',
+        destination: '/:lang/membership',
+      },
+      {
+        source: '/volunteer',
+        destination: '/membership',
+      },
+      {
+        source: '/:lang(en|lv)/volunteer',
+        destination: '/:lang/membership',
+      },
+    ]
+  },
+
   async headers() {
     return [
       {

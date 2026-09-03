@@ -57,20 +57,20 @@ function TrustedPartnerCard({ supporter, lang }: { supporter: Supporter; lang: '
   const helpText = lang === 'lv' ? supporter.lvHelpText : supporter.enHelpText
 
   return (
-    <div className="group relative flex flex-col items-center rounded-2xl border border-ink/10 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-sunset-gold hover:shadow-lg">
+    <div className="group relative flex flex-col items-center rounded-2xl border border-ink/10 bg-white p-3.5 sm:p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-sunset-gold hover:shadow-lg">
       <a
         href={supporter.link}
         aria-describedby={tooltipId}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex aspect-[4/3] w-full items-center justify-center p-2 focus-visible:outline-2 focus-visible:outline-sunset-orange"
+        className="flex aspect-[16/10] w-full items-center justify-center p-1 sm:p-2 focus-visible:outline-2 focus-visible:outline-sunset-orange"
       >
         <Image
           src={supporter.url}
           alt={`${supporter.alt} logo`}
-          width={160}
-          height={64}
-          className="max-h-16 w-auto object-contain transition-all duration-300 group-hover:scale-105"
+          width={280}
+          height={140}
+          className="h-full max-h-24 sm:max-h-28 w-auto max-w-full object-contain transition-all duration-300 group-hover:scale-105"
         />
       </a>
 

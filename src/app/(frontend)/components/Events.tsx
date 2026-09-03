@@ -111,7 +111,8 @@ function EventCard({
         <div className="pt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 mt-6">
           <Link
             href={localizeHref(`/events/${event.slug}`, lang)}
-            className="inline-flex items-center gap-1 font-bold text-sunset-orange hover:text-sunset-red transition-colors text-sm"
+            className="inline-flex items-center gap-1 font-bold text-sunset-red hover:text-latvian-red transition-colors text-sm"
+            aria-label={`${isLatvian ? 'Skatīt pilnu informāciju' : 'See full info'}: ${eventContent.title}`}
           >
             {isLatvian ? 'Skatīt pilnu informāciju' : 'See full info'} →
           </Link>
@@ -181,7 +182,7 @@ export function Events({
         <Container className="relative z-10 space-y-12">
           {/* Header */}
           <div className="max-w-3xl flex flex-col items-start">
-            <Eyebrow className="text-sunset-orange tracking-widest font-bold uppercase mb-4">
+            <Eyebrow className="text-sunset-red tracking-widest font-bold uppercase mb-4">
               {isLatvian ? 'Pasākumi' : 'Events'}
             </Eyebrow>
             <h2

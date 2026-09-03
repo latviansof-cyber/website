@@ -8,6 +8,7 @@
   --color-ink-light: #2d2938;  /* Slightly lighter for cards */
   --color-cream: #fdfaf6;      /* Off-white warm background */
   
+
   --color-sunset-orange: #f97316; /* Vibrant orange */
   --color-sunset-red: #be123c;    /* Deep red */
   --color-sunset-gold: #fbbf24;   /* Warm gold */
@@ -42,7 +43,18 @@
   }
 }
 
+
 @layer utilities {
+  .formatted-text iframe.ql-video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    margin-block: 1.75rem;
+    border: 0;
+    border-radius: 1rem;
+    background: #000;
+  }
+
   .glass-panel {
     @apply bg-white/70 backdrop-blur-lg border border-white/40 shadow-xl;
   }
@@ -65,4 +77,3 @@
     overflow: hidden;
   }
 }
-

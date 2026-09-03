@@ -16,8 +16,13 @@ export const revalidate = 3600
 
 export async function generateStaticParams() {
   const events = await getWebsiteEvents()
-  const slugs = events.length ? events : fallbackEvents
-  return slugs.map((event) => ({ slug: event.slug }))
+  const list = events.length ? events : fallbackEvents
+  return ['en', 'lv'].flatMap((lang) =>
+    list.map((event) => ({
+      lang,
+      slug: event.slug,
+    })),
+  )
 }
 
 export async function generateMetadata({

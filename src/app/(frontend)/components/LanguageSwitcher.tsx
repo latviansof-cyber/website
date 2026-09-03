@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useLanguage } from '../i18n/LanguageProvider'
 import type { Lang } from '../i18n/content'
@@ -28,7 +28,7 @@ export function LanguageSwitcher() {
             lang={opt.value}
             className={
               'rounded-full px-3 py-1 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300 ' +
-              (active ? 'bg-amber-300 text-ink shadow-sm' : 'text-white/80 hover:text-white')
+              (active ? 'bg-amber-300 text-ink shadow-sm' : 'text-slate-100 font-medium hover:text-white')
             }
           >
             {opt.label}

@@ -96,6 +96,17 @@ export const siteStyles = `
     margin-bottom: 0.5rem;
     line-height: 1.6;
   }
+
+  .prose-custom iframe.ql-video,
+  .prose-custom iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    margin-block: 1.75rem;
+    border: 0;
+    border-radius: 1rem;
+    background: #000;
+  }
 `
 
 export const tailwindConfigScript = `

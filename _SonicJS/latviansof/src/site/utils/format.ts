@@ -7,6 +7,8 @@
  * tab). Output is always a safe HTML fragment for use with `raw()`.
  */
 
+import { normalizeYouTubeEmbeds } from './youtube'
+
 function escapeHtml(value: string): string {
   return value
     .replace(/&/g, '&amp;')
@@ -19,6 +21,9 @@ const LINK_RE = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s]+)/g
 const BOLD_RE = /\*\*([^*]+)\*\*/g
 
 function renderParagraph(paragraph: string): string {
+  if (paragraph.trim().startsWith('<iframe') && paragraph.trim().endsWith('</iframe>')) {
+    return `<p>${paragraph}</p>`
+  }
   const parts: string[] = []
   let lastIndex = 0
   let match: RegExpExecArray | null
@@ -68,11 +73,11 @@ function renderBold(escapedText: string): string {
 /** Convert stored body content into safe HTML for `raw()`. */
 export function bodyToHtml(text: string | undefined | null): string {
   if (!text) return ''
-  // Already HTML (rich-text) — pass through (server-generated content).
+  // Already HTML (rich-text) or contains an iframe snippet — normalize YouTube embeds and return
   if (/<[a-z][\s\S]*>/i.test(text) || /&lt;iframe\b/i.test(text)) {
-    return text
+    return normalizeYouTubeEmbeds(text)
   }
-  return text
+  return normalizeYouTubeEmbeds(text)
     .split(/\n\s*\n/)
     .filter(Boolean)
     .map(renderParagraph)
@@ -83,6 +88,8 @@ export function bodyToHtml(text: string | undefined | null): string {
 export function plainText(htmlOrText: string | undefined | null): string {
   if (!htmlOrText) return ''
   return htmlOrText
+    .replace(/<iframe\b[\s\S]*?<\/iframe\s*>/gi, ' ')
+    .replace(/&lt;iframe\b[\s\S]*?&lt;\/iframe\s*&gt;/gi, ' ')
     .replace(/<[^>]*>/g, ' ')
     .replace(/&amp;/g, '&')
     .replace(/&lt;/g, '<')

@@ -33,8 +33,10 @@ const FIXED_LABELS: Record<string, string> = {
   terms: "Terms & Conditions",
   eula: "EULA",
   navigation: "Header navigation",
+  "main-menu": "Header navigation",
   footer: "Footer",
   site: "Site details",
+  "site-settings": "Site details",
 };
 
 function mergeDefaults(

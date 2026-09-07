@@ -325,10 +325,25 @@ export function SiteLayout() {
     return <StateBlock error={error} reload={reload} />;
   }
   const all = records ?? [];
-  const navigation = findRecord(all, "navigation");
-  const footer = findRecord(all, "footer");
-  const site = findRecord(all, "site");
+  const navigation =
+    findRecord(all, "navigation") ??
+    findRecord(all, "main-menu") ??
+    all.find((r) => r.template === "navigation");
+  const footer =
+    findRecord(all, "footer") ??
+    all.find((r) => r.template === "footer");
+  const site =
+    findRecord(all, "site") ??
+    findRecord(all, "site-settings") ??
+    all.find((r) => r.template === "site");
   const navItems = readNavItems(navigation, lang);
+  const isLv = lang === "lv";
+  const defaultNavItems: NavItem[] = [
+    { label: isLv ? "Vēsture" : "History", href: "/history", newTab: false },
+    { label: isLv ? "Pievienoties" : "Join", href: "/membership", newTab: false },
+    { label: isLv ? "Pasākumi" : "Events", href: "/#events", newTab: false },
+  ];
+  const effectiveNavItems = navItems.length > 0 ? navItems : defaultNavItems;
 
   const siteEn = site && typeof site.contentEn === "object" ? site.contentEn : undefined;
   const siteLv = site && typeof site.contentLv === "object" ? site.contentLv : undefined;
@@ -359,7 +374,7 @@ export function SiteLayout() {
           </SmartLink>
           <nav aria-label={lang === "lv" ? "Galvenā navigācija" : "Primary"} className="site-nav-desktop">
             <ul className="nav-list">
-              {navItems.map((item) => (
+              {effectiveNavItems.map((item) => (
                 <li key={item.href}>
                   <SmartLink href={item.href} lang={lang} className="nav-link" newTab={item.newTab}>
                     {item.label}
@@ -381,7 +396,7 @@ export function SiteLayout() {
           className="nav-mobile"
         >
           <ul>
-            {navItems.map((item) => (
+            {effectiveNavItems.map((item) => (
               <li key={item.href}>
                 <SmartLink href={item.href} lang={lang} newTab={item.newTab}>
                   {item.label}

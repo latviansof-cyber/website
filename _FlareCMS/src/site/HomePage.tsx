@@ -618,7 +618,10 @@ function HomePage() {
 
   const all = records ?? [];
   const home = findRecord(all, "home");
-  const site = findRecord(all, "site");
+  const site =
+    findRecord(all, "site") ??
+    findRecord(all, "site-settings") ??
+    all.find((r) => r.template === "site");
   const pages = all
     .filter((record) => record.template === "content")
     .sort((a, b) => a.sortOrder - b.sortOrder);

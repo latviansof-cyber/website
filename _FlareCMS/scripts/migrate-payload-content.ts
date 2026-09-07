@@ -249,10 +249,10 @@ function buildRows(snapshots: Record<string, unknown>): Row[] {
         .map((item) => ({ platform: str(item.platform), url: str(item.url) }))
     : [];
   rows.push({
-    slug: "site-settings",
+    slug: "site",
     template: "site",
     sortOrder: 10,
-    title: str(siteEn.associationName) || "site-settings",
+    title: str(siteEn.associationName) || "site",
     content: "",
     contentEn: JSON.stringify({
       associationName: str(siteEn.associationName),
@@ -278,7 +278,7 @@ function buildRows(snapshots: Record<string, unknown>): Row[] {
         }))
     : [];
   rows.push({
-    slug: "main-menu",
+    slug: "navigation",
     template: "navigation",
     sortOrder: 20,
     title: "Navigation",

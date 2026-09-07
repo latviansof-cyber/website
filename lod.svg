@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 220" width="100%" height="100%">
+  <defs>
+    <!-- Background styling if needed, keeping it transparent by default -->
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&amp;display=swap');
+      
+      .text-top {
+        font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+        font-size: 38px;
+        font-weight: 400;
+        fill: #2C3E50;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+      }
+      
+      .text-bottom {
+        font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+        font-size: 68px;
+        font-weight: 700;
+        fill: #A6192E; /* Rich carmine red often associated with Latvian heritage */
+        letter-spacing: 6px;
+        text-transform: uppercase;
+      }
+      
+      .accent-line {
+        stroke: #A6192E;
+        stroke-width: 3px;
+        stroke-linecap: round;
+      }
+    </style>
+  </defs>
+
+  <!-- Clean, scalable logo composition -->
+  <g transform="translate(250, 110)" text-anchor="middle">
+    <!-- Top Line: Latvians Of -->
+    <text x="0" y="-15" class="text-top">Latvians Of</text>
+    
+    <!-- Decorative subtle separator line -->
+    <line x1="-60" y1="12" x2="60" y2="12" class="accent-line" opacity="0.3" />
+
+    <!-- Bottom Line: Darwin -->
+    <text x="0" y="72" class="text-bottom">Darwin</text>
+  </g>
+</svg>

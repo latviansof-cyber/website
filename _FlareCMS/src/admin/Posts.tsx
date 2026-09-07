@@ -43,8 +43,10 @@ const PAGE_LABELS: Record<string, string> = {
   terms: "Terms & Conditions",
   eula: "EULA",
   navigation: "Header navigation",
+  "main-menu": "Header navigation",
   footer: "Footer",
   site: "Site details",
+  "site-settings": "Site details",
 };
 
 // Runtime readers for fields that only exist on some template shapes.
@@ -168,7 +170,17 @@ function Posts() {
   ).filter((record): record is SiteRecord => Boolean(record));
 
   const sharedContent = ["navigation", "footer", "site"]
-    .map((slug) => records.find((record) => record.slug === slug))
+    .map((slug) =>
+      records.find(
+        (record) =>
+          record.slug === slug ||
+          (slug === "navigation" &&
+            (record.slug === "main-menu" || record.template === "navigation")) ||
+          (slug === "site" &&
+            (record.slug === "site-settings" || record.template === "site")) ||
+          (slug === "footer" && record.template === "footer")
+      )
+    )
     .filter((record): record is SiteRecord => Boolean(record));
 
   const events = records

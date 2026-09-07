@@ -58,15 +58,10 @@ const nextConfig = {
           },
         ],
       },
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800',
-          },
-        ],
-      },
+      // Do not set a catch-all public cache header here. Payload's admin and API
+      // routes contain user-specific and mutable CMS data and must retain their
+      // own private/no-store response headers. Next.js supplies the appropriate
+      // route-level cache headers for the public ISR pages.
     ]
   },
 

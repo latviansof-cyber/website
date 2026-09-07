@@ -3,6 +3,17 @@
 This project uses the Payload CMS skill at `.agents/skills/payload/`.
 Start with `.agents/skills/payload/SKILL.md` for a quick reference, then see `.agents/skills/payload/reference/` for detailed docs.
 
+## Quick Development Tools
+
+### Using Surf for LLM Context
+Run `surf --llm-context` to learn how to use the tool for opening and comparing different front-end implementations:
+- **Sonic**: SonicJS experiment (deployed to CF)
+- **Flare**: FlareCMS implementation (deployed to CF)
+- **Production**: https://latviansofdarwin.org.au/ (current live site with deployed versions)
+
+### Wrangler Access
+`wrangler` authenticates using the token stored in `.env.local`. Ensure this file is configured before running deployment or remote D1 commands.
+
 ## Payload + Cloudflare D1 migration runbook
 
 This project runs Payload 3 on Cloudflare Workers with

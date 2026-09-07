@@ -1,0 +1,36 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "latviansof-sonicjs",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-03",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "latviansof-sonicjs",
+      "database_id": "af849875-6226-4b1c-a0c5-6caa51d47dd9",
+      "migrations_dir": "./migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "MEDIA_BUCKET",
+      "bucket_name": "latviansof-sonicjs-media"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "CACHE_KV",
+      "id": "8ec8b202cc5746e582c309968c0a8a42"
+    }
+  ],
+  "vars": {
+    "ENVIRONMENT": "production",
+    "CORS_ORIGINS": "https://latviansof-sonicjs.vasilkoff.workers.dev,https://latviansofdarwin.org.au,http://localhost:8787",
+    "BETTER_AUTH_SECRET": "85a746345ea6eb9ad4573aa640fc5ea40706c840677719bc3cb660340b40b31c"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

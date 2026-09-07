@@ -1,0 +1,29 @@
+# Shared dependency and build output directories
+node_modules/
+**/node_modules/
+**/dist/
+**/.wrangler/
+**/.next/
+**/.open-next/
+**/coverage/
+.tmp-media-opt/
+temp_IMG_*.JPEG
+next-env.d.ts
+*.tsbuildinfo
+
+# Local secrets and operating-system files
+.env
+.env.*
+!.env.example
+**/.dev.vars
+**/.env
+**/.env.*
+!**/.env.example
+.DS_Store
+**/.DS_Store
+
+# Test and log output
+**/test-results/
+**/playwright-report/
+**/blob-report/
+*.log

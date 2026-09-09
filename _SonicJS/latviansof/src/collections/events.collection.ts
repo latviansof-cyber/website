@@ -40,12 +40,12 @@ export default {
         title: 'Event Date & Time',
       },
       body_en: {
-        type: 'textarea',
+        type: 'quill',
         title: 'Description (English)',
         required: true,
       },
       body_lv: {
-        type: 'textarea',
+        type: 'quill',
         title: 'Description (Latvian)',
         required: true,
       },

@@ -7,9 +7,9 @@ Start with `.agents/skills/payload/SKILL.md` for a quick reference, then see `.a
 
 ### Using Surf for LLM Context
 Run `surf --llm-context` to learn how to use the tool for opening and comparing different front-end implementations:
-- **Sonic**: SonicJS experiment (deployed to CF)
-- **Flare**: FlareCMS implementation (deployed to CF)
-- **Production**: https://latviansofdarwin.org.au/ (current live site with deployed versions)
+- **Sonic**: SonicJS production implementation (deployed to CF at https://latviansofdarwin.org.au/)
+- **Flare**: FlareCMS experimental implementation (deployed to CF)
+- **Payload**: Deprecated (use Sonic for production)
 
 ### Wrangler Access
 `wrangler` authenticates using the token stored in `.env.local`. Ensure this file is configured before running deployment or remote D1 commands.

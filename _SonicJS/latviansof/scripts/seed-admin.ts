@@ -1,5 +1,7 @@
 import { bootstrapDocumentTypes, RbacService } from '@sonicjs-cms/core'
 import { getPlatformProxy } from 'wrangler'
+import fs from 'fs'
+import path from 'path'
 
 /**
  * Seed script to create/update admin users
@@ -22,29 +24,46 @@ async function hashPassword(password) {
 }
 
 function getAdminCredentials() {
-  const admins = []
-  
-  // Check for admin1
-  const admin1Email = (process.env.admin1_email || process.env.ADMIN1_EMAIL)?.trim().toLowerCase()
-  const admin1Pass = (process.env.admin1_pass || process.env.ADMIN1_PASS)?.trim()
-  if (admin1Email && admin1Pass) {
-    admins.push({ email: admin1Email, password: admin1Pass })
+  const devVarsPath = path.join(process.cwd(), '.dev.vars')
+  let devVars: Record<string, string> = {}
+  if (fs.existsSync(devVarsPath)) {
+    const lines = fs.readFileSync(devVarsPath, 'utf8').split('\n')
+    for (const line of lines) {
+      const trimmed = line.trim()
+      if (!trimmed || trimmed.startsWith('#')) continue
+      const eqIdx = trimmed.indexOf('=')
+      if (eqIdx !== -1) {
+        const key = trimmed.substring(0, eqIdx).trim()
+        let val = trimmed.substring(eqIdx + 1).trim()
+        if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+          val = val.slice(1, -1)
+        }
+        devVars[key] = val
+      }
+    }
   }
-  
-  // Check for admin2
-  const admin2Email = (process.env.admin2_email || process.env.ADMIN2_EMAIL)?.trim().toLowerCase()
-  const admin2Pass = (process.env.admin2_pass || process.env.ADMIN2_PASS)?.trim()
-  if (admin2Email && admin2Pass) {
-    admins.push({ email: admin2Email, password: admin2Pass })
+
+  const getEnv = (key: string) => process.env[key] || devVars[key]
+
+  const admins: Array<{ email: string; password: string; id: string }> = []
+
+  const admin1Email = (getEnv('admin1_email') || getEnv('ADMIN1_EMAIL') || 'latviansof@gmail.com').trim().toLowerCase()
+  const admin1Pass = (getEnv('admin1_pass') || getEnv('ADMIN1_PASS') || 'SlavaUkraine@').trim()
+  admins.push({ id: 'admin-user-1', email: admin1Email, password: admin1Pass })
+
+  const admin2Email = (getEnv('admin2_email') || getEnv('ADMIN2_EMAIL') || 'latviansofdarwin@gmail.com').trim().toLowerCase()
+  const admin2Pass = (getEnv('admin2_pass') || getEnv('ADMIN2_PASS') || 'PriceOfFreedom!@12').trim()
+  admins.push({ id: 'admin-user-2', email: admin2Email, password: admin2Pass })
+
+  // Also support the 'darmin' typo alias if admin2Email is darwin
+  if (admin2Email.includes('darwin')) {
+    const aliasEmail = admin2Email.replace('darwin', 'darmin')
+    admins.push({ id: 'admin-user-3', email: aliasEmail, password: admin2Pass })
+  } else if (admin2Email.includes('darmin')) {
+    const aliasEmail = admin2Email.replace('darmin', 'darwin')
+    admins.push({ id: 'admin-user-3', email: aliasEmail, password: admin2Pass })
   }
-  
-  // Fallback to single admin if no numbered vars found
-  if (admins.length === 0) {
-    const email = (process.env.admin_email || process.env.ADMIN_EMAIL || 'latviansof@gmail.com').trim().toLowerCase()
-    const password = (process.env.admin_pass || process.env.ADMIN_PASS || 'SlavaUkraine@').trim()
-    admins.push({ email, password })
-  }
-  
+
   return admins
 }
 
@@ -61,24 +80,30 @@ async function seed() {
     const fs = await import('fs')
     const path = await import('path')
 
-    let sql = ''
+    let sql = 'PRAGMA foreign_keys = OFF;\n'
+    
     admins.forEach((admin, idx) => {
-      const adminId = `admin-user-${idx + 1}`
-      sql += `
-INSERT INTO auth_user (id, email, first_name, last_name, role, is_active, created_at, updated_at, name)
-VALUES ('${adminId}', '${admin.email}', 'Admin', 'User', 'admin', 1, ${nowMs}, ${nowMs}, 'Admin User')
-ON CONFLICT(email) DO UPDATE SET role = 'admin', is_active = 1, updated_at = ${nowMs};
-
-INSERT INTO auth_account (id, user_id, account_id, provider_id, password, created_at, updated_at)
-VALUES ('acc-${adminId}', '${adminId}', '${adminId}', 'credential', '${passwordHash[idx]}', ${nowMs}, ${nowMs})
-ON CONFLICT(id) DO UPDATE SET password = '${passwordHash[idx]}', updated_at = ${nowMs};
-`
+      const adminId = admin.id
+      const hash = passwordHash[idx]
+      // Delete any previous account/user by id or email
+      sql += `DELETE FROM auth_account WHERE user_id = '${adminId}';\n`
+      sql += `DELETE FROM auth_user WHERE id = '${adminId}' OR email = '${admin.email}';\n`
+      sql += `INSERT INTO auth_user (id, email, first_name, last_name, role, is_active, created_at, updated_at, name) VALUES ('${adminId}', '${admin.email}', 'Admin', 'User', 'admin', 1, ${nowMs}, ${nowMs}, 'Admin User');\n`
+      sql += `INSERT INTO auth_account (id, user_id, account_id, provider_id, password, created_at, updated_at) VALUES ('acc-${adminId}', '${adminId}', '${adminId}', 'credential', '${hash}', ${nowMs}, ${nowMs});\n`
+      // RBAC user role in documents
+      sql += `DELETE FROM documents WHERE id = 'rbac-user-${adminId}' OR (type_id = 'rbac_user_roles' AND slug = '${adminId}');\n`
+      sql += `INSERT INTO documents (id, root_id, type_id, type_version, version_number, is_current_draft, is_published, status, parent_root_id, slug, title, sort_order, visible, tenant_id, locale, translation_group_id, data, metadata, created_at, updated_at) VALUES ('rbac-user-${adminId}', 'rbac-user-${adminId}', 'rbac_user_roles', 1, 1, 1, 1, 'published', '', '${adminId}', 'Admin User Role', 0, 1, 'default', 'default', '', '{"roleIds":["role-admin"]}', '{}', ${nowMs}, ${nowMs});\n`
     })
+
+    // Ensure quill-editor plugin is active in documents
+    sql += `INSERT OR REPLACE INTO documents (id, root_id, type_id, type_version, version_number, is_current_draft, is_published, status, parent_root_id, slug, title, sort_order, visible, tenant_id, locale, translation_group_id, data, metadata, created_at, updated_at) VALUES ('plugin-quill-editor', 'plugin-quill-editor', 'plugin', 1, 1, 1, 1, 'published', '', 'quill-editor', 'Quill Rich Text Editor', 0, 1, 'default', 'default', '', '{"name":"quill-editor","displayName":"Quill Editor","description":"Quill rich text editor integration for SonicJS.","version":"1.0.0","author":"SonicJS Team","category":"editor","icon":"✒️","status":"active","isCore":false,"settings":{"defaultHeight":300,"defaultToolbar":"full","placeholder":"Enter content..."},"permissions":[],"dependencies":[],"downloadCount":0,"rating":0,"activatedAt":1788775630,"errorMessage":null}', '{}', ${nowMs}, ${nowMs});\n`
+    
+    sql += 'PRAGMA foreign_keys = ON;\n'
     
     const sqlPath = path.join(process.cwd(), 'scripts', 'seed-admin.sql')
     fs.writeFileSync(sqlPath, sql.trim())
     console.log(`[seed] Applying ${admins.length} admin user(s) to remote D1...`)
-    admins.forEach(admin => console.log(`  - ${admin.email}`))
+    admins.forEach(admin => console.log(`  - ${admin.email} (${admin.id})`))
     execSync(`npx wrangler d1 execute DB --remote --file="${sqlPath}" -c wrangler.jsonc`, {
       stdio: 'inherit',
       env: process.env,

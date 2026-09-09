@@ -1,7 +1,20 @@
-INSERT INTO auth_user (id, email, first_name, last_name, role, is_active, created_at, updated_at, name)
-VALUES ('admin-user-01', 'latviansof@gmail.com', 'Admin', 'User', 'admin', 1, 1788447001336, 1788447001336, 'Admin User')
-ON CONFLICT(email) DO UPDATE SET role = 'admin', is_active = 1, updated_at = 1788447001336;
-
-INSERT INTO auth_account (id, user_id, account_id, provider_id, password, created_at, updated_at)
-VALUES ('acc-admin-user-01', 'admin-user-01', 'admin-user-01', 'credential', 'pbkdf2:100000:61ed4814a3cd29b06f77334086cf1d51:ef8be3c29c859a306e7f9ef07be82023b92f14ea1b4afd799a4138a7a700df36', 1788447001336, 1788447001336)
-ON CONFLICT(id) DO UPDATE SET password = 'pbkdf2:100000:61ed4814a3cd29b06f77334086cf1d51:ef8be3c29c859a306e7f9ef07be82023b92f14ea1b4afd799a4138a7a700df36', updated_at = 1788447001336;
+PRAGMA foreign_keys = OFF;
+DELETE FROM auth_account WHERE user_id = 'admin-user-1';
+DELETE FROM auth_user WHERE id = 'admin-user-1' OR email = 'latviansof@gmail.com';
+INSERT INTO auth_user (id, email, first_name, last_name, role, is_active, created_at, updated_at, name) VALUES ('admin-user-1', 'latviansof@gmail.com', 'Admin', 'User', 'admin', 1, 1788873230040, 1788873230040, 'Admin User');
+INSERT INTO auth_account (id, user_id, account_id, provider_id, password, created_at, updated_at) VALUES ('acc-admin-user-1', 'admin-user-1', 'admin-user-1', 'credential', 'pbkdf2:100000:e84ba7997de4a0e69d8e2852cf2cb900:9da7629011da2949eb517f3d3dd39dd538d2c3ca257ed785bd207bd5676295a5', 1788873230040, 1788873230040);
+DELETE FROM documents WHERE id = 'rbac-user-admin-user-1' OR (type_id = 'rbac_user_roles' AND slug = 'admin-user-1');
+INSERT INTO documents (id, root_id, type_id, type_version, version_number, is_current_draft, is_published, status, parent_root_id, slug, title, sort_order, visible, tenant_id, locale, translation_group_id, data, metadata, created_at, updated_at) VALUES ('rbac-user-admin-user-1', 'rbac-user-admin-user-1', 'rbac_user_roles', 1, 1, 1, 1, 'published', '', 'admin-user-1', 'Admin User Role', 0, 1, 'default', 'default', '', '{"roleIds":["role-admin"]}', '{}', 1788873230040, 1788873230040);
+DELETE FROM auth_account WHERE user_id = 'admin-user-2';
+DELETE FROM auth_user WHERE id = 'admin-user-2' OR email = 'latviansofdarwin@gmail.com';
+INSERT INTO auth_user (id, email, first_name, last_name, role, is_active, created_at, updated_at, name) VALUES ('admin-user-2', 'latviansofdarwin@gmail.com', 'Admin', 'User', 'admin', 1, 1788873230040, 1788873230040, 'Admin User');
+INSERT INTO auth_account (id, user_id, account_id, provider_id, password, created_at, updated_at) VALUES ('acc-admin-user-2', 'admin-user-2', 'admin-user-2', 'credential', 'pbkdf2:100000:7f1c5d3be1b97514e93a9eabc21fc2db:94178550f40f4c9b348fa1e1cdbf3733d3f70b52731f3a5fdebd778eecb1c2f5', 1788873230040, 1788873230040);
+DELETE FROM documents WHERE id = 'rbac-user-admin-user-2' OR (type_id = 'rbac_user_roles' AND slug = 'admin-user-2');
+INSERT INTO documents (id, root_id, type_id, type_version, version_number, is_current_draft, is_published, status, parent_root_id, slug, title, sort_order, visible, tenant_id, locale, translation_group_id, data, metadata, created_at, updated_at) VALUES ('rbac-user-admin-user-2', 'rbac-user-admin-user-2', 'rbac_user_roles', 1, 1, 1, 1, 'published', '', 'admin-user-2', 'Admin User Role', 0, 1, 'default', 'default', '', '{"roleIds":["role-admin"]}', '{}', 1788873230040, 1788873230040);
+DELETE FROM auth_account WHERE user_id = 'admin-user-3';
+DELETE FROM auth_user WHERE id = 'admin-user-3' OR email = 'latviansofdarmin@gmail.com';
+INSERT INTO auth_user (id, email, first_name, last_name, role, is_active, created_at, updated_at, name) VALUES ('admin-user-3', 'latviansofdarmin@gmail.com', 'Admin', 'User', 'admin', 1, 1788873230040, 1788873230040, 'Admin User');
+INSERT INTO auth_account (id, user_id, account_id, provider_id, password, created_at, updated_at) VALUES ('acc-admin-user-3', 'admin-user-3', 'admin-user-3', 'credential', 'pbkdf2:100000:3ab0aae0dffa9a4089dbe7f34e866c8c:189a114f343061a1b4bb968d7469d2b8e3734f45bacfc5bf0275ce6c48b50067', 1788873230040, 1788873230040);
+DELETE FROM documents WHERE id = 'rbac-user-admin-user-3' OR (type_id = 'rbac_user_roles' AND slug = 'admin-user-3');
+INSERT INTO documents (id, root_id, type_id, type_version, version_number, is_current_draft, is_published, status, parent_root_id, slug, title, sort_order, visible, tenant_id, locale, translation_group_id, data, metadata, created_at, updated_at) VALUES ('rbac-user-admin-user-3', 'rbac-user-admin-user-3', 'rbac_user_roles', 1, 1, 1, 1, 'published', '', 'admin-user-3', 'Admin User Role', 0, 1, 'default', 'default', '', '{"roleIds":["role-admin"]}', '{}', 1788873230040, 1788873230040);
+PRAGMA foreign_keys = ON;

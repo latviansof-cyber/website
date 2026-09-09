@@ -1,10 +1,14 @@
-# Latvians of Darwin — SonicJS evaluation
+# Latvians of Darwin — Production Website
 
-A headless CMS built with [SonicJS](https://sonicjs.com) on Cloudflare Workers. Deploys independently as the `latviansof-sonicjs` Worker with its own D1 database, R2 media bucket, and KV namespace.
+Production website for the Latvian Association of Darwin, powered by [SonicJS](https://sonicjs.com) headless CMS on Cloudflare Workers. Deploys independently as the `latviansof-sonicjs` Worker with its own D1 database, R2 media bucket, and KV namespace.
 
-## Setup
+## Admin Panel & Content Management
 
-`.env.local` is a symlink to `_Payload/.env.local` (repo root) and holds the Cloudflare API token wrangler uses for deployment and remote database operations — see the "Wrangler Access" section in the repository root `README.md`.
+The public website and SonicJS admin panel are deployed to the same Worker at `https://latviansofdarwin.org.au`. The admin interface (`/admin`) is protected and managed by the SonicJS CMS team.
+
+### Deployment Access
+
+`.env.local` is a symlink to `_Payload/.env.local` (repo root) and holds the Cloudflare API token wrangler uses for deployment and remote database operations — see the "Wrangler Access" section in the repository root `AGENTS.md`.
 
 ## Content & Architecture
 
@@ -22,7 +26,7 @@ Only documents with `status = 'published'` appear on the public site.
 
 ### Seeding from Payload
 
-Populate this evaluation database with published content from production Payload:
+Sync published content from the deprecated Payload CMS (if needed):
 
 ```bash
 # Local database (uses wrangler dev state)

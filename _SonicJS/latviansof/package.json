@@ -2,7 +2,7 @@
   "name": "latviansof",
   "version": "0.1.0",
   "private": true,
-  "description": "A SonicJS headless CMS application",
+  "description": "Latvians of Darwin production website (SonicJS CMS on Cloudflare Workers)",
   "type": "module",
   "scripts": {
     "dev": "wrangler dev -c wrangler.jsonc",
@@ -18,11 +18,10 @@
     "update": "npm install @sonicjs-cms/core@latest --save",
     "update:beta": "npm install @sonicjs-cms/core@beta --save",
     "update:plugin": "tsx scripts/update-plugin.ts",
-    "seed": "tsx scripts/seed-admin.ts",
-    "postinstall": "patch-package"
+    "seed": "tsx scripts/seed-admin.ts"
   },
   "dependencies": {
-    "@sonicjs-cms/core": "^3.0.0-beta.27"
+    "@sonicjs-cms/core": "file:../darwin-sonicjs/packages/core"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20260724.1",

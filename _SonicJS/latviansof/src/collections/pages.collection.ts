@@ -57,11 +57,11 @@ export default {
         title: 'Excerpt (Latvian)',
       },
       body_en: {
-        type: 'textarea',
+        type: 'quill',
         title: 'Body Content (English)',
       },
       body_lv: {
-        type: 'textarea',
+        type: 'quill',
         title: 'Body Content (Latvian)',
       },
       heroImage: {

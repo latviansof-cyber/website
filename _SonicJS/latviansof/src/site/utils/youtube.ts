@@ -62,11 +62,33 @@ function safeIframe(input: string): string {
 }
 
 /**
- * Converts only explicit YouTube iframe snippets. Bare YouTube links remain links.
+ * Converts YouTube iframe snippets as well as standalone YouTube links
+ * (pasted as plain text or wrapped in paragraph/link tags) into responsive
+ * privacy-enhanced (youtube-nocookie.com) embeds.
  * Raw iframes from any other source are removed before the HTML reaches the page.
  */
 export function normalizeYouTubeEmbeds(html: string): string {
-  return html
+  let result = html
     .replace(/<iframe\b[\s\S]*?(?:<\/iframe\s*>|\/>)/gi, (iframe) => safeIframe(iframe))
     .replace(/&lt;iframe\b[\s\S]*?(?:&lt;\/iframe\s*&gt;|\/&gt;)/gi, (iframe) => safeIframe(iframe))
+
+  // Convert standalone YouTube links in paragraphs (e.g. pasted directly in rich text or HTML)
+  result = result.replace(
+    /<p>\s*(?:<a[^>]*>\s*)?(https?:\/\/(?:www\.|m\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)[A-Za-z0-9_-]{11}[^\s<]*)(?:\s*<\/a>)?\s*<\/p>/gi,
+    (_match, url) => {
+      const embed = safeIframe(url)
+      return embed ? `<p>${embed}</p>` : _match
+    }
+  )
+
+  // Convert standalone YouTube links on their own line (in plain text bodies)
+  result = result.replace(
+    /(^|\n)\s*(https?:\/\/(?:www\.|m\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)[A-Za-z0-9_-]{11}[^\s\n<]*)\s*($|\n)/gi,
+    (_match, before, url, after) => {
+      const embed = safeIframe(url)
+      return embed ? `${before}<p>${embed}</p>${after}` : _match
+    }
+  )
+
+  return result
 }

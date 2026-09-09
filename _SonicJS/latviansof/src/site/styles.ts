@@ -107,6 +107,13 @@ export const siteStyles = `
     border-radius: 1rem;
     background: #000;
   }
+
+  .prose-custom img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+    margin-block: 1.5rem;
+  }
 `
 
 export const tailwindConfigScript = `

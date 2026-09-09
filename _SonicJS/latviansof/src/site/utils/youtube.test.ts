@@ -40,9 +40,11 @@ describe('YouTube embeds in SonicJS', () => {
     expect(result).not.toContain('&lt;iframe')
   })
 
-  it('does not auto-embed a bare YouTube link', () => {
+  it('auto-embeds a bare YouTube link in a paragraph', () => {
     const html = '<p>https://www.youtube.com/watch?v=IGufUlcM6BU</p>'
-    expect(normalizeYouTubeEmbeds(html)).toBe(html)
+    const result = normalizeYouTubeEmbeds(html)
+    expect(result).toContain('<iframe class="ql-video"')
+    expect(result).toContain('https://www.youtube-nocookie.com/embed/IGufUlcM6BU')
   })
 
   it('removes raw iframes from unsupported hosts', () => {

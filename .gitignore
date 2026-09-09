@@ -11,6 +11,9 @@ temp_IMG_*.JPEG
 next-env.d.ts
 *.tsbuildinfo
 
+# Local repositories and submodules
+_SonicJS/darwin-sonicjs/
+
 # Local secrets and operating-system files
 .env
 .env.*

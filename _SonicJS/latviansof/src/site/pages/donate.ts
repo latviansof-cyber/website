@@ -126,6 +126,7 @@ export function renderDonatePage({ lang, settings }: DonatePageProps) {
   const features = settings.features && settings.features.length > 0 ? settings.features : DEFAULT_FEATURES
   const priorities = settings.priorityLinks && settings.priorityLinks.length > 0 ? settings.priorityLinks : DEFAULT_PRIORITIES
   const options = settings.donationOptions && settings.donationOptions.length > 0 ? settings.donationOptions : DEFAULT_OPTIONS
+  const squareUrls = [settings.squareQuickDonate10Url, settings.squareQuickDonate25Url, settings.squareQuickDonate50Url, settings.squareQuickDonate100Url, settings.squareQuickDonate250Url]
 
   const bankName = isLv ? settings.bankName_lv : settings.bankName_en
   const accountName = isLv ? settings.accountName_lv : settings.accountName_en
@@ -193,9 +194,11 @@ export function renderDonatePage({ lang, settings }: DonatePageProps) {
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
               ${options.map((preset, index) => {
                 const body = isLv ? preset.lvBody : preset.enBody
+                const paymentHref = squareUrls[index] || preset.url || '#direct-payment'
                 return html`
                   <a
-                    href="#direct-payment"
+                    href="${paymentHref}"
+                    ${paymentHref.startsWith('http') ? 'target="_blank" rel="noopener noreferrer"' : ''}
                     style="animation-delay: ${120 + index * 70}ms"
                     class="donate-rise group flex flex-col items-start rounded-2xl border-2 border-slate-200/90 bg-white p-5 text-left transition-all duration-300 hover:-translate-y-1 hover:border-sunset-orange hover:shadow-[0_16px_30px_-12px_rgba(249,115,22,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset-orange"
                   >
@@ -234,8 +237,8 @@ export function renderDonatePage({ lang, settings }: DonatePageProps) {
               <div class="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4">
                 <span class="text-xs font-bold uppercase tracking-wider text-slate-500">${isLv ? 'Ziedot:' : 'Donate:'}</span>
                 <div class="flex gap-3">
-                  <a href="#direct-payment" class="group rounded-full bg-ink px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:bg-slate-800 hover:shadow-lg active:scale-95">${isLv ? 'Vienreizējs' : 'One-Time'} <span class="inline-block transition-transform group-hover:translate-x-0.5">→</span></a>
-                  <a href="#direct-payment" class="group rounded-full bg-sunset-gold px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-ink shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-300 hover:shadow-lg active:scale-95">${isLv ? 'Ikmēneša' : 'Monthly'} <span class="inline-block transition-transform group-hover:translate-x-0.5">→</span></a>
+                  <a href="${settings.squareFlexibleDonateUrl || '#direct-payment'}" ${settings.squareFlexibleDonateUrl ? 'target="_blank" rel="noopener noreferrer"' : ''} class="group rounded-full bg-ink px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:bg-slate-800 hover:shadow-lg active:scale-95">${isLv ? 'Vienreizējs' : 'One-Time'} <span class="inline-block transition-transform group-hover:translate-x-0.5">→</span></a>
+                  <a href="${settings.squareFlexibleDonateUrl || '#direct-payment'}" ${settings.squareFlexibleDonateUrl ? 'target="_blank" rel="noopener noreferrer"' : ''} class="group rounded-full bg-sunset-gold px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-ink shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-300 hover:shadow-lg active:scale-95">${isLv ? 'Ikmēneša' : 'Monthly'} <span class="inline-block transition-transform group-hover:translate-x-0.5">→</span></a>
                 </div>
               </div>
             </div>

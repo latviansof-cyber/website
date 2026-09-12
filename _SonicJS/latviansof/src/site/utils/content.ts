@@ -146,6 +146,12 @@ export interface SiteSettingsData {
   instructions_lv?: string | undefined
   priorityLinks?: PriorityLink[] | undefined
   donationOptions?: DonationOption[] | undefined
+  squareQuickDonate10Url?: string | undefined
+  squareQuickDonate25Url?: string | undefined
+  squareQuickDonate50Url?: string | undefined
+  squareQuickDonate100Url?: string | undefined
+  squareQuickDonate250Url?: string | undefined
+  squareFlexibleDonateUrl?: string | undefined
   features?: FeatureBadge[] | undefined
   trustedPartners?: TrustedPartner[] | undefined
 }
@@ -381,6 +387,12 @@ function coerceSiteSettings(data: unknown): SiteSettingsData {
     instructions_lv: str(rec.instructions_lv),
     priorityLinks: coercePriorityLinks(rec.priorityLinks),
     donationOptions: coerceDonationOptions(rec.donationOptions),
+    squareQuickDonate10Url: str(rec.squareQuickDonate10Url),
+    squareQuickDonate25Url: str(rec.squareQuickDonate25Url),
+    squareQuickDonate50Url: str(rec.squareQuickDonate50Url),
+    squareQuickDonate100Url: str(rec.squareQuickDonate100Url),
+    squareQuickDonate250Url: str(rec.squareQuickDonate250Url),
+    squareFlexibleDonateUrl: str(rec.squareFlexibleDonateUrl),
     features: coerceFeatures(rec.features),
     trustedPartners: coerceTrustedPartners(rec.trustedPartners),
   }

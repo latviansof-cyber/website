@@ -116,6 +116,12 @@ export default {
         description: 'Array of { id, amount, enBody, lvBody, url, newTab }',
         default: [],
       },
+      squareQuickDonate10Url: { type: 'url', title: 'Square Quick Donate — $10 URL', default: '' },
+      squareQuickDonate25Url: { type: 'url', title: 'Square Quick Donate — $25 URL', default: '' },
+      squareQuickDonate50Url: { type: 'url', title: 'Square Quick Donate — $50 URL', default: '' },
+      squareQuickDonate100Url: { type: 'url', title: 'Square Quick Donate — $100 URL', default: '' },
+      squareQuickDonate250Url: { type: 'url', title: 'Square Quick Donate — $250 URL', default: '' },
+      squareFlexibleDonateUrl: { type: 'url', title: 'Square Flexible Donation Widget URL', default: '' },
       features: {
         type: 'json',
         title: 'Donation Badge Features',

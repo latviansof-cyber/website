@@ -562,8 +562,8 @@ export async function getSiteSettings(db: D1Database): Promise<SiteSettingsData>
     accountNumber: '210814547',
     accountName_en: 'Latvian Association of Darwin',
     accountName_lv: 'Latvian Association of Darwin Inc',
-    payId_en: 'Not configured',
-    payId_lv: 'Nav konfigurēts',
+    payId_en: 'support@latviansofdarwin.org.au',
+    payId_lv: 'support@latviansofdarwin.org.au',
     instructions_en: 'Enter the verified association bank account and PayID details before accepting donations.',
     instructions_lv: 'Pirms ziedojumu pieņemšanas ievadiet pārbaudītu apvienības bankas kontu un PayID informāciju.',
   }
@@ -572,5 +572,7 @@ export async function getSiteSettings(db: D1Database): Promise<SiteSettingsData>
     ...fallback,
     ...stored,
     socialLinks: stored.socialLinks && stored.socialLinks.length > 0 ? stored.socialLinks : fallback.socialLinks,
+    payId_en: stored.payId_en && !/^not configured$/i.test(stored.payId_en) ? stored.payId_en : fallback.payId_en,
+    payId_lv: stored.payId_lv && !/^nav konfigurēts$/i.test(stored.payId_lv) ? stored.payId_lv : fallback.payId_lv,
   }
 }

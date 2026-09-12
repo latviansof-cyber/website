@@ -30,11 +30,11 @@ const IMG_BY_SLUG: Record<string, string> = {
 }
 
 const DEFAULT_SUPPORTERS: TrustedPartner[] = [
-  { title: 'Australian Government', logo: '/files/uploads/46760b71e54516e7ac3de.webp', url: 'https://my.gov.au/' },
-  { title: 'NT Government', logo: '/files/uploads/a94688d8024e0702cde65.webp', url: 'https://nt.gov.au/' },
-  { title: 'Australian Red Cross', logo: '/files/uploads/ec2b805a29776b6a28b14.webp', url: 'https://www.redcross.org.au/places/offices/darwin/' },
-  { title: 'Melaleuca Australia', logo: '/files/uploads/00c83279589382d6763d8.webp', url: 'https://melaleuca.org.au/' },
-  { title: 'UAANT (Ukrainian Association of NT)', logo: '/files/uploads/1534469e01ce9dccd6dc1.svg', url: 'https://uaant.org.au/' },
+  { title: 'Australian Government', logo: '/files/uploads/46760b71e54516e7ac3de.webp', url: 'https://my.gov.au/', description: 'Access federal services, visa information, Medicare, Centrelink, and national support resources.' },
+  { title: 'NT Government', logo: '/files/uploads/a94688d8024e0702cde65.webp', url: 'https://nt.gov.au/', description: 'Northern Territory government services including housing, health information, and community programs.' },
+  { title: 'Australian Red Cross', logo: '/files/uploads/ec2b805a29776b6a28b14.webp', url: 'https://www.redcross.org.au/places/offices/darwin/', description: 'Emergency relief, humanitarian assistance, and practical help for individuals and families.' },
+  { title: 'Melaleuca Australia', logo: '/files/uploads/00c83279589382d6763d8.webp', url: 'https://melaleuca.org.au/', description: 'Settlement support, casework, referrals, and guidance for building a stable life in the NT.' },
+  { title: 'UAANT (Ukrainian Association of NT)', logo: '/files/uploads/1534469e01ce9dccd6dc1.svg', url: 'https://uaant.org.au/', description: 'Partner multicultural association in Darwin collaborating on joint community events and initiatives.' },
 ]
 
 const TONE_CHIP: Record<string, string> = {
@@ -91,7 +91,7 @@ export function renderHomePage({ lang, pages, events, settings, trustedPartners 
       : 'We collaborate with local and national organizations to deliver practical support for our community.',
   }
 
-  const payIdEmail = settings.contactEmail || 'hello@latviansofdarwin.org.au'
+  const payIdEmail = settings.payId_en || settings.contactEmail || 'support@latviansofdarwin.org.au'
   const quickAmounts = [25, 50, 100]
   const donationLink = `/${lang}/donate`
   const supporters = trustedPartners.length > 0
@@ -101,7 +101,7 @@ export function renderHomePage({ lang, pages, events, settings, trustedPartners 
   return html`
     <style>
       @keyframes donate-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-      @media (prefers-reduced-motion: reduce) { #trusted-partners a { animation: none !important; } }
+      @media (prefers-reduced-motion: reduce) { #trusted-partners .group { animation: none !important; } }
     </style>
     <!-- Hero Section -->
     <section id="top" aria-labelledby="hero-title" class="relative isolate overflow-hidden bg-ink text-white">
@@ -378,10 +378,21 @@ export function renderHomePage({ lang, pages, events, settings, trustedPartners 
 
         <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5 md:gap-6">
           ${supporters.map((supporter, index) => html`
-            <a href="${supporter.url}" target="_blank" rel="noopener noreferrer" class="group relative flex aspect-[16/10] w-full items-center justify-center rounded-2xl border border-ink/10 bg-white p-3.5 sm:p-5 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-sunset-gold hover:shadow-[0_18px_35px_-14px_rgba(251,191,36,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset-orange" title="${supporter.title}${supporter.description ? ` — ${supporter.description}` : ''}" style="animation: donate-rise 620ms cubic-bezier(.22,1,.36,1) ${index * 80}ms both">
-              <img src="${supporter.logo}" alt="${supporter.title} logo" class="h-full max-h-24 sm:max-h-28 w-auto max-w-full object-contain transition-all duration-300 group-hover:scale-105" loading="lazy" />
-              <span class="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 translate-y-2 whitespace-nowrap rounded-full bg-ink px-3 py-1 text-[10px] font-semibold text-white opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">${supporter.title}</span>
-            </a>
+            <div class="group relative flex flex-col items-center rounded-2xl border border-ink/10 bg-white p-3.5 sm:p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-sunset-gold hover:shadow-lg" style="animation: donate-rise 620ms cubic-bezier(.22,1,.36,1) ${index * 80}ms both">
+              <a href="${supporter.url}" target="_blank" rel="noopener noreferrer" class="flex aspect-[16/10] w-full items-center justify-center p-1 sm:p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset-orange rounded-xl">
+                <img src="${supporter.logo}" alt="${supporter.title} logo" class="h-full max-h-24 sm:max-h-28 w-auto max-w-full object-contain transition-all duration-300 group-hover:scale-105" loading="lazy" />
+              </a>
+
+              ${/* Info button — focusable so focus-within shows tooltip */''}
+              <button type="button" aria-label="About ${supporter.title}" tabindex="0" class="partner-info-btn absolute top-2 right-2 flex size-6 items-center justify-center rounded-full bg-ink/5 text-xs font-bold text-ink/70 transition-all hover:bg-sunset-gold hover:text-ink focus:outline-none focus:bg-sunset-gold focus:text-ink">i</button>
+
+              ${/* Tooltip — shows on card hover OR when info button is focused/active */''}
+              <div role="tooltip" class="partner-tooltip pointer-events-none invisible absolute bottom-full left-1/2 z-20 mb-2 w-56 -translate-x-1/2 translate-y-2 rounded-xl bg-ink p-3 text-xs leading-relaxed text-white opacity-0 shadow-xl transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                <div class="mb-1 font-semibold text-sunset-gold">${supporter.title}</div>
+                ${supporter.description || ''}
+                <div class="absolute top-full left-1/2 -ml-1.5 border-4 border-transparent border-t-ink"></div>
+              </div>
+            </div>
           `)}
         </div>
       </div>

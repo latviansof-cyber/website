@@ -141,13 +141,18 @@ export function renderDonatePage({ lang, settings }: DonatePageProps) {
   const payIdFallback = payId || (isLv ? 'Nav konfigurēts' : 'Not configured')
 
   return html`
+    <style>
+      @keyframes donate-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+      .donate-rise { opacity: 0; animation: donate-rise 620ms cubic-bezier(.22,1,.36,1) forwards; }
+      @media (prefers-reduced-motion: reduce) { .donate-rise { opacity: 1; animation: none; } }
+    </style>
     <section class="relative isolate overflow-hidden border-b border-slate-200 bg-gradient-to-r from-sunset-peach/20 via-white to-sunset-gold/20 py-12 lg:py-16">
       <div class="absolute -left-20 top-0 h-56 w-56 rounded-full bg-sunset-red/10 blur-3xl"></div>
       <div class="absolute right-0 top-0 h-44 w-44 rounded-full bg-sunset-orange/10 blur-2xl"></div>
       <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 space-y-16">
         <!-- Top Banner / Header -->
         <div class="flex flex-col gap-10">
-          <div class="space-y-4">
+          <div class="donate-rise space-y-4">
             <span class="inline-block rounded-full bg-sunset-orange/10 px-4 py-1 text-xs font-bold uppercase tracking-wider text-sunset-orange">
               ${copy.heroEyebrow}
             </span>
@@ -186,12 +191,13 @@ export function renderDonatePage({ lang, settings }: DonatePageProps) {
             </div>
 
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-              ${options.map((preset) => {
+              ${options.map((preset, index) => {
                 const body = isLv ? preset.lvBody : preset.enBody
                 return html`
                   <a
                     href="#direct-payment"
-                    class="group flex flex-col items-start rounded-2xl border-2 border-slate-200/90 bg-white p-5 text-left transition hover:border-sunset-orange hover:shadow-lg"
+                    style="animation-delay: ${120 + index * 70}ms"
+                    class="donate-rise group flex flex-col items-start rounded-2xl border-2 border-slate-200/90 bg-white p-5 text-left transition-all duration-300 hover:-translate-y-1 hover:border-sunset-orange hover:shadow-[0_16px_30px_-12px_rgba(249,115,22,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset-orange"
                   >
                     <p class="text-2xl font-black text-sunset-orange sm:text-3xl">$${preset.amount}</p>
                     <p class="mt-2 flex-1 text-xs leading-relaxed text-slate-600 sm:text-sm">
@@ -201,14 +207,14 @@ export function renderDonatePage({ lang, settings }: DonatePageProps) {
                       <span class="text-[11px] font-bold uppercase tracking-wide text-sunset-orange group-hover:text-sunset-red transition">
                         ${copy.quickDonateButton}
                       </span>
-                      <span class="text-xs text-slate-400 group-hover:text-sunset-red transition">→</span>
+                      <span class="text-xs text-slate-400 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-sunset-red">→</span>
                     </div>
                   </a>
                 `
               })}
             </div>
 
-            <div class="mt-4 rounded-2xl border-2 border-slate-200/90 bg-white p-5 sm:p-6 shadow-sm">
+            <div class="donate-rise mt-4 rounded-2xl border-2 border-slate-200/90 bg-white p-5 sm:p-6 shadow-sm transition-all duration-300 hover:border-sunset-orange hover:shadow-lg" style="animation-delay: 500ms">
               <div class="grid gap-4 md:grid-cols-12 md:items-center">
                 <div class="md:col-span-5 lg:col-span-4">
                   <label for="custom-donation-amount" class="mb-2 block text-[11px] font-bold uppercase tracking-widest text-sunset-orange">
@@ -216,7 +222,7 @@ export function renderDonatePage({ lang, settings }: DonatePageProps) {
                   </label>
                   <div class="relative">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-2xl font-black text-sunset-orange">$</span>
-                    <input id="custom-donation-amount" type="text" inputmode="decimal" placeholder="0.00" class="w-full rounded-xl border-2 border-slate-200 bg-slate-50/50 py-3 pl-10 pr-4 text-2xl font-black text-ink shadow-inner focus:border-sunset-orange focus:bg-white focus:outline-none" />
+                    <input id="custom-donation-amount" type="text" inputmode="decimal" placeholder="0.00" class="w-full rounded-xl border-2 border-slate-200 bg-slate-50/50 py-3 pl-10 pr-4 text-2xl font-black text-ink shadow-inner transition-all focus:border-sunset-orange focus:bg-white focus:outline-none focus:ring-4 focus:ring-sunset-orange/10" />
                   </div>
                 </div>
                 <p class="text-xs leading-relaxed text-slate-600 sm:text-sm md:col-span-7 lg:col-span-8">
@@ -228,8 +234,8 @@ export function renderDonatePage({ lang, settings }: DonatePageProps) {
               <div class="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4">
                 <span class="text-xs font-bold uppercase tracking-wider text-slate-500">${isLv ? 'Ziedot:' : 'Donate:'}</span>
                 <div class="flex gap-3">
-                  <a href="#direct-payment" class="rounded-full bg-ink px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-md">${isLv ? 'Vienreizējs' : 'One-Time'}</a>
-                  <a href="#direct-payment" class="rounded-full bg-sunset-gold px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-ink shadow-md">${isLv ? 'Ikmēneša' : 'Monthly'}</a>
+                  <a href="#direct-payment" class="group rounded-full bg-ink px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:bg-slate-800 hover:shadow-lg active:scale-95">${isLv ? 'Vienreizējs' : 'One-Time'} <span class="inline-block transition-transform group-hover:translate-x-0.5">→</span></a>
+                  <a href="#direct-payment" class="group rounded-full bg-sunset-gold px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-ink shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-300 hover:shadow-lg active:scale-95">${isLv ? 'Ikmēneša' : 'Monthly'} <span class="inline-block transition-transform group-hover:translate-x-0.5">→</span></a>
                 </div>
               </div>
             </div>

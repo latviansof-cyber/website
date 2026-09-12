@@ -141,10 +141,12 @@ export function renderDonatePage({ lang, settings }: DonatePageProps) {
   const payIdFallback = payId || (isLv ? 'Nav konfigurēts' : 'Not configured')
 
   return html`
-    <section class="relative isolate overflow-hidden bg-cream py-16 sm:py-24">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-16">
+    <section class="relative isolate overflow-hidden border-b border-slate-200 bg-gradient-to-r from-sunset-peach/20 via-white to-sunset-gold/20 py-12 lg:py-16">
+      <div class="absolute -left-20 top-0 h-56 w-56 rounded-full bg-sunset-red/10 blur-3xl"></div>
+      <div class="absolute right-0 top-0 h-44 w-44 rounded-full bg-sunset-orange/10 blur-2xl"></div>
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 space-y-16">
         <!-- Top Banner / Header -->
-        <div class="glass-panel flex flex-col gap-10 rounded-3xl p-6 sm:p-12 shadow-lg">
+        <div class="flex flex-col gap-10">
           <div class="space-y-4">
             <span class="inline-block rounded-full bg-sunset-orange/10 px-4 py-1 text-xs font-bold uppercase tracking-wider text-sunset-orange">
               ${copy.heroEyebrow}
@@ -204,6 +206,32 @@ export function renderDonatePage({ lang, settings }: DonatePageProps) {
                   </a>
                 `
               })}
+            </div>
+
+            <div class="mt-4 rounded-2xl border-2 border-slate-200/90 bg-white p-5 sm:p-6 shadow-sm">
+              <div class="grid gap-4 md:grid-cols-12 md:items-center">
+                <div class="md:col-span-5 lg:col-span-4">
+                  <label for="custom-donation-amount" class="mb-2 block text-[11px] font-bold uppercase tracking-widest text-sunset-orange">
+                    ${isLv ? 'Vai ievadiet citu summu' : 'Or enter any amount'}
+                  </label>
+                  <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-2xl font-black text-sunset-orange">$</span>
+                    <input id="custom-donation-amount" type="text" inputmode="decimal" placeholder="0.00" class="w-full rounded-xl border-2 border-slate-200 bg-slate-50/50 py-3 pl-10 pr-4 text-2xl font-black text-ink shadow-inner focus:border-sunset-orange focus:bg-white focus:outline-none" />
+                  </div>
+                </div>
+                <p class="text-xs leading-relaxed text-slate-600 sm:text-sm md:col-span-7 lg:col-span-8">
+                  ${isLv
+                    ? 'Norādiet jebkuru ziedojuma summu DLA pasākumiem, valodas nodarbībām un kopienas atbalstam.'
+                    : 'Specify any custom contribution amount to directly fund DLA events, language classes, and community support.'}
+                </p>
+              </div>
+              <div class="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">${isLv ? 'Ziedot:' : 'Donate:'}</span>
+                <div class="flex gap-3">
+                  <a href="#direct-payment" class="rounded-full bg-ink px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-md">${isLv ? 'Vienreizējs' : 'One-Time'}</a>
+                  <a href="#direct-payment" class="rounded-full bg-sunset-gold px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-ink shadow-md">${isLv ? 'Ikmēneša' : 'Monthly'}</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>

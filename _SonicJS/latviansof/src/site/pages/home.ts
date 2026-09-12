@@ -10,7 +10,7 @@
 import { html } from 'hono/html'
 import { resolveMediaUrl } from '../utils/content'
 import { plainText } from '../utils/format'
-import type { EventData, PageData, SiteSettingsData } from '../utils/content'
+import type { EventData, PageData, SiteSettingsData, TrustedPartner } from '../utils/content'
 
 export interface HomeProps {
   lang: 'en' | 'lv'
@@ -28,7 +28,7 @@ const IMG_BY_SLUG: Record<string, string> = {
   culture: '/files/uploads/58a0b3d51187c368496cf.png', // culture.png
 }
 
-const SUPPORTERS: Array<{ url: string; alt: string; link: string }> = [
+const DEFAULT_SUPPORTERS: TrustedPartner[] = [
   { url: '/files/uploads/46760b71e54516e7ac3de.webp', alt: 'Australian Government', link: 'https://my.gov.au/' },
   { url: '/files/uploads/a94688d8024e0702cde65.webp', alt: 'NT Government', link: 'https://nt.gov.au/' },
   { url: '/files/uploads/ec2b805a29776b6a28b14.webp', alt: 'Australian Red Cross', link: 'https://www.redcross.org.au/places/offices/darwin/' },
@@ -93,8 +93,15 @@ export function renderHomePage({ lang, pages, events, settings }: HomeProps) {
   const payIdEmail = settings.contactEmail || 'hello@latviansofdarwin.org.au'
   const quickAmounts = [25, 50, 100]
   const donationLink = `/${lang}/donate`
+  const supporters = settings.trustedPartners && settings.trustedPartners.length > 0
+    ? settings.trustedPartners
+    : DEFAULT_SUPPORTERS
 
   return html`
+    <style>
+      @keyframes donate-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+      @media (prefers-reduced-motion: reduce) { #trusted-partners a { animation: none !important; } }
+    </style>
     <!-- Hero Section -->
     <section id="top" aria-labelledby="hero-title" class="relative isolate overflow-hidden bg-ink text-white">
       <div class="absolute inset-0 -z-20">
@@ -369,9 +376,10 @@ export function renderHomePage({ lang, pages, events, settings }: HomeProps) {
         </div>
 
         <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5 md:gap-6">
-          ${SUPPORTERS.map((supporter) => html`
-            <a href="${supporter.link}" target="_blank" rel="noopener noreferrer" class="group flex aspect-[16/10] w-full items-center justify-center rounded-2xl border border-ink/10 bg-white p-3.5 sm:p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-sunset-gold hover:shadow-lg" title="${supporter.alt}">
+          ${supporters.map((supporter, index) => html`
+            <a href="${supporter.link}" target="_blank" rel="noopener noreferrer" class="group relative flex aspect-[16/10] w-full items-center justify-center rounded-2xl border border-ink/10 bg-white p-3.5 sm:p-5 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-sunset-gold hover:shadow-[0_18px_35px_-14px_rgba(251,191,36,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset-orange" title="${supporter.alt}" style="animation: donate-rise 620ms cubic-bezier(.22,1,.36,1) ${index * 80}ms both">
               <img src="${supporter.url}" alt="${supporter.alt} logo" class="h-full max-h-24 sm:max-h-28 w-auto max-w-full object-contain transition-all duration-300 group-hover:scale-105" loading="lazy" />
+              <span class="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 translate-y-2 whitespace-nowrap rounded-full bg-ink px-3 py-1 text-[10px] font-semibold text-white opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">${supporter.alt}</span>
             </a>
           `)}
         </div>

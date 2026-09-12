@@ -17,7 +17,7 @@ import {
   compareEventsByDate,
   getAllPublishedEvents,
   getAllPublishedPages,
-  getFooterData,
+  getFooterSections,
   getNavigationItems,
   getPublishedEventBySlug,
   getPublishedPageBySlug,
@@ -53,12 +53,19 @@ function plainDescription(htmlOrText: string): string {
 }
 
 async function loadShared(db: D1Database): Promise<Shared> {
-  const [navItems, footer, settings] = await Promise.all([
+  const [navItems, footerSections, settings] = await Promise.all([
     getNavigationItems(db),
-    getFooterData(db),
+    getFooterSections(db),
     getSiteSettings(db),
   ])
-  return { navItems, footer, settings }
+  return {
+    navItems,
+    footer: {
+      ...footerSections.identity,
+      items: [...footerSections.quickLinks, ...footerSections.resources],
+    },
+    settings,
+  }
 }
 
 type SiteContext = Context<{ Bindings: Bindings }>

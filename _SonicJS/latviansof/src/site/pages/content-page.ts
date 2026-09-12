@@ -25,6 +25,34 @@ export function renderContentPage({ lang, page }: ContentPageProps) {
 
   const formattedBody = bodyToHtml(body)
   const isLogo = page.slug === 'history'
+  const isMembership = page.slug === 'membership'
+
+  if (isMembership) {
+    const membershipImage = imgSrc || '/files/uploads/3b09fa70a9e1a257df835.webp'
+    return html`
+      <style>
+        @keyframes membership-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes membership-image { from { opacity: 0; transform: scale(1.04); } to { opacity: 1; transform: scale(1); } }
+        @media (prefers-reduced-motion: reduce) { #membership-page * { animation: none !important; } }
+      </style>
+      <main id="membership-page" class="bg-cream">
+        <section class="relative h-[18rem] overflow-hidden bg-ink sm:h-[24rem]">
+          <img src="${membershipImage}" alt="${title || ''}" class="h-full w-full object-cover" style="animation: membership-image 900ms cubic-bezier(.22,1,.36,1) both" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/45 via-transparent to-transparent"></div>
+        </section>
+        <section class="py-16 lg:py-24">
+          <div class="mx-auto grid max-w-6xl items-start gap-12 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_18rem] lg:px-8">
+            <article class="prose-custom max-w-none" style="animation: membership-rise 700ms 120ms cubic-bezier(.22,1,.36,1) both">
+              ${raw(formattedBody)}
+            </article>
+            <aside class="overflow-hidden rounded-2xl bg-white shadow-lg" style="animation: membership-rise 700ms 220ms cubic-bezier(.22,1,.36,1) both">
+              <img src="${membershipImage}" alt="${title || ''}" class="aspect-[4/3] w-full object-cover" loading="lazy" />
+            </aside>
+          </div>
+        </section>
+      </main>
+    `
+  }
 
   return html`
     <!-- Hero Banner -->

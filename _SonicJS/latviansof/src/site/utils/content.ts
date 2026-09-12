@@ -66,6 +66,28 @@ export interface FooterData {
   rights_en?: string | undefined
   rights_lv?: string | undefined
   items?: FooterItem[] | undefined
+  blurb_en?: string | undefined
+  blurb_lv?: string | undefined
+  donateLabel_en?: string | undefined
+  donateLabel_lv?: string | undefined
+}
+
+/** Structured result returned by getFooterSections(). */
+export interface FooterSections {
+  identity: {
+    tagline_en: string
+    tagline_lv: string
+    address_en: string
+    address_lv: string
+  }
+  quickLinks: FooterItem[]
+  resources: FooterItem[]
+  getInvolved: {
+    blurb_en: string
+    blurb_lv: string
+    donateLabel_en: string
+    donateLabel_lv: string
+  }
 }
 
 export interface SocialLink {
@@ -98,6 +120,12 @@ export interface FeatureBadge {
   lvLabel?: string | undefined
 }
 
+export interface TrustedPartner {
+  url: string
+  alt: string
+  link: string
+}
+
 export interface SiteSettingsData {
   key?: string | undefined
   associationName_en?: string | undefined
@@ -119,6 +147,7 @@ export interface SiteSettingsData {
   priorityLinks?: PriorityLink[] | undefined
   donationOptions?: DonationOption[] | undefined
   features?: FeatureBadge[] | undefined
+  trustedPartners?: TrustedPartner[] | undefined
 }
 
 // ---------------------------------------------------------------------------
@@ -259,6 +288,10 @@ function coerceFooter(data: unknown): FooterData {
     rights_en: str(rec.rights_en),
     rights_lv: str(rec.rights_lv),
     items: items.length > 0 ? items : undefined,
+    blurb_en: str(rec.blurb_en),
+    blurb_lv: str(rec.blurb_lv),
+    donateLabel_en: str(rec.donateLabel_en),
+    donateLabel_lv: str(rec.donateLabel_lv),
   }
 }
 
@@ -319,6 +352,13 @@ function coerceFeatures(value: unknown): FeatureBadge[] {
     .filter((f) => f.enLabel !== undefined || f.lvLabel !== undefined)
 }
 
+function coerceTrustedPartners(value: unknown): TrustedPartner[] {
+  return asArray(value).map((item) => {
+    const rec = asRecord(item)
+    return { url: str(rec.url) ?? '', alt: str(rec.alt) ?? 'Trusted partner', link: str(rec.link) ?? '#' }
+  }).filter((partner) => partner.url.length > 0)
+}
+
 function coerceSiteSettings(data: unknown): SiteSettingsData {
   const rec = asRecord(data)
   return {
@@ -342,6 +382,7 @@ function coerceSiteSettings(data: unknown): SiteSettingsData {
     priorityLinks: coercePriorityLinks(rec.priorityLinks),
     donationOptions: coerceDonationOptions(rec.donationOptions),
     features: coerceFeatures(rec.features),
+    trustedPartners: coerceTrustedPartners(rec.trustedPartners),
   }
 }
 
@@ -439,25 +480,47 @@ export async function getNavigationItems(db: D1Database): Promise<NavigationItem
   ]
 }
 
-export async function getFooterData(db: D1Database): Promise<FooterData> {
-  const rows = await fetchRows(db, 'footer', 'default-footer')
-  if (rows.length === 0) return {}
-  const footer = coerceFooter(docData(rows[0]))
+/** Fetch all four footer section documents in parallel and return structured data. */
+export async function getFooterSections(db: D1Database): Promise<FooterSections> {
+  const [identityRows, quickRows, resourceRows, involvedRows] = await Promise.all([
+    fetchRows(db, 'footer', 'footer-identity'),
+    fetchRows(db, 'footer', 'footer-quick-links'),
+    fetchRows(db, 'footer', 'footer-resources'),
+    fetchRows(db, 'footer', 'footer-get-involved'),
+  ])
+
+  const identity = identityRows.length > 0 ? coerceFooter(docData(identityRows[0])) : {}
+  const quickData = quickRows.length > 0 ? coerceFooter(docData(quickRows[0])) : {}
+  const resourceData = resourceRows.length > 0 ? coerceFooter(docData(resourceRows[0])) : {}
+  const involvedData = involvedRows.length > 0 ? coerceFooter(docData(involvedRows[0])) : {}
+
   return {
-    ...footer,
-    tagline_en: footer.tagline_en ?? 'Connecting Latvians in the Top End.',
-    tagline_lv: footer.tagline_lv ?? 'Vienojot latviešus Ziemeļu Teritorijā.',
-    address_en: footer.address_en ?? 'Darwin, Northern Territory, Australia',
-    address_lv: footer.address_lv ?? 'Dārvina, Ziemeļu Teritorija, Austrālija',
-    rights_en: footer.rights_en ?? 'All rights reserved.',
-    rights_lv: footer.rights_lv ?? 'Visas tiesības aizsargātas.',
-    items: footer.items ?? [
+    identity: {
+      tagline_en: identity.tagline_en ?? 'Connecting Latvians in the Top End.',
+      tagline_lv: identity.tagline_lv ?? 'Vienojot latviešus Ziemeļu Teritorijā.',
+      address_en: identity.address_en ?? 'Darwin, Northern Territory, Australia',
+      address_lv: identity.address_lv ?? 'Dārvina, Ziemeļu Teritorija, Austrālija',
+    },
+    quickLinks: quickData.items ?? [
       { href: '/about', en: 'About', lv: 'Par mums' },
       { href: '/contact', en: 'Contacts', lv: 'Kontakti' },
       { href: '/privacy', en: 'Privacy Policy', lv: 'Privātuma politika' },
       { href: '/terms', en: 'Terms & Conditions', lv: 'Lietošanas noteikumi' },
-      { href: '/eula', en: 'EULA', lv: 'EULA' },
     ],
+    resources: resourceData.items ?? [
+      { href: '/membership', en: 'Join / Membership', lv: 'Pievienoties / Biedri' },
+      { href: '/#events', en: 'Events', lv: 'Pasākumi' },
+    ],
+    getInvolved: {
+      blurb_en:
+        involvedData.blurb_en ??
+        'Whether you have Latvian heritage or want to connect with a vibrant community, there is always a place for you in our association.',
+      blurb_lv:
+        involvedData.blurb_lv ??
+        'Neatkarīgi no tā, vai jums ir latviešu izcelsme, vai vēlaties pievienoties mūsu kopienai, jūs vienmēr esat laipni gaidīti mūsu apvienībā.',
+      donateLabel_en: involvedData.donateLabel_en ?? 'Donate',
+      donateLabel_lv: involvedData.donateLabel_lv ?? 'Ziedot',
+    },
   }
 }
 

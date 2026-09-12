@@ -1,7 +1,11 @@
 /**
  * Footer Collection for SonicJS
  *
- * Manages bilingual footer details, addresses, rights, and links.
+ * Holds four separately editable documents, each mapping to one footer column:
+ *   footer-identity     — tagline + address (brand column)
+ *   footer-quick-links  — quick links array
+ *   footer-resources    — resources links array
+ *   footer-get-involved — blurb text + donate button label
  */
 
 import type { CollectionConfig } from '@sonicjs-cms/core'
@@ -10,7 +14,7 @@ export default {
   name: 'footer',
   displayName: 'Footer',
   slug: 'footer',
-  description: 'Footer details and links',
+  description: 'Footer sections — edit each column separately (Identity, Quick Links, Resources, Get Involved)',
   icon: '🦶',
 
   schema: {
@@ -18,13 +22,15 @@ export default {
     properties: {
       name: {
         type: 'string',
-        title: 'Footer Identifier',
+        title: 'Section Identifier',
         required: true,
-        default: 'default-footer',
+        default: 'footer-identity',
       },
+      // ── Identity column ────────────────────────────────────────────────────
       tagline_en: {
         type: 'string',
         title: 'Tagline (English)',
+        description: 'e.g. "Connecting Latvians in the Top End."',
       },
       tagline_lv: {
         type: 'string',
@@ -33,24 +39,38 @@ export default {
       address_en: {
         type: 'string',
         title: 'Address (English)',
+        description: 'e.g. "Darwin, Northern Territory, Australia"',
       },
       address_lv: {
         type: 'string',
         title: 'Address (Latvian)',
       },
-      rights_en: {
-        type: 'string',
-        title: 'Copyright Text (English)',
-      },
-      rights_lv: {
-        type: 'string',
-        title: 'Copyright Text (Latvian)',
-      },
+      // ── Quick Links / Resources columns ───────────────────────────────────
       items: {
         type: 'json',
-        title: 'Footer Links',
-        description: 'Array of { href, en, lv, newTab }',
+        title: 'Links',
+        description: 'Array of { href, en, lv, newTab } — used for Quick Links or Resources columns.',
         default: [],
+      },
+      // ── Get Involved column ───────────────────────────────────────────────
+      blurb_en: {
+        type: 'string',
+        title: 'Blurb (English)',
+        description: 'Short paragraph shown in the "Get Involved" column.',
+      },
+      blurb_lv: {
+        type: 'string',
+        title: 'Blurb (Latvian)',
+      },
+      donateLabel_en: {
+        type: 'string',
+        title: 'Donate Button Label (English)',
+        description: 'e.g. "Donate"',
+      },
+      donateLabel_lv: {
+        type: 'string',
+        title: 'Donate Button Label (Latvian)',
+        description: 'e.g. "Ziedot"',
       },
     },
     required: ['name'],

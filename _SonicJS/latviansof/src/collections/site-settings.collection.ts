@@ -17,12 +17,6 @@ export default {
   schema: {
     type: 'object',
     properties: {
-      key: {
-        type: 'string',
-        title: 'Settings Key',
-        required: true,
-        default: 'default-settings',
-      },
       associationName_en: {
         type: 'string',
         title: 'Association Name (English)',
@@ -135,10 +129,9 @@ export default {
         default: [],
       },
     },
-    required: ['key'],
   },
 
-  listFields: ['key', 'associationName_en', 'contactEmail', 'updatedAt'],
+  listFields: ['associationName_en', 'contactEmail', 'updatedAt'],
   managed: true,
   isActive: true,
 

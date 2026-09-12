@@ -123,12 +123,6 @@ export default {
         description: 'Array of { id, enLabel, lvLabel }',
         default: [],
       },
-      trustedPartners: {
-        type: 'json',
-        title: 'Trusted Partners',
-        description: 'Array of { url, alt, link } used on the homepage partner section',
-        default: [],
-      },
     },
   },
 

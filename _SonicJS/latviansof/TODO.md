@@ -13,7 +13,7 @@
 
 4. Trusted partners list, editable
    Implemented on the homepage: https://latviansofdarwin.org.au/en#trusted-partners
-   Edit the list in Admin → Content → Site Settings → “Trusted Partners”.
+   Edit each partner in Admin → Content → Trusted Partners. Each entry has Title, Description, Logo, URL, and Sort Order fields.
 
 5. Footer to make completely editable
    Implemented across all public pages through the shared footer, for example: https://latviansofdarwin.org.au/en

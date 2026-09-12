@@ -12,6 +12,7 @@ import eventsCollection from './collections/events.collection'
 import navigationCollection from './collections/navigation.collection'
 import footerCollection from './collections/footer.collection'
 import siteSettingsCollection from './collections/site-settings.collection'
+import trustedPartnersCollection from './collections/trusted-partners.collection'
 import { siteRouter } from './site'
 
 // Register collections BEFORE creating the app.
@@ -21,6 +22,7 @@ registerCollections([
   navigationCollection,
   footerCollection,
   siteSettingsCollection,
+  trustedPartnersCollection,
 ])
 
 // Application configuration

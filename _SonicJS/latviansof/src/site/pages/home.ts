@@ -17,6 +17,7 @@ export interface HomeProps {
   pages: PageData[]
   events: EventData[]
   settings: SiteSettingsData
+  trustedPartners: TrustedPartner[]
 }
 
 // Mirrored production images (deterministic R2 keys from the migration script).
@@ -29,11 +30,11 @@ const IMG_BY_SLUG: Record<string, string> = {
 }
 
 const DEFAULT_SUPPORTERS: TrustedPartner[] = [
-  { url: '/files/uploads/46760b71e54516e7ac3de.webp', alt: 'Australian Government', link: 'https://my.gov.au/' },
-  { url: '/files/uploads/a94688d8024e0702cde65.webp', alt: 'NT Government', link: 'https://nt.gov.au/' },
-  { url: '/files/uploads/ec2b805a29776b6a28b14.webp', alt: 'Australian Red Cross', link: 'https://www.redcross.org.au/places/offices/darwin/' },
-  { url: '/files/uploads/00c83279589382d6763d8.webp', alt: 'Melaleuca Australia', link: 'https://melaleuca.org.au/' },
-  { url: '/files/uploads/1534469e01ce9dccd6dc1.svg', alt: 'UAANT (Ukrainian Association of NT)', link: 'https://uaant.org.au/' },
+  { title: 'Australian Government', logo: '/files/uploads/46760b71e54516e7ac3de.webp', url: 'https://my.gov.au/' },
+  { title: 'NT Government', logo: '/files/uploads/a94688d8024e0702cde65.webp', url: 'https://nt.gov.au/' },
+  { title: 'Australian Red Cross', logo: '/files/uploads/ec2b805a29776b6a28b14.webp', url: 'https://www.redcross.org.au/places/offices/darwin/' },
+  { title: 'Melaleuca Australia', logo: '/files/uploads/00c83279589382d6763d8.webp', url: 'https://melaleuca.org.au/' },
+  { title: 'UAANT (Ukrainian Association of NT)', logo: '/files/uploads/1534469e01ce9dccd6dc1.svg', url: 'https://uaant.org.au/' },
 ]
 
 const TONE_CHIP: Record<string, string> = {
@@ -45,7 +46,7 @@ const TONE_CHIP: Record<string, string> = {
   slate: 'bg-slate-200 text-slate-700',
 }
 
-export function renderHomePage({ lang, pages, events, settings }: HomeProps) {
+export function renderHomePage({ lang, pages, events, settings, trustedPartners }: HomeProps) {
   const isLv = lang === 'lv'
 
   const copy = {
@@ -93,8 +94,8 @@ export function renderHomePage({ lang, pages, events, settings }: HomeProps) {
   const payIdEmail = settings.contactEmail || 'hello@latviansofdarwin.org.au'
   const quickAmounts = [25, 50, 100]
   const donationLink = `/${lang}/donate`
-  const supporters = settings.trustedPartners && settings.trustedPartners.length > 0
-    ? settings.trustedPartners
+  const supporters = trustedPartners.length > 0
+    ? trustedPartners
     : DEFAULT_SUPPORTERS
 
   return html`
@@ -377,9 +378,9 @@ export function renderHomePage({ lang, pages, events, settings }: HomeProps) {
 
         <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5 md:gap-6">
           ${supporters.map((supporter, index) => html`
-            <a href="${supporter.link}" target="_blank" rel="noopener noreferrer" class="group relative flex aspect-[16/10] w-full items-center justify-center rounded-2xl border border-ink/10 bg-white p-3.5 sm:p-5 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-sunset-gold hover:shadow-[0_18px_35px_-14px_rgba(251,191,36,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset-orange" title="${supporter.alt}" style="animation: donate-rise 620ms cubic-bezier(.22,1,.36,1) ${index * 80}ms both">
-              <img src="${supporter.url}" alt="${supporter.alt} logo" class="h-full max-h-24 sm:max-h-28 w-auto max-w-full object-contain transition-all duration-300 group-hover:scale-105" loading="lazy" />
-              <span class="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 translate-y-2 whitespace-nowrap rounded-full bg-ink px-3 py-1 text-[10px] font-semibold text-white opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">${supporter.alt}</span>
+            <a href="${supporter.url}" target="_blank" rel="noopener noreferrer" class="group relative flex aspect-[16/10] w-full items-center justify-center rounded-2xl border border-ink/10 bg-white p-3.5 sm:p-5 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-sunset-gold hover:shadow-[0_18px_35px_-14px_rgba(251,191,36,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sunset-orange" title="${supporter.title}${supporter.description ? ` — ${supporter.description}` : ''}" style="animation: donate-rise 620ms cubic-bezier(.22,1,.36,1) ${index * 80}ms both">
+              <img src="${supporter.logo}" alt="${supporter.title} logo" class="h-full max-h-24 sm:max-h-28 w-auto max-w-full object-contain transition-all duration-300 group-hover:scale-105" loading="lazy" />
+              <span class="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 translate-y-2 whitespace-nowrap rounded-full bg-ink px-3 py-1 text-[10px] font-semibold text-white opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">${supporter.title}</span>
             </a>
           `)}
         </div>

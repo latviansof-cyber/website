@@ -17,6 +17,7 @@ import {
   compareEventsByDate,
   getAllPublishedEvents,
   getAllPublishedPages,
+  getAllPublishedTrustedPartners,
   getFooterSections,
   getNavigationItems,
   getPublishedEventBySlug,
@@ -25,7 +26,7 @@ import {
   isEventUpcoming,
   resolveMediaUrl,
 } from './utils/content'
-import type { FooterSections, NavigationItem, SiteSettingsData } from './utils/content'
+import type { FooterSections, NavigationItem, SiteSettingsData, TrustedPartner } from './utils/content'
 
 type Bindings = {
   DB: D1Database
@@ -37,6 +38,7 @@ type Shared = {
   navItems: NavigationItem[]
   footerSections: FooterSections
   settings: SiteSettingsData
+  trustedPartners: TrustedPartner[]
 }
 
 function parseLang(param: string): 'en' | 'lv' | null {
@@ -62,6 +64,7 @@ async function loadShared(db: D1Database): Promise<Shared> {
     navItems,
     footerSections,
     settings,
+    trustedPartners: [],
   }
 }
 
@@ -93,9 +96,10 @@ siteRouter.get('/:lang', async (c) => {
     return render404(c, 'en', shared, c.req.path)
   }
 
-  const [allPages, allEvents, shared] = await Promise.all([
+  const [allPages, allEvents, trustedPartners, shared] = await Promise.all([
     getAllPublishedPages(c.env.DB),
     getAllPublishedEvents(c.env.DB),
+    getAllPublishedTrustedPartners(c.env.DB),
     loadShared(c.env.DB),
   ])
 
@@ -108,7 +112,7 @@ siteRouter.get('/:lang', async (c) => {
   const past = allEvents.filter((e) => !isEventUpcoming(e)).sort(compareEventsByDate)
   const events = [...upcoming, ...past]
 
-  const content = renderHomePage({ lang, pages: explorePages, events, settings: shared.settings })
+  const content = renderHomePage({ lang, pages: explorePages, events, settings: shared.settings, trustedPartners })
 
   const layout = renderLayout({
     lang,

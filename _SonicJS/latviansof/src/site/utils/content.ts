@@ -121,9 +121,11 @@ export interface FeatureBadge {
 }
 
 export interface TrustedPartner {
+  title: string
+  description?: string | undefined
+  logo: string
   url: string
-  alt: string
-  link: string
+  sortOrder?: number | undefined
 }
 
 export interface SiteSettingsData {
@@ -154,7 +156,6 @@ export interface SiteSettingsData {
   squareFlexibleDonateUrl?: string | undefined
   membershipFormUrl?: string | undefined
   features?: FeatureBadge[] | undefined
-  trustedPartners?: TrustedPartner[] | undefined
 }
 
 // ---------------------------------------------------------------------------
@@ -359,13 +360,6 @@ function coerceFeatures(value: unknown): FeatureBadge[] {
     .filter((f) => f.enLabel !== undefined || f.lvLabel !== undefined)
 }
 
-function coerceTrustedPartners(value: unknown): TrustedPartner[] {
-  return asArray(value).map((item) => {
-    const rec = asRecord(item)
-    return { url: str(rec.url) ?? '', alt: str(rec.alt) ?? 'Trusted partner', link: str(rec.link) ?? '#' }
-  }).filter((partner) => partner.url.length > 0)
-}
-
 function coerceSiteSettings(data: unknown): SiteSettingsData {
   const rec = asRecord(data)
   return {
@@ -396,7 +390,6 @@ function coerceSiteSettings(data: unknown): SiteSettingsData {
     squareFlexibleDonateUrl: str(rec.squareFlexibleDonateUrl),
     membershipFormUrl: str(rec.membershipFormUrl),
     features: coerceFeatures(rec.features),
-    trustedPartners: coerceTrustedPartners(rec.trustedPartners),
   }
 }
 
@@ -462,6 +455,22 @@ export async function getPublishedEventBySlug(db: D1Database, slug: string): Pro
 export async function getAllPublishedEvents(db: D1Database): Promise<EventData[]> {
   const rows = await fetchRows(db, 'events')
   return rows.map((row) => coerceEvent(docData(row)))
+}
+
+function coerceTrustedPartner(data: unknown): TrustedPartner {
+  const rec = asRecord(data)
+  return {
+    title: str(rec.title) ?? 'Trusted partner',
+    description: str(rec.description),
+    logo: resolveMediaUrl(rec.logo),
+    url: str(rec.url) ?? '#',
+    sortOrder: num(rec.sortOrder),
+  }
+}
+
+export async function getAllPublishedTrustedPartners(db: D1Database): Promise<TrustedPartner[]> {
+  const rows = await fetchRows(db, 'trusted_partners')
+  return rows.map((row) => coerceTrustedPartner(docData(row))).filter((partner) => partner.logo.length > 0)
 }
 
 /** Chronological comparator: dated events by ISO date asc, undated events last. */

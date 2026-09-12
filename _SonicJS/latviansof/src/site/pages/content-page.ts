@@ -50,6 +50,19 @@ export function renderContentPage({ lang, page }: ContentPageProps) {
             </aside>
           </div>
         </section>
+        <section class="pb-16 lg:pb-24">
+          <div class="mx-auto max-w-6xl rounded-[2rem] bg-gradient-to-br from-sunset-red via-sunset-red to-sunset-orange px-8 py-12 text-white shadow-xl sm:px-12 lg:flex lg:items-center lg:justify-between lg:gap-12 lg:px-20 lg:py-16" style="animation: membership-rise 700ms 320ms cubic-bezier(.22,1,.36,1) both">
+            <div class="max-w-2xl">
+              <p class="text-xs font-bold uppercase tracking-[0.2em] text-sunset-gold">${isLv ? 'IESAISTIETIES' : 'GET INVOLVED'}</p>
+              <h2 class="mt-4 font-serif text-4xl font-bold leading-tight text-white sm:text-5xl">${isLv ? 'Vai esat gatavi iesaistīties?' : 'Ready to get involved?'}</h2>
+              <p class="mt-4 text-lg leading-relaxed text-white/90">${isLv ? 'Jautājiet par dalību, brīvprātīgo darbu vai nākamo kopienas pasākumu.' : 'Ask about membership, volunteering, or the next community gathering.'}</p>
+            </div>
+            <div class="mt-8 flex flex-col gap-3 sm:flex-row lg:mt-0 lg:shrink-0">
+              <a href="${ctaHref}" class="inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 font-bold text-sunset-red shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-cream hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">${ctaLabel || (isLv ? 'Sazinieties ar Apvienību' : 'Email the Association')}</a>
+              <a href="/${lang}#events" class="inline-flex items-center justify-center rounded-full border-2 border-white/80 px-7 py-3.5 font-bold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">${isLv ? 'Skatīt pasākumus' : 'See our events'}</a>
+            </div>
+          </div>
+        </section>
       </main>
     `
   }

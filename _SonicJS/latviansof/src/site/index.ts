@@ -25,7 +25,7 @@ import {
   isEventUpcoming,
   resolveMediaUrl,
 } from './utils/content'
-import type { FooterData, NavigationItem, SiteSettingsData } from './utils/content'
+import type { FooterSections, NavigationItem, SiteSettingsData } from './utils/content'
 
 type Bindings = {
   DB: D1Database
@@ -35,7 +35,7 @@ export const siteRouter = new Hono<{ Bindings: Bindings }>()
 
 type Shared = {
   navItems: NavigationItem[]
-  footer: FooterData
+  footerSections: FooterSections
   settings: SiteSettingsData
 }
 
@@ -60,10 +60,7 @@ async function loadShared(db: D1Database): Promise<Shared> {
   ])
   return {
     navItems,
-    footer: {
-      ...footerSections.identity,
-      items: [...footerSections.quickLinks, ...footerSections.resources],
-    },
+    footerSections,
     settings,
   }
 }
@@ -76,7 +73,7 @@ async function render404(c: SiteContext, lang: 'en' | 'lv', shared: Shared, curr
     currentPath,
     origin: new URL(c.req.url).origin,
     navItems: shared.navItems,
-    footer: shared.footer,
+    footerSections: shared.footerSections,
     settings: shared.settings,
     content: renderNotFoundPage(lang),
   })
@@ -118,7 +115,7 @@ siteRouter.get('/:lang', async (c) => {
     currentPath: c.req.path,
     origin: new URL(c.req.url).origin,
     navItems: shared.navItems,
-    footer: shared.footer,
+    footerSections: shared.footerSections,
     settings: shared.settings,
     image: homePage?.heroImage ? resolveMediaUrl(homePage.heroImage) : undefined,
     content,
@@ -154,7 +151,7 @@ siteRouter.get('/:lang/donate', async (c) => {
     description: metaDescription || undefined,
     noIndex: donatePage?.noIndex,
     navItems: shared.navItems,
-    footer: shared.footer,
+    footerSections: shared.footerSections,
     settings: shared.settings,
     content,
   })
@@ -197,7 +194,7 @@ siteRouter.get('/:lang/events/:slug', async (c) => {
     description: description || undefined,
     image,
     navItems: shared.navItems,
-    footer: shared.footer,
+    footerSections: shared.footerSections,
     settings: shared.settings,
     content,
   })
@@ -249,7 +246,7 @@ siteRouter.get('/:lang/:slug', async (c) => {
     image,
     noIndex: page.noIndex,
     navItems: shared.navItems,
-    footer: shared.footer,
+    footerSections: shared.footerSections,
     settings: shared.settings,
     content,
   })

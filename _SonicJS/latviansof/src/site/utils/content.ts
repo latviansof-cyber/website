@@ -152,6 +152,7 @@ export interface SiteSettingsData {
   squareQuickDonate100Url?: string | undefined
   squareQuickDonate250Url?: string | undefined
   squareFlexibleDonateUrl?: string | undefined
+  membershipFormUrl?: string | undefined
   features?: FeatureBadge[] | undefined
   trustedPartners?: TrustedPartner[] | undefined
 }
@@ -393,6 +394,7 @@ function coerceSiteSettings(data: unknown): SiteSettingsData {
     squareQuickDonate100Url: str(rec.squareQuickDonate100Url),
     squareQuickDonate250Url: str(rec.squareQuickDonate250Url),
     squareFlexibleDonateUrl: str(rec.squareFlexibleDonateUrl),
+    membershipFormUrl: str(rec.membershipFormUrl),
     features: coerceFeatures(rec.features),
     trustedPartners: coerceTrustedPartners(rec.trustedPartners),
   }

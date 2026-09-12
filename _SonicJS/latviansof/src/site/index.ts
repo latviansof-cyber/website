@@ -230,7 +230,7 @@ siteRouter.get('/:lang/:slug', async (c) => {
   const content =
     template === 'simple'
       ? renderSimplePage({ lang, page })
-      : renderContentPage({ lang, page })
+      : renderContentPage({ lang, page, settings: shared.settings })
 
   const title = lang === 'lv' ? page.metaTitle_lv || page.title_lv : page.metaTitle_en || page.title_en
   const description =

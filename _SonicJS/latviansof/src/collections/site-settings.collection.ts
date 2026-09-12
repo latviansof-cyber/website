@@ -116,6 +116,7 @@ export default {
       squareQuickDonate100Url: { type: 'string', title: 'Square Quick Donate — $100 URL', default: '' },
       squareQuickDonate250Url: { type: 'string', title: 'Square Quick Donate — $250 URL', default: '' },
       squareFlexibleDonateUrl: { type: 'string', title: 'Square Flexible Donation Widget URL', default: '' },
+      membershipFormUrl: { type: 'string', title: 'Membership Form URL', default: '' },
       features: {
         type: 'json',
         title: 'Donation Badge Features',

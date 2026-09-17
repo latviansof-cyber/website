@@ -1,13 +1,17 @@
 /**
  * Bilingual Site Footer Component
  *
- * Structure mirrors the production SiteFooter: brand column, footer.items
- * split between Quick Links (first 4) and Resources (rest), Get Involved
- * column with contact email + donate CTA, and the bottom legal bar.
+ * Consumes four separately-managed CMS sections (FooterSections):
+ *   identity     → Column 1 – Brand (tagline + address)
+ *   quickLinks   → Column 2 – Quick Links (link list)
+ *   resources    → Column 3 – Resources (link list)
+ *   getInvolved  → Column 4 – Get Involved (blurb + email + donate CTA)
+ *
+ * The copyright line and bottom-bar legal links remain hard-coded.
  */
 
 import { html, raw } from 'hono/html'
-import type { FooterData, FooterItem, SiteSettingsData } from './utils/content'
+import type { FooterItem, FooterSections, SiteSettingsData } from './utils/content'
 
 const FB_ICON =
   '<path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />'
@@ -16,44 +20,31 @@ const IG_ICON =
 const HEART_ICON =
   '<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>'
 
-export function renderFooter(lang: 'en' | 'lv', footer: FooterData, settings: SiteSettingsData) {
+export function renderFooter(lang: 'en' | 'lv', sections: FooterSections, settings: SiteSettingsData) {
   const year = new Date().getFullYear()
   const isLv = lang === 'lv'
   const assocNameEn = settings.associationName_en || 'Latvian Association of Darwin'
   const assocNameLv = settings.associationName_lv || 'Dārvinas Latviešu Apvienība'
-  const tagline = (isLv ? footer.tagline_lv : footer.tagline_en) || ''
-  const address = (isLv ? footer.address_lv : footer.address_en) || ''
-  const rights = (isLv ? footer.rights_lv : footer.rights_en) || 'All rights reserved.'
-  const contactEmail = settings.contactEmail || 'hello@latviansofdarwin.org.au'
+  const contactEmail = settings.contactEmail || 'support@latviansofdarwin.org.au'
+
+  // Section data
+  const { identity, quickLinks, resources, getInvolved } = sections
+
+  const tagline = isLv ? identity.tagline_lv : identity.tagline_en
+  const address = isLv ? identity.address_lv : identity.address_en
+  const blurb = isLv ? getInvolved.blurb_lv : getInvolved.blurb_en
+  const donateLabel = isLv ? getInvolved.donateLabel_lv : getInvolved.donateLabel_en
 
   const headings = {
     quickLinks: isLv ? 'Ātrās saites' : 'Quick Links',
     resources: isLv ? 'Resursi' : 'Resources',
     getInvolved: isLv ? 'Iesaisties' : 'Get Involved',
   }
-  const getInvolvedText = isLv
-    ? 'Neatkarīgi no tā, vai jums ir latviešu izcelsme, vai vēlaties pievienoties mūsu kopienai, jūs vienmēr esat laipni gaidīti mūsu apvienībā.'
-    : 'Whether you have Latvian heritage or want to connect with a vibrant community, there is always a place for you in our association.'
+
   const incorporatedSince = isLv
     ? 'Reģistrēta asociācija no 2023. gada 22. oktobra'
     : 'Incorporated Entity from 22 October 2023'
   const reportBug = isLv ? 'Ziņot par kļūdu' : 'Report a bug'
-  const donateLabel = isLv ? 'Ziedot' : 'Donate'
-
-  const items = footer.items || []
-  const defaultQuick = [
-    { href: '/about', en: 'About', lv: 'Par mums', newTab: false },
-    { href: '/history', en: 'History', lv: 'Vēsture', newTab: false },
-    { href: '/#events', en: 'Events', lv: 'Pasākumi', newTab: false },
-    { href: '/donate', en: 'Donate', lv: 'Ziedot', newTab: false },
-  ]
-  const defaultResources = [
-    { href: '/privacy', en: 'Privacy Policy', lv: 'Privātuma politika', newTab: false },
-    { href: '/terms', en: 'Terms & Conditions', lv: 'Lietošanas noteikumi', newTab: false },
-    { href: '/eula', en: 'EULA', lv: 'EULA', newTab: false },
-  ]
-  const quickLinks = items.length > 0 ? items.slice(0, 4) : defaultQuick
-  const resourceLinks = items.length > 0 ? items.slice(4) : defaultResources
 
   function localize(href: string): string {
     if (href.startsWith('http') || href.startsWith('mailto:')) return href
@@ -85,7 +76,7 @@ export function renderFooter(lang: 'en' | 'lv', footer: FooterData, settings: Si
           { platform: 'Instagram', url: 'https://instagram.com' },
         ]
 
-  const logoUrl = '/files/uploads/e9cd9febfcf6d193954bc.png' // mirrored /images/logo.png
+  const logoUrl = '/files/uploads/e9cd9febfcf6d193954bc.png'
 
   return html`
     <footer class="bg-ink text-white" itemscope itemtype="https://schema.org/Organization">
@@ -96,7 +87,7 @@ export function renderFooter(lang: 'en' | 'lv', footer: FooterData, settings: Si
       <div class="h-1.5 w-full bg-gradient-to-r from-latvian-red via-sunset-gold to-latvian-red"></div>
 
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
-        <!-- Column 1: Brand -->
+        <!-- Column 1: Brand (Identity) -->
         <div class="space-y-4">
           <a href="/${lang}#top" class="inline-flex items-center gap-3 group">
             <span class="flex size-14 items-center justify-center rounded-full border border-white/30 bg-white/10 p-1 shadow-[0_8px_24px_rgba(122,34,49,0.35)] backdrop-blur-sm transition-transform duration-300 group-hover:scale-105">
@@ -155,7 +146,7 @@ export function renderFooter(lang: 'en' | 'lv', footer: FooterData, settings: Si
         <div>
           <h2 class="mb-4 text-xs font-bold uppercase tracking-widest text-sunset-gold">${headings.resources}</h2>
           <ul role="list" class="space-y-2.5 text-sm">
-            ${resourceLinks.map(renderLink)}
+            ${resources.map(renderLink)}
           </ul>
         </div>
 
@@ -163,7 +154,7 @@ export function renderFooter(lang: 'en' | 'lv', footer: FooterData, settings: Si
         <div>
           <h2 class="mb-4 text-xs font-bold uppercase tracking-widest text-sunset-gold">${headings.getInvolved}</h2>
           <p class="mb-4 text-sm leading-relaxed text-white/80">
-            ${getInvolvedText}
+            ${blurb}
           </p>
           <div class="mb-5 space-y-2">
             <a
@@ -187,11 +178,11 @@ export function renderFooter(lang: 'en' | 'lv', footer: FooterData, settings: Si
         </div>
       </div>
 
-      <!-- Bottom Bar -->
+      <!-- Bottom Bar (hard-coded legal links) -->
       <div class="border-t border-white/10">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col gap-3 py-6 text-xs text-white/70 sm:flex-row sm:items-center sm:justify-between">
           <div class="flex flex-col gap-1">
-            <p>© 2023–${year} ${assocNameEn}. ${rights}</p>
+            <p>© 2023–${year} ${assocNameEn}. All rights reserved.</p>
             <p class="text-white/50">${incorporatedSince}</p>
           </div>
           <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-white/70">
@@ -201,7 +192,6 @@ export function renderFooter(lang: 'en' | 'lv', footer: FooterData, settings: Si
             <a href="/${lang}/terms" class="transition hover:text-sunset-gold">
               ${isLv ? 'Lietošanas noteikumi' : 'Terms & Conditions'}
             </a>
-            <a href="/${lang}/eula" class="transition hover:text-sunset-gold">EULA</a>
             <a href="https://abr.business.gov.au/ABN/View?abn=25545712911" target="_blank" rel="noopener noreferrer" class="transition hover:text-sunset-gold">
               ABN 25 545 712 911
             </a>

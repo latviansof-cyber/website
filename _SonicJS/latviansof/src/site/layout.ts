@@ -9,7 +9,7 @@ import { html, raw } from 'hono/html'
 import { renderHeader } from './header'
 import { renderFooter } from './footer'
 import { siteStyles, tailwindConfigScript } from './styles'
-import type { FooterData, NavigationItem, SiteSettingsData } from './utils/content'
+import type { FooterSections, NavigationItem, SiteSettingsData } from './utils/content'
 
 export interface LayoutOptions {
   lang: 'en' | 'lv'
@@ -21,7 +21,7 @@ export interface LayoutOptions {
   image?: string | undefined
   noIndex?: boolean | undefined
   navItems: NavigationItem[]
-  footer: FooterData
+  footerSections: FooterSections
   settings: SiteSettingsData
   content: unknown
 }
@@ -44,7 +44,7 @@ function langPath(currentPath: string, target: 'en' | 'lv'): string {
 }
 
 export function renderLayout(opts: LayoutOptions): string {
-  const { lang, currentPath, origin, navItems, footer, settings, content } = opts
+  const { lang, currentPath, origin, navItems, footerSections, settings, content } = opts
   const associationName =
     (lang === 'en' ? settings.associationName_en : settings.associationName_lv) ||
     settings.associationName_en ||
@@ -131,7 +131,7 @@ export function renderLayout(opts: LayoutOptions): string {
   <main id="main" class="flex-grow">
     ${renderedContent}
   </main>
-  ${renderFooter(lang, footer, settings)}
+  ${renderFooter(lang, footerSections, settings)}
   <script>
     function copyToClipboard(text, btn) {
       if (!navigator.clipboard) return;

@@ -27,6 +27,7 @@
   ],
   "vars": {
     "ENVIRONMENT": "production",
+    "PUBLIC_SITE_ORIGIN": "https://latviansofdarwin.org.au",
     "CORS_ORIGINS": "https://latviansof-sonicjs.vasilkoff.workers.dev,https://latviansofdarwin.org.au,http://localhost:8787",
     "BETTER_AUTH_SECRET": "85a746345ea6eb9ad4573aa640fc5ea40706c840677719bc3cb660340b40b31c"
   },

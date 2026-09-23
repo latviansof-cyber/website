@@ -45,6 +45,28 @@ npx tsx scripts/seed-admin.ts            # local (uses .dev.vars)
 npx tsx scripts/seed-admin.ts --remote   # remote evaluation
 ```
 
+### Public site cache (KV)
+
+Public visitor traffic reads from a published KV snapshot instead of D1. The
+snapshot is built from the same content helpers as the D1 path and rendered by
+the same renderer (`src/site/render-route-snapshot.ts`), so KV and D1 responses
+are byte-identical.
+
+- Source: `src/site/publish/` (types, builder, writer, reader), keys in `kv-keys.ts`.
+- Rebuilt automatically after every content create/update/delete/publish —
+  `src/plugins/public-site-cache.ts` subscribes to the core content hooks.
+- Manual rebuild: `POST /admin/api/publish-public-site` (admin/editor only).
+- Pages answer `X-Public-Source: kv` from the snapshot, and
+  `X-Public-Source: d1-fallback` when the snapshot has no entry for that path.
+- `robots.txt` and `sitemap.xml` are served from KV, with D1/static fallbacks.
+- `PUBLIC_SITE_ORIGIN` (wrangler `vars`) is the canonical origin baked into
+  robots and sitemap URLs; publishing fails loudly if neither it nor a request
+  origin is available.
+
+Published keys are current-only: each publish overwrites every route key and
+deletes route keys that are no longer published, so unpublished content cannot
+keep being served from the edge cache.
+
 ### Deploy to Cloudflare
 
 ```bash

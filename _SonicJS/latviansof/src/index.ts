@@ -13,6 +13,8 @@ import navigationCollection from './collections/navigation.collection'
 import footerCollection from './collections/footer.collection'
 import siteSettingsCollection from './collections/site-settings.collection'
 import trustedPartnersCollection from './collections/trusted-partners.collection'
+import { publishPublicSiteRoutes } from './admin/publish-public-site'
+import { publicSiteCachePlugin } from './plugins/public-site-cache'
 import { siteRouter } from './site'
 
 // Register collections BEFORE creating the app.
@@ -44,8 +46,17 @@ const config: SonicJSConfig = {
     ],
   },
   plugins: {
-    register: [],
-  },
+    // `definePlugin()` output satisfies every runtime plugin contract, but the
+    // config field is typed as the legacy `Plugin[]` in a different declaration
+    // chunk — cast to the config's own type to cross that seam.
+    register: [publicSiteCachePlugin],
+  } as unknown as NonNullable<SonicJSConfig['plugins']>,
+  routes: [
+    // Admin-only manual publish of the public KV snapshot. Mounted at
+    // /admin/api so the core auth/RBAC middleware covers it. Typed as the
+    // config's own route shape to cross the bundled-Hono type boundary.
+    { path: '/admin/api', handler: publishPublicSiteRoutes },
+  ] as unknown as NonNullable<SonicJSConfig['routes']>,
 }
 
 // Create the application

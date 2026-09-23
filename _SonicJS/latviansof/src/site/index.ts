@@ -46,6 +46,17 @@ type SiteContext = Context<{ Bindings: Bindings }>
 const HTML_CACHE_CONTROL = 'public, max-age=60, s-maxage=600'
 const SEO_CACHE_CONTROL = 'public, max-age=3600'
 
+// Keep one canonical URL per page. Hono's router does not match the routes
+// below when a trailing slash is present, so normalize before route dispatch.
+siteRouter.use('*', async (c, next) => {
+  const url = new URL(c.req.url)
+  if (url.pathname.length > 1 && url.pathname.endsWith('/')) {
+    url.pathname = url.pathname.replace(/\/+$/, '')
+    return c.redirect(`${url.pathname}${url.search}`, 308)
+  }
+  return next()
+})
+
 function parseLang(param: string): 'en' | 'lv' | null {
   if (param === 'en' || param === 'lv') return param
   return null

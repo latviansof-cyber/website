@@ -1,40 +1,35 @@
-# Latvians of Darwin website experiments
+# Latvians of Darwin website
 
-This repository contains three independently deployable implementations:
+This repository contains the production SonicJS implementation for the Latvian Association of Darwin.
 
-- [`_Payload/`](./_Payload/) — **current production** Payload CMS website (`latviansof` Worker)
-- [`_SonicJS/latviansof/`](./_SonicJS/latviansof/) — SonicJS experiment (`latviansof-sonicjs` Worker)
-- [`_FlareCMS/`](./_FlareCMS/) — **next generation** FlareCMS implementation (`latviansof-flare` Pages project) — to replace `_Payload/`
+- `_SonicJS/latviansofdarwin.com.au/` — production site and admin (`latviansof-sonicjs` Worker)
+- `_SonicJS/darwin-sonicjs/` — custom SonicJS fork used by the production app
 
-Each directory owns its dependencies, Cloudflare configuration, and deployment commands. Run commands from the relevant directory.
+Run commands from the app directory for local development, database migrations, and deploys.
 
-## Comparing Implementations
+## Production site
 
-Use `surf --llm-context` to open and compare different front-end implementations deployed to Cloudflare:
-- Production site: **https://latviansofdarwin.org.au/** (deployed with Sonic and Flare versions)
+- Public site: https://latviansofdarwin.org.au/
+- Admin: https://latviansofdarwin.org.au/admin
 
-## Wrangler Access
+## Wrangler access
 
-Cloudflare credentials live in a single gitignored file, `_Payload/.env.local` (mode `0600`). The other projects symlink it so one token serves every implementation:
-
-- `_SonicJS/latviansof/.env.local` → `../../_Payload/.env.local`
-- `_FlareCMS/.env.local` → `../_Payload/.env.local`
-
-Required variables:
-
-- `CLOUDFLARE_API_TOKEN` — Account API token that authenticates `wrangler`
-- `CLOUDFLARE_ACCOUNT_ID` — the target Cloudflare account
-
-Wrangler auto-loads `.env.local` from the directory it runs in, so deploy and remote commands work as-is from each project directory:
+Cloudflare credentials live in the app directory as `.env.local` and are loaded automatically when `wrangler` is run from there:
 
 ```bash
-npx wrangler whoami   # verify auth — run from any project directory
+cd _SonicJS/latviansofdarwin.com.au
+npx wrangler whoami
 ```
 
-`deploy.sh` in `_SonicJS/` and `_FlareCMS/` also `source .env.local` defensively before invoking wrangler. If you run wrangler from elsewhere, export the file first: `set -a; source .env.local; set +a`.
+If you run `wrangler` from another directory, export the file first:
 
-Notes:
+```bash
+set -a; source _SonicJS/latviansofdarwin.com.au/.env.local; set +a
+```
 
-- `wrangler dev` is fully local and needs no token; only deploys and `--remote` commands (D1, R2, KV, Pages) reach the account.
-- Treat the token as a secret: the file is never committed, and its contents should not be printed or pasted into logs/issues.
-- Remote database inspection examples live in `AGENTS.md` (Diagnosing production admin problems).
+The expected variables are:
+
+- `CLOUDFLARE_API_TOKEN`
+- `CLOUDFLARE_ACCOUNT_ID`
+
+Keep the token private and do not print it in logs or issues.

@@ -1,7 +1,19 @@
 # Agents
 
-This project uses the Payload CMS skill at `.agents/skills/payload/`.
-Start with `.agents/skills/payload/SKILL.md` for a quick reference, then see `.agents/skills/payload/reference/` for detailed docs.
+## Production CMS: read this first
+
+The production website and admin panel use the **custom Darwin fork of
+SonicJS**, not Payload. Production is deployed from `_SonicJS/latviansof/` and
+the forked CMS source lives in `_SonicJS/darwin-sonicjs/`.
+
+- Production site and admin: https://latviansofdarwin.org.au/ and `/admin`
+- Application: `_SonicJS/latviansof/`
+- Custom SonicJS fork: `_SonicJS/darwin-sonicjs/`
+- Payload: deprecated legacy implementation in `_Payload/`; do not use it for
+  production admin, content, deployment, or debugging.
+
+Only use the Payload skill and the legacy runbook below when a task explicitly
+targets `_Payload/` or historical Payload data.
 
 ## Quick Development Tools
 
@@ -14,7 +26,7 @@ Run `surf --llm-context` to learn how to use the tool for opening and comparing 
 ### Wrangler Access
 `wrangler` authenticates using the token stored in `.env.local`. Ensure this file is configured before running deployment or remote D1 commands.
 
-## Payload + Cloudflare D1 migration runbook
+## Legacy-only: Payload + Cloudflare D1 migration runbook
 
 This project runs Payload 3 on Cloudflare Workers with
 `@payloadcms/db-d1-sqlite`. Production data is the remote D1 database bound as

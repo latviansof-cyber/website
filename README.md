@@ -33,3 +33,5 @@ The expected variables are:
 - `CLOUDFLARE_ACCOUNT_ID`
 
 Keep the token private and do not print it in logs or issues.
+
+Important note: discover surf cli by running "surf --llm-context" or "surf --help-full"

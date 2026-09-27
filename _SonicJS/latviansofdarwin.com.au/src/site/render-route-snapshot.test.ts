@@ -102,6 +102,19 @@ describe('rendering a route from KV matches rendering it from D1', () => {
     expect(rendered.html).toContain(`src="${HERO_IMAGE}"`)
   })
 
+  it('renders a top hero banner for simple pages when a hero image exists', () => {
+    const rendered = renderRouteSnapshot({
+      route: {
+        ...viaKv(pageRoute),
+        page: { ...viaKv(pageRoute).page, slug: 'about', template: 'simple' },
+      },
+      origin: ORIGIN,
+    })
+
+    expect(rendered.html).toContain('mx-auto mb-10 max-w-5xl')
+    expect(rendered.html).toContain(`src="${HERO_IMAGE}"`)
+  })
+
   it('keeps YouTube embeds working from a KV payload', () => {
     const rendered = renderRouteSnapshot({ route: viaKv(pageRoute), origin: ORIGIN })
 
